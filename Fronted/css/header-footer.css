@@ -1,3 +1,257 @@
+/*  HEADER  */
+
+header {
+    background-color: black;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 15px;
+    position: relative;
+}
+
+/* Mobile-first - Diseño base */
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+}
+
+/* Iconos del menú móvil */
+.mobile-menu-toggle {
+    font-size: 22px;
+    cursor: pointer;
+    background-image: linear-gradient(to top, #ff6600, #fbff00);
+    -webkit-background-clip:text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Logo para móvil (centrado) */
+.logo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.header-logo {
+    height: 40px;
+    /* Mantiene la proporción del logo original 3840x720 */
+}
+
+/* Iconos de acción */
+.user-actions {
+    display: flex;
+}
+
+.action-icon {
+    margin-left: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    background-image: linear-gradient(to top, #ff6600, #fbff00);
+    -webkit-background-clip:text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+    
+}
+
+/* Mostramos todos los iconos tanto en móvil como en desktop */
+.action-icon {
+    display: block;
+}
+
+/* Menú desplegable para móvil */
+.menu-dropdown {
+    display: none;
+    /* Oculto en móvil */
+}
+
+.mobile-menu{
+    display: none;
+    width: 100%;
+    background-color: #fff;
+    padding: 15px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+}
+
+.mobile-menu {
+    flex-direction: column;
+}
+
+.search-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    padding: 15px;
+    margin-top: 10px;
+    width: 300px; /* Ancho fijo inicial */
+    padding: 15px;
+}
+
+.search-form {
+    display: flex;
+    width: 50%;
+}
+
+.search-input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    font-size: 14px;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: transparent;
+    box-shadow: 0 0 0 1px #ff6b00,
+                inset 0 0 0 1px #ff6b00;
+    background-image: 
+        linear-gradient(to right, white, white),
+        linear-gradient(to top, #ff6600, #fbff00);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+
+.search-button {
+    background-image: linear-gradient(to top, #ff6600, #fbff00);
+    color: black;
+    border: none;
+    padding: 0 15px;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+    
+
+.mobile-menu-item {
+    list-style: none;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.mobile-menu-item:last-child {
+    border-bottom: none;
+}
+
+.mobile-menu-item a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    font-size: 16px;
+    display: block;
+}
+
+.show-menu,
+.show-search {
+    display: flex;
+}
+
+/* Media query para tablets y desktop */
+@media (min-width: 768px) {
+    .header-container {
+        max-width: 1200px;
+        padding: 0 20px;
+    }
+
+    .main-header {
+        padding: 15px 0;
+    }
+
+    /* Ocultamos el botón de menú móvil */
+    .mobile-menu-toggle {
+        display: none;
+    }
+
+    /* Mostramos el menú desplegable */
+    .menu-dropdown {
+        display: block;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .menu-icon {
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .menu-icon i {
+        margin-right: 8px;
+        font-size: 20px;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #fff;
+        min-width: 180px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        z-index: 1100;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .dropdown-content a {
+        display: block;
+        padding: 12px 16px;
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f9f9f9;
+        color: #ff6b00;
+    }
+
+    .menu-dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    /* Aumentamos el tamaño del logo */
+    .logo {
+        height: 50px;
+    }
+
+    /* Ajustamos el tamaño y espaciado de los iconos en desktop */
+    .action-icon {
+        font-size: 20px;
+        margin-left: 20px;
+        transition: color 0.3s ease;
+    }
+
+    .action-icon:hover {
+        color: #ff6b00;
+    }
+}
+
+
+
+
+
 /*  FOOTER  */
 
 @font-face {
@@ -144,8 +398,20 @@ footer {
     .footer-locations {
         display: flex;
         justify-content: space-evenly;
+        flex-direction: row;
+    }
 
+    .footer-locations-pack{
+        padding-bottom: 2.5%;
+    }
+
+    .footer-socialmedia{
+        padding-bottom: 2.5%;
+        margin: 0%;
+    }
+
+    .footer-content{
+        padding-top: 2.5%;
+        padding-bottom: 2.5%;
     }
 }
-
-@media (min-width: 1024px) {}
