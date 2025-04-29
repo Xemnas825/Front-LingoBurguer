@@ -67,11 +67,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // loginEmail y loginPassword tienen los datos
     });
 
+
+    ///////////////////////
+    // Registro de datos //
+    ///////////////////////
     registerForm.addEventListener('submit', function(e) {
         e.preventDefault();
         // Aquí iría tu lógica para procesar el registro
         console.log('Register submitted');
-        // registerName, registerEmail, registerPassword y confirmPassword tienen los datos
+        // registerName, registerEmail, registerPassword, confirmPassword, etc tienen los datos
     });
 
     forgotPasswordForm.addEventListener('submit', function(e) {
