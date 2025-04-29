@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lingoburguer - Hamburguesas Artesanales</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<header>
+    <nav>
+        <ul>
+            <li><a href="#nosotros">¿Quiénes somos?</a></li>
+            <li><a href="#carta">Carta</a></li>
+            <div class="logo-container">   
+                <img src="../images/LogoLingoBurguerWhite.png" alt="Lingoburguer Logo" class="logo">
+            </div>
+            <li><a href="#nosotros"></a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+</header>
+
+<body>
+
+    <section class="hero" id="inicio">
+        <div class="hero-video-container">
+            <video autoplay muted loop>
+                <source src="../videos/BURGER 🍔 Video Publicitario HAMBURGUESA ｜ BROLL.mp4" type="video/mp4">
+                <source src="../videos/hamburguesa-video.webm" type="video/webm">
+                Tu navegador no soporta videos HTML5.
+            </video>
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <h1>HAMBURGUESAS ARTESANALES</h1>
+            <p>Hechas con ingredientes frescos y de la más alta calidad</p>
+            <a href="#carta" class="btn">VER CARTA</a>
+        </div>
+    </section>
+
+    <section class="about" id="nosotros">
+        <div class="about-content">
+            <h2>SOBRE LINGOBURGUER</h2>
+            <p>En Lingoburguer reinventamos la experiencia de la hamburguesa. Cada una de nuestras creaciones es una explosión de sabores cuidadosamente equilibrados, utilizando ingredientes locales y técnicas culinarias innovadoras.</p>
+            <p>Nuestro compromiso es ofrecer no solo una comida, sino una experiencia gastronómica memorable.</p>
+        </div>
+        <div class="about-image">
+            <img src="burger-about.jpg" alt="Hamburguesa Lingoburguer">
+        </div>
+    </section>
+
+    <section class="letter" id="carta">
+        <h2>NUESTRO CARTA</h2>
+        <div class="#carta-categories">
+            <button class="category-btn active" data-category="hamburguesas">Hamburguesas</button>
+            <button class="category-btn" data-category="acompanamientos">Acompañamientos</button>
+            <button class="category-btn" data-category="bebidas">Bebidas</button>
+        </div>
+        
+        <div class="#carta-items" id="hamburguesas">
+            <div class="#carta-item">
+                <img src="burger-classic.jpg" alt="Lingoburguer Clásica">
+                <h3>Lingoburguer fucking clasic </h3>
+                <p>Carne 100% res, queso cheddar, lechuga, tomate, cebolla y salsa especial</p>
+                <span class="price">$12.990</span>
+            </div>
+            <div class="#carta-item">
+                <img src="burger-bbq.jpg" alt="BBQ Bacon">
+                <h3>LIngo Bacon fucking BBQ</h3>
+                <p>Doble carne, bacon crocante, cebolla caramelizada, queso americano y salsa BBQ</p>
+                <span class="price">$15.990</span>
+            </div>
+            <div class="#carta-item">
+                <img src="burger-veggie.jpg" alt="Veggie Delight">
+                <h3>(la cosa esa para los raritos)Veggie Delight</h3>
+                <p>Medallón vegetal, queso de cabra, rúcula, tomate seco y mayonesa de albahaca</p>
+                <span class="price">$13.990</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery">
+        <h2>GALERÍA</h2>
+        <div class="gallery-grid">
+            <img src="gallery1.jpg" alt="Hamburguesa 1">
+            <img src="gallery2.jpg" alt="Hamburguesa 2">
+            <img src="gallery3.jpg" alt="Hamburguesa 3">
+            <img src="gallery4.jpg" alt="Hamburguesa 4">
+        </div>
+    </section>
+
+    <section class="contact" id="contacto">
+        <div class="contact-info">
+            <h2>CONTÁCTANOS</h2>
+            <p><i class="fas fa-map-marker-alt"></i> Av. Siempre Viva 123, Santiago</p>
+            <p><i class="fas fa-phone"></i> +56 9 1234 5678</p>
+            <p><i class="fas fa-envelope"></i> hola@lingoburguer.cl</p>
+            <p><i class="fas fa-clock"></i> Lunes a Domingo: 12:00 - 22:00 hrs</p>
+            
+            <div class="social-media">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <div class="contact-form">
+            <form>
+                <input type="text" placeholder="Nombre" required>
+                <input type="email" placeholder="Email" required>
+                <input type="tel" placeholder="Teléfono">
+                <textarea placeholder="Mensaje" required></textarea>
+                <button type="submit" class="btn">ENVIAR</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <img src="logo-lingoburguer-white.png" alt="Lingoburguer Logo" class="footer-logo">
+            <p>&copy; 2023 Lingoburguer. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>

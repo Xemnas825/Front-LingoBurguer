@@ -1,0 +1,554 @@
+/* ==========================================================================
+   VARIABLES Y CONFIGURACIÓN GLOBAL
+   ========================================================================== */
+   :root {
+    /* Paleta de colores del sitio */
+    --primary-color: #e63946;     /* Rojo para acentos y botones */
+    --secondary-color: #1d3557;   /* Azul oscuro para fondos y textos importantes */
+    --accent-color: #f1faee;      /* Color claro para fondos alternativos */
+    --text-color: #333;           /* Color base para textos */
+    --light-text: #f1faee;        /* Color claro para textos sobre fondos oscuros */
+    --dark-bg: #1d3557;           /* Fondo oscuro para secciones contrastantes */
+    --light-bg: #f1faee;          /* Fondo claro para secciones principales */
+    --golden: #ebd55a;            /* Color dorado para elementos destacados */
+}
+
+/*   HEADER Y NAVEGACIÓN */
+   header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    background-color: transparent; /* Header transparente para que se vea el video */
+    width: 100%;
+}
+
+/* Contenedor de navegación - ocupa todo el ancho */
+nav {
+position: fixed; 
+  left: 0;
+  width: 100%;
+  height: 90px;
+  z-index: 1000;
+  background-color: black;
+  border-bottom: 6px solid black;
+  padding-top: 30px;
+}
+
+/* Lista de navegación */
+nav ul {
+    display: flex;
+    list-style: none;
+    font-family: 'MiFuentePersonalizada';
+    justify-content: center;
+    align-items: center;
+    background-color: black; /* Fondo negro para el carta */
+    width: 100%;
+    margin: 0%;
+    padding: 0%;
+    margin-top: auto;
+    font-size: 20px;
+    
+}
+
+/* Elementos de la lista de navegación */
+nav ul li {
+    margin: 0% 15px;
+    position: relative;
+    color: var(--golden); /* Color dorado para los elementos del carta */
+}
+
+/* Enlaces en la navegación */
+nav ul li a {
+    font-weight: 600;
+    letter-spacing: 2px;
+    transition: color 0.3s ease;
+}
+
+/* Efecto hover para enlaces */
+nav ul li a:hover {
+    color: var(--primary-color);
+}
+
+/* Línea decorativa bajo los elementos del carta (aparece al hover) */
+nav ul li::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+nav ul li:hover::after {
+    width: 100%;
+}
+
+/* Estilos para iconos sociales en el header */
+.header-social a {
+    margin-left: 15px;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.header-social a:hover {
+    color: var(--primary-color);
+}
+
+/* Estilos para el logo */
+.logo {
+    height: 60px;
+}
+
+/* Contenedor del logo - asegura que tenga fondo negro */
+.logo-container {
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Reset básico para todos los elementos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Configuración de fuente personalizada */
+@font-face {
+    font-family: 'MiFuentePersonalizada';
+    src: url('../fonts/duality.otf') format('opentype');
+}
+
+
+
+/* ==========================================================================
+   SECCIÓN HERO CON VIDEO DE FONDO
+   ========================================================================== */
+.hero {
+    height: 100vh; /* Altura completa de la ventana */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding-top: 80px;
+    overflow: hidden;
+}
+
+/* Contenedor del video de fondo */
+.hero-video-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2; /* Coloca el video detrás del contenido */
+}
+
+/* Estilo del video */
+.hero-video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que el video cubra todo el contenedor */
+}
+
+/* Capa semitransparente sobre el video para mejorar la legibilidad del texto */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+/* Contenido principal de la sección hero */
+.hero-content {
+    position: relative;
+    z-index: 1; /* Por encima del video y overlay */
+    width: 100%;
+    padding: 0 20px;
+}
+
+/* Título principal en la sección hero */
+.hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Sombra para mejorar legibilidad */
+}
+
+/* Párrafo en la sección hero */
+.hero-content p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   SECCIÓN SOBRE NOSOTROS
+   ========================================================================== */
+.about {
+    padding: 100px 10%;
+    display: flex;
+    align-items: center;
+    background-color: var(--light-bg);
+}
+
+.about-content {
+    flex: 1;
+    padding-right: 50px;
+}
+
+.about-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: var(--secondary-color);
+}
+
+.about-content p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.about-image {
+    flex: 1;
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+   SECCIÓN CARTA
+   ========================================================================== */
+/* Estilos básicos del body */
+body {
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+/* Estilos generales para títulos */
+h1, h2, h3, h4 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+/* Estilos generales para enlaces */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Estilo de botón general */
+.btn {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #c1121f;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.carta {
+    padding: 100px 10%;
+    text-align: center;
+    background-color: white;
+}
+
+.carta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: var(--secondary-color);
+}
+
+/* Categorías del carta */
+.carta-categories {
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.category-btn {
+    padding: 10px 25px;
+    background: none;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.category-btn.active, .category-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Grid de elementos del carta */
+.carta-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 40px;
+    margin-top: 50px;
+}
+
+.carta-item {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.carta-item:hover {
+    transform: translateY(-10px);
+}
+
+.carta-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.carta-item h3 {
+    padding: 20px 20px 10px;
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+}
+
+.carta-item p {
+    padding: 0 20px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.carta-item .price {
+    display: block;
+    padding: 20px;
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+/* ==========================================================================
+   SECCIÓN GALERÍA
+   ========================================================================== */
+.gallery {
+    padding: 80px 10%;
+    background-color: var(--light-bg);
+    text-align: center;
+}
+
+.gallery h2 {
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: var(--secondary-color);
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.gallery-grid img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 5px;
+    transition: transform 0.3s ease;
+}
+
+.gallery-grid img:hover {
+    transform: scale(1.05);
+}
+
+/* ==========================================================================
+   SECCIÓN CONTACTO
+   ========================================================================== */
+.contact {
+    padding: 100px 10%;
+    display: flex;
+    background-color: var(--dark-bg);
+    color: white;
+}
+
+.contact-info {
+    flex: 1;
+    padding-right: 50px;
+}
+
+.contact-info h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.contact-info p {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.contact-info i {
+    margin-right: 15px;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+/* Redes sociales en contacto */
+.social-media {
+    margin-top: 30px;
+}
+
+.social-media a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    margin-right: 15px;
+    transition: all 0.3s ease;
+}
+
+.social-media a:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-3px);
+}
+
+/* Formulario de contacto */
+.contact-form {
+    flex: 1;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 5px;
+    color: white;
+}
+
+.contact-form textarea {
+    height: 150px;
+    resize: none;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.contact-form .btn {
+    width: 100%;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+footer {
+    background-color: #0d1b2a;
+    color: white;
+    text-align: center;
+    padding: 30px 0;
+}
+
+.footer-logo {
+    height: 50px;
+    margin-bottom: 20px;
+}
+
+/* ==========================================================================
+   DISEÑO RESPONSIVO
+   ========================================================================== */
+/* Para tablets y dispositivos medianos */
+@media (max-width: 992px) {
+    /* Cambios en las secciones about y contact */
+    .about, .contact {
+        flex-direction: column;
+    }
+    
+    .about-content, .contact-info {
+        padding-right: 0;
+        margin-bottom: 50px;
+    }
+    
+    /* Ajuste de la galería a 2 columnas */
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Para móviles y tablets pequeñas */
+@media (max-width: 768px) {
+    /* Ajuste del header para móviles */
+    header {
+        flex-direction: column;
+    }
+    
+    .logo {
+        margin-bottom: 15px;
+    }
+    
+    /* Reducción del tamaño de texto en hero */
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-content p {
+        font-size: 1.2rem;
+    }
+    
+    /* Ajuste de las categorías del carta */
+    .carta-categories {
+        flex-wrap: wrap;
+    }
+}
+
+/* Para móviles pequeños */
+@media (max-width: 576px) {
+    /* Galería en una sola columna */
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* carta de navegación en columna */
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    nav ul li {
+        margin: 10px 0;
+    }
+}
