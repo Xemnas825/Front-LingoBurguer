@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Menú móvil
-    const menuToggle = document.getElementById('mobile-menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
+    // Menú unificado
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuContent = document.getElementById('menu-content');
     
     menuToggle.addEventListener('click', function() {
-        mobileMenu.classList.toggle('show-menu');
+        menuContent.classList.toggle('show-menu');
         
         // Si la búsqueda está abierta, la cerramos
         if (searchDropdown.classList.contains('show-search')) {
@@ -13,16 +13,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Búsqueda desplegable
-    // Corregido: seleccionamos por clase y el primer elemento que coincida
-    const searchIcon = document.querySelector('.action-icon .fa-search').parentElement;
+    const searchIcon = document.querySelector('.search-icon');
     const searchDropdown = document.getElementById('search-dropdown');
     
     searchIcon.addEventListener('click', function() {
         searchDropdown.classList.toggle('show-search');
         
-        // Si el menú móvil está abierto, lo cerramos
-        if (mobileMenu.classList.contains('show-menu')) {
-            mobileMenu.classList.remove('show-menu');
+        // Si el menú está abierto, lo cerramos
+        if (menuContent.classList.contains('show-menu')) {
+            menuContent.classList.remove('show-menu');
         }
         
         // Enfocamos en el campo de búsqueda
@@ -35,13 +34,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Cerrar desplegables al hacer clic fuera
     document.addEventListener('click', function(event) {
-        if (!event.target.closest('.mobile-menu') && 
-            !event.target.closest('.mobile-menu-toggle') &&
+        if (!event.target.closest('.menu-content') && 
+            !event.target.closest('.menu-toggle') &&
             !event.target.closest('.search-dropdown') &&
-            !event.target.closest('.action-icon .fa-search')) {  // Corregido: usamos selector de clase
+            !event.target.closest('.search-icon')) {
             
-            if (mobileMenu.classList.contains('show-menu')) {
-                mobileMenu.classList.remove('show-menu');
+            if (menuContent.classList.contains('show-menu')) {
+                menuContent.classList.remove('show-menu');
             }
             
             if (searchDropdown.classList.contains('show-search')) {

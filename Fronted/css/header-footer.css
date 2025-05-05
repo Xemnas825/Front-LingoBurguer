@@ -23,6 +23,64 @@ header {
     padding: 12px 0;
 }
 
+
+/*Menu*/
+.menu-toggle {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    cursor: pointer;
+    background-image: linear-gradient(to top, #ff6600, #fbff00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.menu-toggle span {
+    margin-left: 8px;
+    font-weight: 600;
+}
+
+.desktop-only {
+    display: none; /* Oculto en móvil */
+}
+
+/* Menú desplegable unificado */
+.menu-content {
+    display: none;
+    width: 100%;
+    background-color: #fff;
+    padding: 15px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+}
+
+.menu-item {
+    list-style: none;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-item a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    font-size: 16px;
+    display: block;
+}
+
+.menu-item a:hover {
+    color: #ff6b00;
+}
+
+
 /* Logo para móvil (centrado) */
 .logo-container {
     display: flex;
@@ -55,29 +113,27 @@ header {
     display: block;
 }
 
-/* Menú desplegable para móvil */
-.menu-dropdown {
-    display: none;
-}
-
 .search-dropdown {
     display: none;
     position: absolute;
-    top: 100%;
+    top: 0;
+    left: 0;
     right: 0;
     background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 999;
+    z-index: 1000;
     padding: 15px;
-    margin-top: 10px;
-    width: 300px; /* Ancho fijo inicial */
-    padding: 15px;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+}
+
+.search-dropdown.show-search {
+    transform: translateY(0);
+    display: block;
 }
 
 .search-form {
     display: flex;
-    width: 50%;
+    width: 100%;
 }
 
 .search-input {
@@ -87,18 +143,6 @@ header {
     border-right: none;
     border-radius: 4px 0 0 4px;
     font-size: 14px;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: transparent;
-    box-shadow: 0 0 0 1px #ff6b00,
-                inset 0 0 0 1px #ff6b00;
-    background-image: 
-        linear-gradient(to right, white, white),
-        linear-gradient(to top, #ff6600, #fbff00);
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
 }
 
 .search-button {
@@ -111,10 +155,10 @@ header {
     font-size: 14px;
 }
 
-.show-menu,
-.show-search {
-    display: flex;
+.show-menu {
+    display: block;
 }
+
 
 /* Media query para tablets y desktop */
 @media (min-width: 768px) {
@@ -128,53 +172,16 @@ header {
     }
 
     /* Mostramos el menú desplegable */
-    .menu-dropdown {
-        display: block;
-        position: relative;
-        cursor: pointer;
+    .desktop-only {
+        display: inline-block;
     }
 
-    .menu-icon {
-        display: flex;
-        align-items: center;
-        font-weight: 600;
-        color: #333;
-    }
-
-    .menu-icon i {
-        margin-right: 8px;
-        font-size: 20px;
-    }
-
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background-color: #fff;
-        min-width: 180px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        z-index: 1100;
-        border-radius: 4px;
-        overflow: hidden;
-    }
-
-    .dropdown-content a {
-        display: block;
-        padding: 12px 16px;
-        text-decoration: none;
-        color: #333;
-        font-weight: 500;
-        transition: background-color 0.3s ease;
-    }
-
-    .dropdown-content a:hover {
-        background-color: #f9f9f9;
-        color: #ff6b00;
-    }
-
-    .menu-dropdown:hover .dropdown-content {
-        display: block;
+    /* Estilo del menú en desktop */
+    .menu-content {
+        min-width: 200px;
+        width: auto;
+        left: auto;
+        right: auto;
     }
 
     /* Aumentamos el tamaño del logo */
@@ -192,6 +199,13 @@ header {
     .action-icon:hover {
         color: #ff6b00;
     }
+
+    .search-dropdown {
+        top: 0;
+        width: 100%;
+        padding: 20px;
+    }
+
 }
 
 
