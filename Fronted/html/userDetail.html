@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/userDetailStyle.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Barra lateral -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Mi Portal</h2>
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <div class="user-profile">
+                <img src="/api/placeholder/100/100" alt="Foto de perfil" class="user-avatar">
+                <div class="user-name">[Insertar Nombre de BD]</div>
+                <div class="user-email">[Insertar Correo de BD]</div>
+            </div>
+            
+            <div class="nav-menu">
+                <h3>Gestión de Cuenta</h3>
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-user"></i> Información Personal</a></li>
+                    <li><a href="#"><i class="fas fa-lock"></i> Seguridad</a></li>
+                    <li><a href="#"><i class="fas fa-bell"></i> Notificaciones</a></li>
+                    <li><a href="#"><i class="fas fa-credit-card"></i> Pagos</a></li>
+                </ul>
+                
+                <h3>Actividad</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-history"></i> Historial de Pedidos</a></li>
+                    <li><a href="#"><i class="fas fa-star"></i> Reseñas</a></li>
+                    <li><a href="#"><i class="fas fa-heart"></i> Favoritos</a></li>
+                </ul>
+                
+                <h3>Preferencias</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-utensils"></i> Preferencias Alimentarias</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Direcciones</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Configuración</a></li>
+                </ul>
+            </div>
+            
+            <div class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </div>
+        </div>
+        
+        <!-- Contenido principal -->
+        <div class="main-content">
+            <div class="content-header">
+                <h1>Dashboard</h1>
+                <button class="action-button">
+                    <i class="fas fa-plus"></i> Nueva Reserva
+                </button>
+            </div>
+            
+            <!-- Estadísticas -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-shopping-bag"></i>
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">Pedidos Totales</div>
+                </div>
+                
+                <div class="stat-card">
+                    <i class="fas fa-star"></i>
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Reseñas Realizadas</div>
+                </div>
+                
+                <div class="stat-card">
+                    <i class="fas fa-trophy"></i>
+                    <div class="stat-value">250</div>
+                    <div class="stat-label">Puntos Acumulados</div>
+                </div>
+                
+                <div class="stat-card">
+                    <i class="fas fa-heart"></i>
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Favoritos</div>
+                </div>
+            </div>
+            
+            <!-- Panel de Información Personal -->
+            <div class="content-panel">
+                <div class="panel-header">
+                    <h2>Información Personal</h2>
+                    <button class="action-button" id="edit-info-btn">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                </div>
+                
+                <form id="personal-info-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">Nombre</label>
+                            <input type="text" id="firstName" class="form-control" value="[BD]" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastName">Apellidos</label>
+                            <input type="text" id="lastName" class="form-control" value="[BD]" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico</label>
+                            <input type="email" id="email" class="form-control" value="[BD]" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Teléfono</label>
+                            <input type="tel" id="phone" class="form-control" value="[BD]" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="birthdate">Fecha de Nacimiento</label>
+                            <input type="date" id="birthdate" class="form-control" value="[BD]" disabled>
+                        </div>
+                                                
+                        <div class="form-group full-width">
+                            <label for="address">Dirección</label>
+                            <textarea id="address" class="form-control" rows="3" disabled>[BD]</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-buttons" style="display: none;">
+                        <button type="button" class="btn btn-secondary" id="cancel-btn">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Panel de Pedidos Recientes -->
+            <div class="content-panel">
+                <div class="panel-header">
+                    <h2>Pedidos Recientes</h2>
+                    <button class="action-button">
+                        <i class="fas fa-eye"></i> Ver Todos
+                    </button>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#001245</td>
+                            <td>02/05/2025</td>
+                            <td>€35.90</td>
+                            <td><span class="badge badge-success">Entregado</span></td>
+                        </tr>
+                        <tr>
+                            <td>#001244</td>
+                            <td>28/04/2025</td>
+                            <td>€42.50</td>
+                            <td><span class="badge badge-success">Entregado</span></td>
+                        </tr>
+                        <tr>
+                            <td>#001243</td>
+                            <td>15/04/2025</td>
+                            <td>€18.20</td>
+                            <td><span class="badge badge-success">Entregado</span></td>
+                        </tr>
+                        <tr>
+                            <td>#001242</td>
+                            <td>10/04/2025</td>
+                            <td>€55.30</td>
+                            <td><span class="badge badge-warning">En proceso</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/userDetailScript.js"></script>
+</body>
+</html>
