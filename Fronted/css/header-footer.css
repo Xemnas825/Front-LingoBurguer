@@ -23,16 +23,6 @@ header {
     padding: 12px 0;
 }
 
-/* Iconos del menú móvil */
-.mobile-menu-toggle {
-    font-size: 22px;
-    cursor: pointer;
-    background-image: linear-gradient(to top, #ff6600, #fbff00);
-    -webkit-background-clip:text;
-    background-clip: text;
-    color: transparent;
-}
-
 /* Logo para móvil (centrado) */
 .logo-container {
     display: flex;
@@ -42,7 +32,6 @@ header {
 
 .header-logo {
     height: 40px;
-    /* Mantiene la proporción del logo original 3840x720 */
 }
 
 /* Iconos de acción */
@@ -59,7 +48,6 @@ header {
     background-clip: text;
     color: transparent;
     position: relative;
-    
 }
 
 /* Mostramos todos los iconos tanto en móvil como en desktop */
@@ -70,23 +58,6 @@ header {
 /* Menú desplegable para móvil */
 .menu-dropdown {
     display: none;
-    /* Oculto en móvil */
-}
-
-.mobile-menu{
-    display: none;
-    width: 100%;
-    background-color: #fff;
-    padding: 15px;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-}
-
-.mobile-menu {
-    flex-direction: column;
 }
 
 .search-dropdown {
@@ -140,27 +111,6 @@ header {
     font-size: 14px;
 }
 
-
-    
-
-.mobile-menu-item {
-    list-style: none;
-    padding: 12px 0;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.mobile-menu-item:last-child {
-    border-bottom: none;
-}
-
-.mobile-menu-item a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    font-size: 16px;
-    display: block;
-}
-
 .show-menu,
 .show-search {
     display: flex;
@@ -175,11 +125,6 @@ header {
 
     .main-header {
         padding: 15px 0;
-    }
-
-    /* Ocultamos el botón de menú móvil */
-    .mobile-menu-toggle {
-        display: none;
     }
 
     /* Mostramos el menú desplegable */

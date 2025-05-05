@@ -17,23 +17,20 @@
     <header>
         <div class="header-container">
             <div class="main-header">
-                <!-- Botón de menú para móvil -->
-                <div class="mobile-menu-toggle" id="mobile-menu-toggle">
+                <!-- Botón de menú unificado -->
+                <div class="menu-toggle" id="menu-toggle">
                     <i class="fas fa-bars"></i>
+                    <span class="desktop-only">Menú</span>
                 </div>
 
-                <!-- Menú desplegable estilo Telepizza (visible solo en desktop) -->
-                <div class="menu-dropdown">
-                    <div class="menu-icon">
-                        <i class="fas fa-bars"></i>
-                        <span>Menú</span>
-                    </div>
-                    <div class="dropdown-content">
-                        <a href="#about">About Us</a>
-                        <a href="#menu">Menu</a>
-                        <a href="#contact">Contact Us</a>
-                        <a href="#careers">Careers</a>
-                    </div>
+                <!-- Menú desplegable unificado -->
+                <div class="menu-content" id="menu-content">
+                    <ul>
+                        <li class="menu-item"><a href="#about">About Us</a></li>
+                        <li class="menu-item"><a href="#menu">Menu</a></li>
+                        <li class="menu-item"><a href="#contact">Contact Us</a></li>
+                        <li class="menu-item"><a href="#careers">Careers</a></li>
+                    </ul>
                 </div>
 
                 <!-- Logo central -->
@@ -45,7 +42,7 @@
 
                 <!-- Iconos de acción -->
                 <div class="user-actions">
-                    <div class="action-icon">
+                    <div class="action-icon search-icon">
                         <i class="fas fa-search"></i>
                     </div>
                     <div class="action-icon">
@@ -57,25 +54,17 @@
                 </div>
             </div>
 
-            <!-- Menú móvil desplegable -->
-            <div class="mobile-menu" id="mobile-menu">
-                <ul>
-                    <li class="mobile-menu-item"><a href="#about">About Us</a></li>
-                    <li class="mobile-menu-item"><a href="#menu">Menu</a></li>
-                    <li class="mobile-menu-item"><a href="#contact">Contact Us</a></li>
-                    <li class="mobile-menu-item"><a href="#careers">Careers</a></li>
-                </ul>
+
+
+            <!-- Desplegable de búsqueda -->
+            <div class="search-dropdown" id="search-dropdown">
+                <form class="search-form">
+                    <input type="text" class="search-input" placeholder="What are you looking for?">
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
             </div>
-        </div>
-        <!-- Desplegable de búsqueda -->
-        <div class="search-dropdown" id="search-dropdown">
-            <form class="search-form">
-                <input type="text" class="search-input" placeholder="What are you looking for?">
-                <button type="submit" class="search-button">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
-        </div>
         </div>
     </header>
 
