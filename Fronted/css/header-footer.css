@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'MiFuentePersonalizada';
+    src: url('../fonts/Teko-VariableFont_wght.ttf') format('truetype');
+}
+
 /*  HEADER  */
 
 header {
@@ -6,6 +11,8 @@ header {
     position: sticky;
     top: 0;
     z-index: 1000;
+    font-family: 'MiFuentePersonalizada';
+    font-size: 22px;
 }
 
 .header-container {
@@ -13,6 +20,13 @@ header {
     margin: 0 auto;
     padding: 0 15px;
     position: relative;
+}
+
+.gradient-text {
+    background-image: linear-gradient(to top, #ff6600, #fbff00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 /* Mobile-first - Diseño base */
@@ -23,17 +37,21 @@ header {
     padding: 12px 0;
 }
 
-
 /*Menu*/
 .menu-toggle {
     display: flex;
     align-items: center;
-    font-size: 22px;
+    font-size: 24px;
     cursor: pointer;
     background-image: linear-gradient(to top, #ff6600, #fbff00);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
 }
 
 .menu-toggle span {
@@ -41,45 +59,65 @@ header {
     font-weight: 600;
 }
 
-.desktop-only {
-    display: none; /* Oculto en móvil */
-}
 
 /* Menú desplegable unificado */
-.menu-content {
-    display: none;
-    width: 100%;
-    background-color: #fff;
-    padding: 15px;
-    position: absolute;
-    top: 100%;
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: black;
+    transition: left 0.3s ease;
+    z-index: 1001; /* Mayor que el overlay */
+}
+
+.sidebar.active {
     left: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 999;
 }
 
-.menu-item {
+.sidebar-header {
+    padding: 20px;
+    background-color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+.sidebar-header h3 {
+    background-image: linear-gradient(to top,#ff6600, #fbff00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin: 0; /* Elimina margen por defecto */
+    font-family: 'MiFuentePersonalizada';
+}
+
+.close-sidebar {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.sidebar ul {
     list-style: none;
-    padding: 12px 0;
-    border-bottom: 1px solid #f0f0f0;
+    padding: 0;
+    margin: 0; /* Elimina margen por defecto */
 }
 
-.menu-item:last-child {
-    border-bottom: none;
+.sidebar ul li {
+    padding: 15px 20px;
+    border-bottom: 1px solid white;
 }
 
-.menu-item a {
+.sidebar ul li a {
     text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    font-size: 16px;
     display: block;
+    background-image: linear-gradient(to top,#ff6600, #fbff00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
-
-.menu-item a:hover {
-    color: #ff6b00;
-}
-
 
 /* Logo para móvil (centrado) */
 .logo-container {
@@ -100,9 +138,9 @@ header {
 .action-icon {
     margin-left: 12px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 20px;
     background-image: linear-gradient(to top, #ff6600, #fbff00);
-    -webkit-background-clip:text;
+    -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     position: relative;
@@ -113,112 +151,9 @@ header {
     display: block;
 }
 
-.search-dropdown {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: #fff;
-    z-index: 1000;
-    padding: 15px;
-    transform: translateY(-100%);
-    transition: transform 0.3s ease;
-}
-
-.search-dropdown.show-search {
-    transform: translateY(0);
-    display: block;
-}
-
-.search-form {
-    display: flex;
-    width: 100%;
-}
-
-.search-input {
-    flex-grow: 1;
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-right: none;
-    border-radius: 4px 0 0 4px;
-    font-size: 14px;
-}
-
-.search-button {
-    background-image: linear-gradient(to top, #ff6600, #fbff00);
-    color: black;
-    border: none;
-    padding: 0 15px;
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.show-menu {
-    display: block;
-}
-
-
-/* Media query para tablets y desktop */
-@media (min-width: 768px) {
-    .header-container {
-        max-width: 1200px;
-        padding: 0 20px;
-    }
-
-    .main-header {
-        padding: 15px 0;
-    }
-
-    /* Mostramos el menú desplegable */
-    .desktop-only {
-        display: inline-block;
-    }
-
-    /* Estilo del menú en desktop */
-    .menu-content {
-        min-width: 200px;
-        width: auto;
-        left: auto;
-        right: auto;
-    }
-
-    /* Aumentamos el tamaño del logo */
-    .logo {
-        height: 50px;
-    }
-
-    /* Ajustamos el tamaño y espaciado de los iconos en desktop */
-    .action-icon {
-        font-size: 20px;
-        margin-left: 20px;
-        transition: color 0.3s ease;
-    }
-
-    .action-icon:hover {
-        color: #ff6b00;
-    }
-
-    .search-dropdown {
-        top: 0;
-        width: 100%;
-        padding: 20px;
-    }
-
-}
-
-
-
 
 
 /*  FOOTER  */
-
-@font-face {
-    font-family: 'MiFuentePersonalizada';
-    src: url('../fonts/Teko-VariableFont_wght.ttf') format('truetype');
-}
-
 
 footer {
     font-family: 'MiFuentePersonalizada';
@@ -332,12 +267,16 @@ footer {
     color: transparent;
 }
 
-.footer-privacy{
+.footer-privacy {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 11px;
     color: grey;
     padding-top: 3%;
 
+}
+.footer-privacy a {
+    text-decoration: none;
+    color: inherit;
 }
 
 
@@ -349,10 +288,29 @@ footer {
 /* RESPONSIVE */
 
 @media (min-width: 768px) {
+    .header-container {
+        padding: 0 20px;
+    }
 
-    /* Ajuste del header para móviles */
-    header {
-        flex-direction: column;
+    .main-header {
+        padding: 15px 0;
+    }
+
+    /* Mostramos el menú desplegable */
+    .desktop-only {
+        display: inline-block;
+    }
+
+    /* Aumentamos el tamaño del logo */
+    .logo {
+        height: 50px;
+    }
+
+    /* Ajustamos el tamaño y espaciado de los iconos en desktop */
+    .action-icon {
+        font-size: 25px;
+        margin-left: 20px;
+        transition: color 0.3s ease;
     }
 
     .footer-locations {
@@ -361,16 +319,16 @@ footer {
         flex-direction: row;
     }
 
-    .footer-locations-pack{
+    .footer-locations-pack {
         padding-bottom: 2.5%;
     }
 
-    .footer-socialmedia{
+    .footer-socialmedia {
         padding-bottom: 2.5%;
         margin: 0%;
     }
 
-    .footer-content{
+    .footer-content {
         padding-top: 2.5%;
         padding-bottom: 2.5%;
     }

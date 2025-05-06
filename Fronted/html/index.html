@@ -14,59 +14,49 @@
 
 
 <body>
+    
     <header>
         <div class="header-container">
             <div class="main-header">
                 <!-- Botón de menú unificado -->
                 <div class="menu-toggle" id="menu-toggle">
                     <i class="fas fa-bars"></i>
-                    <span class="desktop-only">Menú</span>
                 </div>
-
+    
                 <!-- Menú desplegable unificado -->
-                <div class="menu-content" id="menu-content">
+                <div class="sidebar" id="sidebar">
+                    <div class="sidebar-header">
+                        <h3 class="gradient-text">Index</h3>
+                        <div class="close-sidebar gradient-text" id="close-sidebar">✖</div>
+                    </div>
                     <ul>
-                        <li class="menu-item"><a href="#about">About Us</a></li>
-                        <li class="menu-item"><a href="#menu">Menu</a></li>
-                        <li class="menu-item"><a href="#contact">Contact Us</a></li>
-                        <li class="menu-item"><a href="#careers">Careers</a></li>
+                        <li><a href="#" class="gradient-text">Menu</a></li>
+                        <li><a href="#" class="gradient-text">About Us</a></li>
+                        <li><a href="#" class="gradient-text">Contact</a></li>
+                        <li><a href="#" class="gradient-text">Careers</a></li>
                     </ul>
                 </div>
-
+    
                 <!-- Logo central -->
                 <div class="logo-container">
                     <a href="index.html">
                         <img src="../images/LogoLingoBurguerWhite.png" alt="LingoBurguer" class="header-logo">
                     </a>
                 </div>
-
+    
                 <!-- Iconos de acción -->
                 <div class="user-actions">
-                    <div class="action-icon search-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <div class="action-icon">
+                    <div class="action-icon" id="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
                     </div>
-                    <div class="action-icon">
+                    <div class="action-icon" id="user-icon">
                         <i class="fas fa-user"></i>
                     </div>
                 </div>
             </div>
-
-
-
-            <!-- Desplegable de búsqueda -->
-            <div class="search-dropdown" id="search-dropdown">
-                <form class="search-form">
-                    <input type="text" class="search-input" placeholder="What are you looking for?">
-                    <button type="submit" class="search-button">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-            </div>
         </div>
     </header>
+    
 
     <section class="hero" id="inicio">
         <div class="hero-video-container">

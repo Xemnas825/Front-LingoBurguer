@@ -1,51 +1,52 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Menú unificado
+    // Seleccionamos los elementos usando los IDs actualizados
     const menuToggle = document.getElementById('menu-toggle');
-    const menuContent = document.getElementById('menu-content');
+    const sidebar = document.getElementById('sidebar');
+    const closeSidebar = document.getElementById('close-sidebar');
+    const overlay = document.getElementById('overlay');
+    const cartIcon = document.getElementById('cart-icon');
+    const userIcon = document.getElementById('user-icon');
     
-    menuToggle.addEventListener('click', function() {
-        menuContent.classList.toggle('show-menu');
-        
-        // Si la búsqueda está abierta, la cerramos
-        if (searchDropdown.classList.contains('show-search')) {
-            searchDropdown.classList.remove('show-search');
-        }
-    });
+    // Verificamos que los elementos existan antes de agregar event listeners
+    if (menuToggle) {
+        menuToggle.addEventListener('click', function() {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            console.log('Menú abierto'); // Para depuración
+        });
+    } else {
+        console.error('El elemento menu-toggle no fue encontrado');
+    }
     
-    // Búsqueda desplegable
-    const searchIcon = document.querySelector('.search-icon');
-    const searchDropdown = document.getElementById('search-dropdown');
+    // Función para cerrar el menú lateral
+    function closeSidebarMenu() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        console.log('Menú cerrado'); // Para depuración
+    }
     
-    searchIcon.addEventListener('click', function() {
-        searchDropdown.classList.toggle('show-search');
-        
-        // Si el menú está abierto, lo cerramos
-        if (menuContent.classList.contains('show-menu')) {
-            menuContent.classList.remove('show-menu');
-        }
-        
-        // Enfocamos en el campo de búsqueda
-        if (searchDropdown.classList.contains('show-search')) {
-            setTimeout(function() {
-                searchDropdown.querySelector('.search-input').focus();
-            }, 100);
-        }
-    });
+    if (closeSidebar) {
+        closeSidebar.addEventListener('click', closeSidebarMenu);
+    } else {
+        console.error('El elemento close-sidebar no fue encontrado');
+    }
     
-    // Cerrar desplegables al hacer clic fuera
-    document.addEventListener('click', function(event) {
-        if (!event.target.closest('.menu-content') && 
-            !event.target.closest('.menu-toggle') &&
-            !event.target.closest('.search-dropdown') &&
-            !event.target.closest('.search-icon')) {
-            
-            if (menuContent.classList.contains('show-menu')) {
-                menuContent.classList.remove('show-menu');
-            }
-            
-            if (searchDropdown.classList.contains('show-search')) {
-                searchDropdown.classList.remove('show-search');
-            }
-        }
-    });
+    if (overlay) {
+        overlay.addEventListener('click', closeSidebarMenu);
+    } else {
+        console.error('El elemento overlay no fue encontrado');
+    }
+    
+    // Funciones básicas para los otros iconos (para demostración)
+    if (cartIcon) {
+        cartIcon.addEventListener('click', function() {
+            alert('Has hecho clic en el carrito de compras');
+        });
+    }
+    
+    if (userIcon) {
+        userIcon.addEventListener('click', function() {
+            alert('Has hecho clic en el icono de usuario');
+        });
+    }
 });
