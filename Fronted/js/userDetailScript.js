@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Funcionalidad para editar información personal
     const editBtn = document.getElementById('edit-info-btn');
+    const ratingsPannel = document.getElementById('comments-feed');
+    const orderPannel = document.getElementById('orders-pannel');
+    const ratingsBtn = document.getElementById('ratings-button');
     const cancelBtn = document.getElementById('cancel-btn');
     const form = document.getElementById('personal-info-form');
     const formInputs = form.querySelectorAll('input, textarea, select');
@@ -24,6 +27,21 @@ document.addEventListener('DOMContentLoaded', function() {
         editBtn.style.display = 'flex';
     });
     
+    function showForm(formToShow) {
+        // Ocultar todos los formularios
+        form.style.display = 'none';
+        orderPannel.style.display = 'none';
+        ratingsPannel.style.display = 'none';
+        
+        // Mostrar el formulario seleccionado
+        formToShow.style.display = 'block';
+    }
+
+    // Revisar !!!!!!!!!!!!!!!!!!!!!!!!!!
+    ratingsBtn.addEventListener('click', function(){
+        showForm(ratingsPannel);
+    });
+
     // Envío del formulario
     form.addEventListener('submit', function(e) {
         e.preventDefault();
