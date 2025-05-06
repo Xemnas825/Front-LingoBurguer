@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+-<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -16,8 +16,22 @@
             <div class="logo-container">   
                 <img src="../../imagenes/LingoBurguer logo.png" alt="Lingoburguer Logo" class="logo">
             </div>
-            <li><a href="#whoarewe"></a></li>
-            <li><a href="#contact">contact</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li class="cart-icon">
+                <a href="#" id="cart-button"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+                <div class="cart-dropdown">
+                    <div class="cart-header">
+                        <h3>Your Cart</h3>
+                    </div>
+                    <div class="cart-items">
+                        <div class="empty-cart-message">Your cart is empty</div>
+                    </div>
+                    <div class="cart-total">
+                        <p>Total: <span id="cart-total-amount">$0.00</span></p>
+                        <button class="btn checkout-btn">Checkout</button>
+                    </div>
+                </div>
+            </li>
         </ul>
     </nav>
 </header>
