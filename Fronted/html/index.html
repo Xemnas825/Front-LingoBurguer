@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+-<!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lingoburguer - Hamburguesas Artesanales</title>
+    <title>Lingoburguer - Handmade Hamburgers</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/header-footer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -58,23 +58,21 @@
     </header>
     
 
-    <section class="hero" id="inicio">
+    <section class="hero" id="home">
         <div class="hero-video-container">
             <video autoplay muted loop>
                 <source src="../videos/BURGER 🍔 Video Publicitario HAMBURGUESA ｜ BROLL.mp4" type="video/mp4">
-                <source src="../videos/hamburguesa-video.webm" type="video/webm">
-                Tu navegador no soporta videos HTML5.
             </video>
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content">
-            <h1>HAMBURGUESAS ARTESANALES</h1>
-            <p>Hechas con ingredientes frescos y de la más alta calidad</p>
-            <a href="#carta" class="btn">VER CARTA</a>
+            <h1>HANDMADE HAMBURGERS</h1>
+            <p>Made with fresh ingredients of the highest quality.</p>
+            <a href="#menu" class="btn">see letter</a>
         </div>
     </section>
 
-    <section class="about" id="nosotros">
+    <section class="about" id="whoarewe">
         <div class="about-content">
             <h2>SOBRE LINGOBURGUER</h2>
             <p>En Lingoburguer reinventamos la experiencia de la hamburguesa. Cada una de nuestras creaciones es una
@@ -87,12 +85,13 @@
         </div>
     </section>
 
-    <section class="letter" id="carta">
-        <h2>NUESTRO CARTA</h2>
-        <div class="#carta-categories">
-            <button class="category-btn active" data-category="hamburguesas">Hamburguesas</button>
-            <button class="category-btn" data-category="acompanamientos">Acompañamientos</button>
-            <button class="category-btn" data-category="bebidas">Bebidas</button>
+    <section class="menu" id="menu">
+        <h2>our menu</h2>
+        <div class="menu-categories">
+            <button class="category-btn active" data-category="hamburguesas">Hamburgers</button>
+            <button class="category-btn" data-category="acompañamientos">Accompaniments</button>
+            <button class="category-btn" data-category="bebidas">Beverages</button>
+            <button class="category-btn" data-category="postres">Desserts</button>
         </div>
 
         <div class="#carta-items" id="hamburguesas">
@@ -100,25 +99,88 @@
                 <img src="burger-classic.jpg" alt="Lingoburguer Clásica">
                 <h3>Lingoburguer fucking clasic </h3>
                 <p>Carne 100% res, queso cheddar, lechuga, tomate, cebolla y salsa especial</p>
-                <span class="price">$12.990</span>
+                <span class="price">$12.99</span>
             </div>
-            <div class="#carta-item">
-                <img src="burger-bbq.jpg" alt="BBQ Bacon">
-                <h3>LIngo Bacon fucking BBQ</h3>
+            <div class="menu-item">
+                <img src="../../imagenes/PC2.jpg" alt="BBQ Bacon">
+                <h3>Lingo Bacon BBQ</h3>
                 <p>Doble carne, bacon crocante, cebolla caramelizada, queso americano y salsa BBQ</p>
-                <span class="price">$15.990</span>
+                <span class="price">$15.99</span>
             </div>
-            <div class="#carta-item">
+            <div class="menu-item">
                 <img src="burger-veggie.jpg" alt="Veggie Delight">
-                <h3>(la cosa esa para los raritos)Veggie Delight</h3>
+                <h3>Veggie Delight</h3>
                 <p>Medallón vegetal, queso de cabra, rúcula, tomate seco y mayonesa de albahaca</p>
-                <span class="price">$13.990</span>
+                <span class="price">$13.99</span>
+            </div>
+        </div>
+        
+        <div class="menu-items" id="acompañamientos" style="display: none;">
+            <div class="menu-item">
+                <img src="burger-fries.jpg" alt="Papas Fritas">
+                <h3>Papas Fritas Rústicas</h3>
+                <p>Papas cortadas a mano con sal de mar y hierbas</p>
+                <span class="price">$5.99</span>
+            </div>
+            <div class="menu-item">
+                <img src="onion-rings.jpg" alt="Aros de Cebolla">
+                <h3>Aros de Cebolla Crujientes</h3>
+                <p>Aros de cebolla en tempura con salsa ranch casera</p>
+                <span class="price">$6.99</span>
+            </div>
+            <div class="menu-item">
+                <img src="cesar-salad.jpg" alt="Ensalada César">
+                <h3>Ensalada César</h3>
+                <p>Lechuga romana, crutones, queso parmesano y aderezo César</p>
+                <span class="price">$7.99</span>
+            </div>
+        </div>
+        
+        <div class="menu-items" id="bebidas" style="display: none;">
+            <div class="menu-item">
+                <img src="lemonade.jpg" alt="Limonada Casera">
+                <h3>Limonada Casera</h3>
+                <p>Jugo de limón recién exprimido con un toque de hierbabuena</p>
+                <span class="price">$4.99</span>
+            </div>
+            <div class="menu-item">
+                <img src="craft-beer.jpg" alt="Cerveza Artesanal">
+                <h3>Cerveza Artesanal Local</h3>
+                <p>Variedad de cervezas artesanales locales. Consulta las opciones disponibles</p>
+                <span class="price">$6.99</span>
+            </div>
+            <div class="menu-item">
+                <img src="milkshake.jpg" alt="Malteada">
+                <h3>Malteada Clásica</h3>
+                <p>Helado cremoso batido con leche. Sabores: vainilla, chocolate o fresa</p>
+                <span class="price">$7.59</span>
+            </div>
+        </div>
+        
+        <div class="menu-items" id="postres" style="display: none;">
+            <div class="menu-item">
+                <img src="brownie.jpg" alt="Brownie con Helado">
+                <h3>Brownie con Helado</h3>
+                <p>Brownie caliente de chocolate con helado de vainilla y salsa de caramelo</p>
+                <span class="price">$8.99</span>
+            </div>
+            <div class="menu-item">
+                <img src="cheesecake.jpg" alt="Cheesecake">
+                <h3>Cheesecake de Frutos Rojos</h3>
+                <p>Tarta de queso cremosa con coulis de frutos rojos de temporada</p>
+                <span class="price">$7.99</span>
+            </div>
+            <div class="menu-item">
+                <img src="icecream.jpg" alt="Helado Artesanal">
+                <h3>Helado Artesanal</h3>
+                <p>Dos bolas de helado artesanal. Consulta los sabores del día</p>
+                <span class="price">$5.99</span>
             </div>
         </div>
     </section>
 
     <section class="gallery">
-        <h2>GALERÍA</h2>
+        <h2>Gallery</h2>
         <div class="gallery-grid">
             <img src="gallery1.jpg" alt="Hamburguesa 1">
             <img src="gallery2.jpg" alt="Hamburguesa 2">
@@ -127,7 +189,7 @@
         </div>
     </section>
 
-    <section class="contact" id="contacto">
+    <section class="contact" id="contact">
         <div class="contact-info">
             <h2>CONTÁCTANOS</h2>
             <p><i class="fas fa-map-marker-alt"></i> Av. Siempre Viva 123, Santiago</p>
@@ -143,9 +205,9 @@
         </div>
         <div class="contact-form">
             <form>
-                <input type="text" placeholder="Nombre" required>
+                <input type="text" placeholder="Name" required>
                 <input type="email" placeholder="Email" required>
-                <input type="tel" placeholder="Teléfono">
+                <input type="tel" placeholder="Telephone">
                 <textarea placeholder="Mensaje" required></textarea>
                 <button type="submit" class="btn">ENVIAR</button>
             </form>
