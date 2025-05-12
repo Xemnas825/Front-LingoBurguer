@@ -51,6 +51,10 @@ body {
     line-height: 1.5;
 }
 
+.main a{
+    text-decoration: none;
+    color: inherit;
+}
 .main ul {
     padding-left: 25px;
     margin-bottom: 20px;

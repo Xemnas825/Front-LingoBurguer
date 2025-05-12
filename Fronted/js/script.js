@@ -12,11 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let cart = [];
     
-     // Cargar carrito desde localStorage al cargar la página
-     initCart();
+     //Cargar carrito desde localStorage al cargar la página
+    initCart();
     
-     // ===== EVENTOS DEL CARRITO =====
-     // Abrir/cerrar el carrito al hacer clic en el icono
+    //  ===== EVENTOS DEL CARRITO =====
+    //  Abrir/cerrar el carrito al hacer clic en el icono
      cartButton.addEventListener('click', function(e) {
          e.preventDefault();
          e.stopPropagation();
