@@ -1,15 +1,52 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Funcionalidad para editar información personal
+    // Elementos del DOM
     const editBtn = document.getElementById('edit-info-btn');
-    const ratingsPannel = document.getElementById('comments-feed');
     const orderPannel = document.getElementById('orders-pannel');
-    const ratingsBtn = document.getElementById('ratings-button');
+    const personalPannel = document.getElementById('persInfoPannel');
     const cancelBtn = document.getElementById('cancel-btn');
     const form = document.getElementById('personal-info-form');
     const formInputs = form.querySelectorAll('input, textarea, select');
     const formButtons = form.querySelector('.form-buttons');
     
-    // Activar modo edición
+    // Botones del menú lateral (usando los IDs que ya tienes)
+    const persInfoBtn = document.getElementById('persInfoBtn').closest('a'); // Selecciona el <a> que contiene el ícono
+    const ordersBtn = document.getElementById('ordersBtn').closest('a');   // Selecciona el <a> que contiene el ícono
+    
+    // Función para cambiar entre paneles
+    function showPanel(panelToShow) {
+        // Oculta todos los paneles
+        personalPannel.style.display = 'none';
+        orderPannel.style.display = 'none';
+        
+        // Muestra solo el panel seleccionado
+        if (panelToShow === 'personal') {
+            personalPannel.style.display = 'block';
+        } 
+        else if (panelToShow === 'orders') {
+            orderPannel.style.display = 'block';
+        }
+    }
+
+    // Evento para el botón "Información Personal"
+    persInfoBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        showPanel('personal');
+        
+        // Actualiza la clase 'active' en el menú
+        document.querySelectorAll('.nav-menu a').forEach(link => link.classList.remove('active'));
+        this.classList.add('active');
+    });
+
+    // Evento para el botón "Historial de Pedidos"
+    ordersBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        showPanel('orders');
+        
+        // Actualiza la clase 'active' en el menú
+        document.querySelectorAll('.nav-menu a').forEach(link => link.classList.remove('active'));
+        this.classList.add('active');
+    });
+
     editBtn.addEventListener('click', function() {
         formInputs.forEach(input => {
             input.disabled = false;
@@ -18,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
         editBtn.style.display = 'none';
     });
     
-    // Cancelar edición
     cancelBtn.addEventListener('click', function() {
         formInputs.forEach(input => {
             input.disabled = true;
@@ -27,38 +63,17 @@ document.addEventListener('DOMContentLoaded', function() {
         editBtn.style.display = 'flex';
     });
     
-    function showForm(formToShow) {
-        // Ocultar todos los formularios
-        form.style.display = 'none';
-        orderPannel.style.display = 'none';
-        ratingsPannel.style.display = 'none';
-        
-        // Mostrar el formulario seleccionado
-        formToShow.style.display = 'block';
-    }
-
-    // Revisar !!!!!!!!!!!!!!!!!!!!!!!!!!
-    ratingsBtn.addEventListener('click', function(){
-        showForm(ratingsPannel);
-    });
-
-    // Envío del formulario
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        
-        // Aquí iría la lógica para guardar los cambios
-        
         formInputs.forEach(input => {
             input.disabled = true;
         });
         formButtons.style.display = 'none';
         editBtn.style.display = 'flex';
-        
-        // Mostrar un mensaje de éxito
         alert('¡Información actualizada correctamente!');
     });
-    
-    // Toggle para menú móvil
+
+    // Menú móvil (toggle)
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
     const navMenu = document.querySelector('.nav-menu');
     
@@ -67,14 +82,8 @@ document.addEventListener('DOMContentLoaded', function() {
             navMenu.classList.toggle('active');
         });
     }
-    
-    // Navegación
-    const navLinks = document.querySelectorAll('.nav-menu a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Aquí iría la lógica para cambiar de página o cargar contenido
-            navLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
+
+    // Mostrar "Información Personal" por defecto al cargar la página
+    showPanel('personal');
+    persInfoBtn.classList.add('active'); // Marcar como activo
 });

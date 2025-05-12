@@ -124,6 +124,10 @@ body {
     transition: background-color 0.3s ease;
 }
 
+.logo {
+    height: 120px;
+}
+
 .logout-btn:hover {
     background-color: #c5a00d;
 }
