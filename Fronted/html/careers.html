@@ -62,11 +62,11 @@
             <div id="details1" class="details"></div>
             <div id="details2" class="details"></div>
             <div id="details3" class="details"></div>
-            <button class="apply-button" onclick="applyNow()">Apply Now</button>
+            <button id="apply-btn" class="apply-button">Apply Now</button>
         </div>
 
-        <form id="candidateForm" class="candidate-card" style="display:none" enctype="multipart/form-data">
-            <label for="candidateName">First_Name</label>
+        <form id="candidateForm" class="candidate-card" style="display: none;" enctype="multipart/form-data">
+            <label for="candidateName">First Name</label>
             <input type="text" id="candidateName" placeholder="Enter your name" required />
 
             <label for="candidateLastName">Last Name</label>
@@ -78,18 +78,21 @@
             <label for="candidatePhoneNumber">Phone number</label>
             <input type="text" id="candidatePhoneNumber" placeholder="Enter your phone" required />
 
-            <label for="candidateCV">Currículum Vitae (PDF):</label><br>
-            <input type="file" id="candidateCV" name="cv" accept=".pdf" required><br><br>
+            <label for="candidateLetter">Letter Presentation</label>
+            <textarea id="candidateLetter" name="candidateLetter" rows="4" placeholder="Enter your letter presentation here..."></textarea>
 
-            <label for="candidateLetter">Letter Presentation</label><br>
-            <textarea id="candidateLetter" name="candidateLetter" rows="6" cols="40"
-                placeholder="Enter your letter presentation here..."></textarea><br><br>
+            <label for="candidateNotes">Notes</label>
+            <textarea id="candidateNotes" name="candidateNotes" rows="4" placeholder="Enter your extra notes here..."></textarea>
 
-                <label for="candidateNotes">Notes</label><br>
-            <textarea id="candidateNotes" name="candidateNotes" rows="6" cols="40"
-                placeholder="Enter your extra notes here..."></textarea><br><br>
-
+            <label for="candidateCV">Currículum Vitae (PDF)</label>
+            <input type="file" id="candidateCV" name="cv" accept=".pdf" required>
+            
             <button type="submit" class="apply-btn">Apply</button>
+            
+            <div id="successMessage" class="success-message" style="display: none;">
+                <i class="fas fa-check-circle"></i>
+                Application sent successfully!
+            </div>
         </form>
 
 

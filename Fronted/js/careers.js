@@ -12,12 +12,105 @@ document.addEventListener('DOMContentLoaded', function () {
         details3: document.getElementById("details3"),
         applyButton: document.getElementById("apply-btn"),
         candidateForm: document.getElementById("candidateForm"),
+        successMessage: document.getElementById("successMessage")
     };
     
-
     // Verificamos que los elementos esenciales existan
     if (!DOM_ELEMENTS.title) {
         console.error('Elemento title no encontrado');
+    }
+
+    // Crear y añadir el overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    document.body.appendChild(overlay);
+
+    // Crear y añadir el botón de cerrar
+    const closeButton = document.createElement('button');
+    closeButton.className = 'close-form';
+    closeButton.innerHTML = '×';
+    if (DOM_ELEMENTS.candidateForm) {
+        DOM_ELEMENTS.candidateForm.appendChild(closeButton);
+    }
+
+    // Función para mostrar el formulario
+    function showForm() {
+        if (DOM_ELEMENTS.candidateForm && overlay) {
+            overlay.classList.add('show');
+            DOM_ELEMENTS.candidateForm.style.display = 'block';
+            DOM_ELEMENTS.candidateForm.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    // Función para ocultar el formulario
+    function hideForm() {
+        if (DOM_ELEMENTS.candidateForm && overlay) {
+            overlay.classList.remove('show');
+            DOM_ELEMENTS.candidateForm.classList.remove('show');
+            DOM_ELEMENTS.candidateForm.style.display = 'none';
+            document.body.style.overflow = '';
+            if (DOM_ELEMENTS.successMessage) {
+                DOM_ELEMENTS.successMessage.style.display = 'none';
+            }
+        }
+    }
+
+    // Event listeners
+    if (DOM_ELEMENTS.applyButton) {
+        DOM_ELEMENTS.applyButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Apply button clicked'); // Debug
+            showForm();
+        });
+    }
+
+    closeButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        hideForm();
+    });
+
+    overlay.addEventListener('click', function(e) {
+        e.preventDefault();
+        hideForm();
+    });
+
+    // Prevenir que clicks dentro del formulario cierren el overlay
+    if (DOM_ELEMENTS.candidateForm) {
+        DOM_ELEMENTS.candidateForm.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Manejo de envío de formularios
+        DOM_ELEMENTS.candidateForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitButton = this.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.innerHTML = 'Sending...';
+
+                // Simulamos una petición al servidor
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = 'Apply';
+                    
+                    // Mostrar mensaje de éxito
+                    if (DOM_ELEMENTS.successMessage) {
+                        DOM_ELEMENTS.successMessage.classList.add('show');
+                        DOM_ELEMENTS.successMessage.style.display = 'flex';
+                    }
+
+                    // Limpiar el formulario
+                    this.reset();
+
+                    // Ocultar el mensaje y el formulario después de 3 segundos
+                    setTimeout(() => {
+                        hideForm();
+                    }, 3000);
+                }, 1500);
+            }
+        });
     }
 
     // Iniciar la carga de datos
@@ -96,28 +189,4 @@ document.addEventListener('DOMContentLoaded', function () {
             return dateString;
         }
     }
-
-    function showForm(formToShow) {
-        // Ocultar todos los formularios
-        candidateForm.style.display = 'none';
-        
-        // Mostrar el formulario seleccionado
-        formToShow.style.display = 'block';
-    }
-
-    // Evento para cambiar al formulario de registro
-    applyButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        showForm(candidateForm);
-    });
-
-    // Manejo de envío de formularios
-    candidateForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Aquí iría tu lógica para procesar el login
-        console.log('Login submitted');
-        // loginEmail y loginPassword tienen los datos
-    });
-   
-
 });
