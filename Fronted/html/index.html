@@ -11,8 +11,6 @@
     
 </head>
 
-
-
 <body>
     
     <header>
@@ -48,6 +46,19 @@
                 <div class="user-actions">
                     <div class="action-icon" id="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                        <div class="cart-dropdown">
+                            <div class="cart-header">
+                                <h3>Tu Carrito</h3>
+                            </div>
+                            <div class="cart-items">
+                                <!-- Los items del carrito se insertarán aquí dinámicamente -->
+                            </div>
+                            <div class="cart-total">
+                                <p>Total: <span id="cart-total-amount">$0.00</span></p>
+                                <button class="btn checkout-btn">Realizar Pedido</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="action-icon" id="user-icon">
                         <i class="fas fa-user"></i>
@@ -85,98 +96,105 @@
         </div>
     </section>
     <section class="menu" id="menu">
-    <h2>our menu</h2>
-    <div class="menu-categories">
-        <button class="category-btn active" data-category="hamburguesas">Hamburgers</button>
-        <button class="category-btn" data-category="acompañamientos">Accompaniments</button>
-        <button class="category-btn" data-category="bebidas">Beverages</button>
-        <button class="category-btn" data-category="postres">Desserts</button>
-    </div>
+        <h2>Nuestro Menú</h2>
+        <div class="menu-categories">
+            <button class="category-btn active" data-category="hamburguesas">Hamburguesas</button>
+            <button class="category-btn" data-category="acompañamientos">Acompañamientos</button>
+            <button class="category-btn" data-category="bebidas">Bebidas</button>
+            <button class="category-btn" data-category="postres">Postres</button>
+        </div>
 
-    <div class="#carta-items" id="hamburguesas">
-        <div class="#carta-item">
-            <img src="burger-classic.jpg" alt="Lingoburguer Clásica">
-            <h3>Lingoburguer fucking clasic </h3>
-            <p>Carne 100% res, queso cheddar, lechuga, tomate, cebolla y salsa especial</p>
-            <span class="price">$12.99</span>
+        <div class="menu-items" id="hamburguesas">
+            <div class="menu-item">
+                <img src="../images/burgers/classic.jpg" alt="Lingoburguer Clásica">
+                <div class="menu-item-content">
+                    <h3>Lingoburguer Clásica</h3>
+                    <p>Carne 100% res, queso cheddar, lechuga, tomate, cebolla y salsa especial</p>
+                    <span class="price">$12.99</span>
+                    <button class="add-to-cart-btn" data-id="classic-burger">
+                        <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="../../imagenes/PC2.jpg" alt="BBQ Bacon">
+                <h3>Lingo Bacon BBQ</h3>
+                <p>Doble carne, bacon crocante, cebolla caramelizada, queso americano y salsa BBQ</p>
+                <span class="price">$15.99</span>
+                <button class="add-to-cart-btn" data-id="bbq-bacon">Agregar al Carrito</button>
+            </div>
+            <div class="menu-item">
+                <img src="burger-veggie.jpg" alt="Veggie Delight">
+                <h3>Veggie Delight</h3>
+                <p>Medallón vegetal, queso de cabra, rúcula, tomate seco y mayonesa de albahaca</p>
+                <span class="price">$13.99</span>
+                <button class="add-to-cart-btn" data-id="veggie-delight">Agregar al Carrito</button>
+            </div>
         </div>
-        <div class="menu-item">
-            <img src="../../imagenes/PC2.jpg" alt="BBQ Bacon">
-            <h3>Lingo Bacon BBQ</h3>
-            <p>Doble carne, bacon crocante, cebolla caramelizada, queso americano y salsa BBQ</p>
-            <span class="price">$15.99</span>
+        
+        <div class="menu-items" id="acompañamientos" style="display: none;">
+            <div class="menu-item">
+                <img src="burger-fries.jpg" alt="Papas Fritas">
+                <h3>Papas Fritas Rústicas</h3>
+                <p>Papas cortadas a mano con sal de mar y hierbas</p>
+                <span class="price">$5.99</span>
+            </div>
+            <div class="menu-item">
+                <img src="onion-rings.jpg" alt="Aros de Cebolla">
+                <h3>Aros de Cebolla Crujientes</h3>
+                <p>Aros de cebolla en tempura con salsa ranch casera</p>
+                <span class="price">$6.99</span>
+            </div>
+            <div class="menu-item">
+                <img src="cesar-salad.jpg" alt="Ensalada César">
+                <h3>Ensalada César</h3>
+                <p>Lechuga romana, crutones, queso parmesano y aderezo César</p>
+                <span class="price">$7.99</span>
+            </div>
         </div>
-        <div class="menu-item">
-            <img src="burger-veggie.jpg" alt="Veggie Delight">
-            <h3>Veggie Delight</h3>
-            <p>Medallón vegetal, queso de cabra, rúcula, tomate seco y mayonesa de albahaca</p>
-            <span class="price">$13.99</span>
+        
+        <div class="menu-items" id="bebidas" style="display: none;">
+            <div class="menu-item">
+                <img src="lemonade.jpg" alt="Limonada Casera">
+                <h3>Limonada Casera</h3>
+                <p>Jugo de limón recién exprimido con un toque de hierbabuena</p>
+                <span class="price">$4.99</span>
+            </div>
+            <div class="menu-item">
+                <img src="craft-beer.jpg" alt="Cerveza Artesanal">
+                <h3>Cerveza Artesanal Local</h3>
+                <p>Variedad de cervezas artesanales locales. Consulta las opciones disponibles</p>
+                <span class="price">$6.99</span>
+            </div>
+            <div class="menu-item">
+                <img src="milkshake.jpg" alt="Malteada">
+                <h3>Malteada Clásica</h3>
+                <p>Helado cremoso batido con leche. Sabores: vainilla, chocolate o fresa</p>
+                <span class="price">$7.59</span>
+            </div>
         </div>
-    </div>
-    
-    <div class="menu-items" id="acompañamientos" style="display: none;">
-        <div class="menu-item">
-            <img src="burger-fries.jpg" alt="Papas Fritas">
-            <h3>Papas Fritas Rústicas</h3>
-            <p>Papas cortadas a mano con sal de mar y hierbas</p>
-            <span class="price">$5.99</span>
+        
+        <div class="menu-items" id="postres" style="display: none;">
+            <div class="menu-item">
+                <img src="brownie.jpg" alt="Brownie con Helado">
+                <h3>Brownie con Helado</h3>
+                <p>Brownie caliente de chocolate con helado de vainilla y salsa de caramelo</p>
+                <span class="price">$8.99</span>
+            </div>
+            <div class="menu-item">
+                <img src="cheesecake.jpg" alt="Cheesecake">
+                <h3>Cheesecake de Frutos Rojos</h3>
+                <p>Tarta de queso cremosa con coulis de frutos rojos de temporada</p>
+                <span class="price">$7.99</span>
+            </div>
+            <div class="menu-item">
+                <img src="icecream.jpg" alt="Helado Artesanal">
+                <h3>Helado Artesanal</h3>
+                <p>Dos bolas de helado artesanal. Consulta los sabores del día</p>
+                <span class="price">$5.99</span>
+            </div>
         </div>
-        <div class="menu-item">
-            <img src="onion-rings.jpg" alt="Aros de Cebolla">
-            <h3>Aros de Cebolla Crujientes</h3>
-            <p>Aros de cebolla en tempura con salsa ranch casera</p>
-            <span class="price">$6.99</span>
-        </div>
-        <div class="menu-item">
-            <img src="cesar-salad.jpg" alt="Ensalada César">
-            <h3>Ensalada César</h3>
-            <p>Lechuga romana, crutones, queso parmesano y aderezo César</p>
-            <span class="price">$7.99</span>
-        </div>
-    </div>
-    
-    <div class="menu-items" id="bebidas" style="display: none;">
-        <div class="menu-item">
-            <img src="lemonade.jpg" alt="Limonada Casera">
-            <h3>Limonada Casera</h3>
-            <p>Jugo de limón recién exprimido con un toque de hierbabuena</p>
-            <span class="price">$4.99</span>
-        </div>
-        <div class="menu-item">
-            <img src="craft-beer.jpg" alt="Cerveza Artesanal">
-            <h3>Cerveza Artesanal Local</h3>
-            <p>Variedad de cervezas artesanales locales. Consulta las opciones disponibles</p>
-            <span class="price">$6.99</span>
-        </div>
-        <div class="menu-item">
-            <img src="milkshake.jpg" alt="Malteada">
-            <h3>Malteada Clásica</h3>
-            <p>Helado cremoso batido con leche. Sabores: vainilla, chocolate o fresa</p>
-            <span class="price">$7.59</span>
-        </div>
-    </div>
-    
-    <div class="menu-items" id="postres" style="display: none;">
-        <div class="menu-item">
-            <img src="brownie.jpg" alt="Brownie con Helado">
-            <h3>Brownie con Helado</h3>
-            <p>Brownie caliente de chocolate con helado de vainilla y salsa de caramelo</p>
-            <span class="price">$8.99</span>
-        </div>
-        <div class="menu-item">
-            <img src="cheesecake.jpg" alt="Cheesecake">
-            <h3>Cheesecake de Frutos Rojos</h3>
-            <p>Tarta de queso cremosa con coulis de frutos rojos de temporada</p>
-            <span class="price">$7.99</span>
-        </div>
-        <div class="menu-item">
-            <img src="icecream.jpg" alt="Helado Artesanal">
-            <h3>Helado Artesanal</h3>
-            <p>Dos bolas de helado artesanal. Consulta los sabores del día</p>
-            <span class="price">$5.99</span>
-        </div>
-    </div>
-</section>
+    </section>
 
     <section class="gallery">
         <h2>Gallery</h2>

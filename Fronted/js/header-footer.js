@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
         footerLocations: document.querySelector('.footer-locations')
     };
 
-
     // Verificamos que los elementos existan antes de agregar event listeners
     if (menuToggle) {
         menuToggle.addEventListener('click', function () {
@@ -36,14 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('El elemento close-sidebar no fue encontrado');
     }
 
-
-    // Funciones básicas para los otros iconos (para demostración)
-    if (cartIcon) {
-        cartIcon.addEventListener('click', function () {
-            alert('Has hecho clic en el carrito de compras');
-        });
-    }
-
+    // Solo mantener el event listener para el icono de usuario
     if (userIcon) {
         userIcon.addEventListener('click', function () {
             alert('Has hecho clic en el icono de usuario');
@@ -74,24 +66,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-
     function createEstablishmentCard(establishment) {
-            const ubicationElement = document.createElement('div');
-            ubicationElement.classList.add('footer-locations-pack');
-            ubicationElement.innerHTML = `
-            <div class="footer-name-location">
-                <h3>${establishment.m_strName}</h3>
-                <p>${establishment.m_strAddress}
-                    <br>${establishment.m_strTelephone}
-                </p>
-            </div>`;
-            DOM_ELEMENTS.footerLocations.appendChild(ubicationElement);
-        //})
+        const ubicationElement = document.createElement('div');
+        ubicationElement.classList.add('footer-locations-pack');
+        ubicationElement.innerHTML = `
+        <div class="footer-name-location">
+            <h3>${establishment.m_strName}</h3>
+            <p>${establishment.m_strAddress}
+                <br>${establishment.m_strTelephone}
+            </p>
+        </div>`;
+        DOM_ELEMENTS.footerLocations.appendChild(ubicationElement);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
         loadEstablishments();
     });
-loadEstablishments();
 
+    loadEstablishments();
 });
