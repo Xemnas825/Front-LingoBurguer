@@ -38,6 +38,12 @@
                     <li><a href="#" class="active"><i class="fas fa-user" id="persInfoBtn"></i> Información Personal</a></li>
                 </ul>
                 
+                <h3>Administración</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-users" id="employeesBtn"></i> Gestión de Empleados</a></li>
+                    <li><a href="#"><i class="fas fa-hamburger" id="productsBtn"></i> Gestión de Productos</a></li>
+                </ul>
+
                 <h3>Actividad</h3>
                 <ul>
                     <li><a href="#"><i class="fas fa-history" id="ordersBtn"></i> Historial de Pedidos</a></li>
@@ -139,6 +145,155 @@
                                 <td>€35.90</td> PRECIO_PEDIDO
                                 <td><span class="badge badge-success">Entregado</span></td> ESTADO_PEDIDO
                             </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Panel de Gestión de Empleados -->
+                <div class="content-panel" id="employees-panel" style="display: none;">
+                    <div class="panel-header">
+                        <h2>Gestión de Empleados</h2>
+                        <button class="action-button" id="add-employee-btn">
+                            <i class="fas fa-plus"></i> Añadir Empleado
+                        </button>
+                    </div>
+
+                    <form id="employee-form" style="display: none;">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="emp-firstName">Nombre</label>
+                                <input type="text" id="emp-firstName" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="emp-lastName">Apellidos</label>
+                                <input type="text" id="emp-lastName" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="emp-email">Correo Electrónico</label>
+                                <input type="email" id="emp-email" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="emp-telephone">Teléfono</label>
+                                <input type="tel" id="emp-telephone" class="form-control" required>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="emp-address">Dirección</label>
+                                <textarea id="emp-address" class="form-control" rows="3" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="emp-password">Contraseña</label>
+                                <input type="password" id="emp-password" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="emp-hire-date">Fecha de Contratación</label>
+                                <input type="text" id="emp-hire-date" class="form-control" placeholder="DD/MM/AAAA" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="emp-salary">Salario</label>
+                                <input type="number" id="emp-salary" class="form-control" step="0.01" required>
+                            </div>
+
+                            <div class="form-buttons">
+                                <button type="button" class="btn btn-secondary" id="cancel-employee-btn">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar Empleado</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Teléfono</th>
+                                <th>Fecha Contratación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employees-table-body">
+                            <!-- Aquí se cargarán los empleados dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Panel de Gestión de Productos -->
+                <div class="content-panel" id="products-panel" style="display: none;">
+                    <div class="panel-header">
+                        <h2>Gestión de Productos</h2>
+                        <button class="action-button" id="add-product-btn">
+                            <i class="fas fa-plus"></i> Añadir Producto
+                        </button>
+                    </div>
+
+                    <form id="product-form" style="display: none;">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="prod-name">Nombre del Producto</label>
+                                <input type="text" id="prod-name" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prod-category">Categoría</label>
+                                <select id="prod-category" class="form-control" required>
+                                    <option value="">Selecciona una categoría</option>
+                                    <option value="hamburguesas">Hamburguesas</option>
+                                    <option value="bebidas">Bebidas</option>
+                                    <option value="complementos">Complementos</option>
+                                    <option value="postres">Postres</option>
+                                    <option value="menu">Menús</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="prod-description">Descripción</label>
+                                <textarea id="prod-description" class="form-control" rows="3" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prod-price">Precio</label>
+                                <input type="text" id="prod-price" class="form-control" placeholder="0.00" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prod-availability">Disponibilidad</label>
+                                <select id="prod-availability" class="form-control" required>
+                                    <option value="true">Disponible</option>
+                                    <option value="false">No Disponible</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prod-image">Imagen del Producto</label>
+                                <input type="file" id="prod-image" class="form-control" accept=".jpg, .jpeg" required>
+                                <small class="form-text text-muted">Selecciona una imagen en formato JPG</small>
+                            </div>
+
+                            <div class="form-buttons">
+                                <button type="button" class="btn btn-secondary" id="cancel-product-btn">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar Producto</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Disponibilidad</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table-body">
+                            <!-- Aquí se cargarán los productos dinámicamente -->
                         </tbody>
                     </table>
                 </div>
