@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
+   //Referencia API Ejemplo formato: 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.FIND_ALL'
+   const apiClientUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.FIND_ALL';
+   const apiEmployeeUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.FIND_ALL';
+   
+
+   
     // Referencias a los formularios
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
@@ -66,6 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Login submitted');
         // loginEmail y loginPassword tienen los datos
     });
+
+
 
 
     ///////////////////////
