@@ -1,0 +1,122 @@
+body {
+    background-color: black;
+    font-family: Arial, sans-serif;
+    color: white;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+    max-width: 100%;
+        width: 100vw; /* Asegura que ocupe toda la pantalla pero no más */
+}
+
+.card {
+    background-color: #222;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    text-align: center;
+   
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    background-image: linear-gradient(to top, #ff6600, #fbff00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 15px;
+}
+
+.description, .salary, .details {
+    font-size: 16px;
+    margin: 10px 0;
+    line-height: 1.4;
+}
+
+.apply-button {
+    background-color: #ff6600;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 15px;
+}
+
+.apply-button:hover {
+    background-color: #fbff00;
+}
+
+/* Loading state styles */
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading::after {
+    content: "";
+    width: 30px;
+    height: 30px;
+    border: 4px solid #ff6600;
+    border-top: 4px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* ===== RESET DEL HEADER - QUE NADA SE MUEVA ===== */
+/* careers.css */
+header {
+    display: flex !important;
+    justify-content: center !important;
+    padding: 0 20px !important;
+}
+
+.main-header {
+    width: 100% !important;
+    max-width: 1200px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+}
+
+/* Fuerza al logo a estar en el centro */
+.logo-container {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+
+
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (min-width: 768px) {
+    main {
+        flex-direction: row;
+        justify-content: center;
+        padding: 60px 20px;
+    }
+
+    .card {
+        max-width: 350px;
+        padding: 20px;
+    }
+}
