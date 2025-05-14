@@ -35,24 +35,20 @@
     </form>
 
     <!-- Formulario de Registro -->
-    <form id="registerForm" class="login-card" style="display:none;">
+    <form id="registerForm" class="login-card" style="display:none;" method='POST'>
         <span class="material-symbols-outlined">
             <a href="#" id="backToLoginFromRegister">arrow_back_ios</a>
         </span>
         <h2>Create an Account</h2>
 
         <label for="registerName">Name</label>
-        <input type="text" id="registerName" placeholder="Enter your name" required />
+        <input type="text" id="registerName" placeholder="Enter your first name" required />
         
         <label for="registerLastName">Last Name</label>
-        <input type="text" id="registerLastName" placeholder="Enter your name" required />
-
-        <!-- Agregar formato para ingresar datos de fecha -->
-        <label for="registerBirth">Date of Birth</label>
-        <input type="text" id="registerBirth" placeholder="Enter your name" required />
+        <input type="text" id="registerLastName" placeholder="Enter your last name" required />
 
         <label for="registerPhoneNumber">Phone number</label>
-        <input type="text" id="registerPhoneNumber" placeholder="Enter your name" required />
+        <input type="text" id="registerPhoneNumber" placeholder="Enter your phone number" required />
 
         <label for="registerEmail">Email</label>
         <input type="email" id="registerEmail" placeholder="Enter your email" required />
@@ -63,7 +59,7 @@
         <label for="confirmPassword">Confirm Password</label>
         <input type="password" id="confirmPassword" placeholder="Confirm your password" required />
 
-        <button type="submit" class="login-btn">Sign Up</button>
+        <button type="submit" class="login-btn" id="submitButton" >Sign Up</button>
 
         <div class="options">
             <a href="#" id="alreadyHaveAccount">Already have an account? Log in</a>
