@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Verificar si el usuario está autenticado
+    
+    /*const userRole = sessionStorage.getItem('userRole');
+    const userData = JSON.parse(sessionStorage.getItem('userData'));
+
+    if (!userRole || !userData) {
+        // Si no hay datos de sesión, redirigir al login
+        window.location.href = 'login.html';
+        return;
+    }*/
+
     // Elementos del DOM
     const editBtn = document.getElementById('edit-info-btn');
     const orderPannel = document.getElementById('orders-pannel');
@@ -23,14 +34,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const addProductBtn = document.getElementById('add-product-btn');
     const cancelEmployeeBtn = document.getElementById('cancel-employee-btn');
     const cancelProductBtn = document.getElementById('cancel-product-btn');
+
+    // Cargar datos del usuario
+    /*document.querySelector('.user-name').textContent = userData.name + ' ' + userData.lastName;
+    document.querySelector('.user-email').textContent = userData.email;
+
+    // Configurar visibilidad según el rol
+    const adminSection = document.querySelector('.nav-menu h3:nth-of-type(2)');
+    const adminLinks = adminSection?.nextElementSibling;
+
+    if (userRole === 'client') {
+        // Ocultar sección de administración para clientes
+        if (adminSection) adminSection.style.display = 'none';
+        if (adminLinks) adminLinks.style.display = 'none';
+    }*/
     
     // Función para cambiar entre paneles
     function showPanel(panelToShow) {
         // Oculta todos los paneles
         personalPannel.style.display = 'none';
         orderPannel.style.display = 'none';
-        employeesPanel.style.display = 'none';
-        productsPanel.style.display = 'none';
+        /*if (userRole === 'employee') {
+            employeesPanel.style.display = 'none';
+            productsPanel.style.display = 'none';
+        }*/
         
         // Muestra solo el panel seleccionado
         switch(panelToShow) {
@@ -41,10 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 orderPannel.style.display = 'block';
                 break;
             case 'employees':
-                employeesPanel.style.display = 'block';
+                /*if (userRole === 'employee') {
+                    employeesPanel.style.display = 'block';
+                }
                 break;
             case 'products':
-                productsPanel.style.display = 'block';
+                /*if (userRole === 'employee') {
+                    productsPanel.style.display = 'block';
+                }*/
                 break;
         }
     }
@@ -68,61 +99,65 @@ document.addEventListener('DOMContentLoaded', function() {
         updateActiveMenu(this);
     });
 
-    employeesBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        showPanel('employees');
-        updateActiveMenu(this);
-    });
+    if (userRole === 'employee') {
+        employeesBtn?.addEventListener('click', function(e) {
+            e.preventDefault();
+            showPanel('employees');
+            updateActiveMenu(this);
+        });
 
-    productsBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        showPanel('products');
-        updateActiveMenu(this);
-    });
+        productsBtn?.addEventListener('click', function(e) {
+            e.preventDefault();
+            showPanel('products');
+            updateActiveMenu(this);
+        });
+    }
 
     // Gestión de formularios de empleados
-    addEmployeeBtn.addEventListener('click', function() {
-        employeeForm.style.display = 'block';
-        addEmployeeBtn.style.display = 'none';
-    });
+    if (userRole === 'employee') {
+        addEmployeeBtn?.addEventListener('click', function() {
+            employeeForm.style.display = 'block';
+            addEmployeeBtn.style.display = 'none';
+        });
 
-    cancelEmployeeBtn.addEventListener('click', function() {
-        employeeForm.style.display = 'none';
-        addEmployeeBtn.style.display = 'block';
-        employeeForm.reset();
-    });
+        cancelEmployeeBtn?.addEventListener('click', function() {
+            employeeForm.style.display = 'none';
+            addEmployeeBtn.style.display = 'block';
+            employeeForm.reset();
+        });
 
-    employeeForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Aquí irá la lógica para guardar el empleado
-        alert('¡Empleado guardado correctamente!');
-        employeeForm.style.display = 'none';
-        addEmployeeBtn.style.display = 'block';
-        employeeForm.reset();
-    });
+        employeeForm?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Aquí irá la lógica para guardar el empleado
+            alert('Employee saved successfully!');
+            employeeForm.style.display = 'none';
+            addEmployeeBtn.style.display = 'block';
+            employeeForm.reset();
+        });
 
-    // Gestión de formularios de productos
-    addProductBtn.addEventListener('click', function() {
-        productForm.style.display = 'block';
-        addProductBtn.style.display = 'none';
-    });
+        // Gestión de formularios de productos
+        addProductBtn?.addEventListener('click', function() {
+            productForm.style.display = 'block';
+            addProductBtn.style.display = 'none';
+        });
 
-    cancelProductBtn.addEventListener('click', function() {
-        productForm.style.display = 'none';
-        addProductBtn.style.display = 'block';
-        productForm.reset();
-    });
+        cancelProductBtn?.addEventListener('click', function() {
+            productForm.style.display = 'none';
+            addProductBtn.style.display = 'block';
+            productForm.reset();
+        });
 
-    productForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Aquí irá la lógica para guardar el producto
-        alert('¡Producto guardado correctamente!');
-        productForm.style.display = 'none';
-        addProductBtn.style.display = 'block';
-        productForm.reset();
-    });
+        productForm?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Aquí irá la lógica para guardar el producto
+            alert('Product saved successfully!');
+            productForm.style.display = 'none';
+            addProductBtn.style.display = 'block';
+            productForm.reset();
+        });
+    }
 
-    // Eventos existentes para edición de información personal
+    // Eventos para edición de información personal
     editBtn.addEventListener('click', function() {
         formInputs.forEach(input => {
             input.disabled = false;
@@ -146,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         formButtons.style.display = 'none';
         editBtn.style.display = 'flex';
-        alert('¡Información actualizada correctamente!');
+        alert('Information updated successfully!');
     });
 
     // Menú móvil (toggle)
@@ -158,6 +193,13 @@ document.addEventListener('DOMContentLoaded', function() {
             navMenu.classList.toggle('active');
         });
     }
+
+    // Gestión del logout
+    const logoutBtn = document.querySelector('.logout-btn');
+    logoutBtn.addEventListener('click', function() {
+        sessionStorage.clear();
+        window.location.href = 'login.html';
+    });
 
     // Mostrar "Información Personal" por defecto al cargar la página
     showPanel('personal');
