@@ -2,14 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
    //Referencia API Ejemplo formato: 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.FIND_ALL'
    const apiUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.';
    const apiClientUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.FIND_ALL';
-<<<<<<< HEAD
-   const apiEmployeeUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.FIND_ALL';
-   
-   
 
-=======
-   const apiEmployeeUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.FIND_ALL';
->>>>>>> fb626a4e003a97790fcfd5f4fc9a5c90ae871953
+   const apiEmployeeUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.FIND_ALL';
    
     // Referencias a los formularios
     const loginForm = document.getElementById('loginForm');
@@ -119,8 +113,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-<<<<<<< HEAD
-
     // var check = function(){
     //     if(registerBtn != confirRegister ){
     //         alert("aushdaidfhisadf");
@@ -181,8 +173,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     })
 
-=======
->>>>>>> fb626a4e003a97790fcfd5f4fc9a5c90ae871953
     ///////////////////////
     // Registro de datos //
     ///////////////////////
