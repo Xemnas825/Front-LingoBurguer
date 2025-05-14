@@ -11,12 +11,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const DOM_ELEMENTS = {
         footerLocations: document.querySelector('.footer-locations')
     };
+    const sidebarLinks = sidebar.querySelectorAll('a');
 
     // Verificamos que los elementos existan antes de agregar event listeners
     if (menuToggle) {
         menuToggle.addEventListener('click', function () {
             sidebar.classList.add('active');
-            overlay.classList.add('active');
+            if (overlay) overlay.classList.add('active');
             console.log('Menú abierto'); // Para depuración
         });
     } else {
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para cerrar el menú lateral
     function closeSidebarMenu() {
         sidebar.classList.remove('active');
+        if (overlay) overlay.classList.remove('active');
         console.log('Menú cerrado'); // Para depuración
     }
 
@@ -41,6 +43,28 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Has hecho clic en el icono de usuario');
         });
     }
+
+    // Event listeners para los enlaces del menú
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            closeSidebarMenu(); // Cerrar el menú
+
+            // Si el enlace tiene un hash (ancla)
+            if (this.hash) {
+                // Si estamos en la misma página
+                if (window.location.pathname.endsWith('index.html')) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(this.hash);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80, // Offset para el header
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            }
+        });
+    });
 
     //Etsablecimientos Footer
     async function loadEstablishments() {

@@ -254,6 +254,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Modificar el event listener del botón de checkout
+    document.querySelector('.checkout-btn').addEventListener('click', function() {
+        // Redirigir a la página de detalles de compra
+        window.location.href = './buying_details.html';
+    });
+    
     // Inicializar carrito
     initCart();
 });

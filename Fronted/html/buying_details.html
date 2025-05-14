@@ -4,19 +4,133 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Buying Details</title>
+    <title>Detalles de Compra</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/buying_details_styles.css">
+    <link rel="stylesheet" href="../css/header-footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
-    <form class="buying_details_card">
-        <h2>Confirma tu compra</h2>
-        <div class="">
-            <a href="#"></a> <br />
-            <a href="#"></a>
+    <header>
+        <div class="header-container">
+            <div class="main-header">
+                <div class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+
+                <div class="sidebar" id="sidebar">
+                    <div class="sidebar-header">
+                        <h3 class="gradient-text">Index</h3>
+                        <div class="close-sidebar gradient-text" id="close-sidebar">✖</div>
+                    </div>
+                    <ul>
+                        <li><a href="./index.html#menu" class="gradient-text">Menu</a></li>
+                        <li><a href="./about-us.html" class="gradient-text">About Us</a></li>
+                        <li><a href="./contact-us.html" class="gradient-text">Contact</a></li>
+                        <li><a href="./careers.html" class="gradient-text">Careers</a></li>
+                    </ul>
+                </div>
+
+                <div class="logo-container">
+                    <a href="index.html">
+                        <img src="../images/LogoLingoBurguerWhite.png" alt="LingoBurguer" class="header-logo">
+                    </a>
+                </div>
+
+                <div class="user-actions">
+                    <div class="action-icon" id="user-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-    </form>
+    </header>
+
+    <main>
+        <div class="buying_details_card">
+            <h2>Detalles de Compra</h2>
+            
+            <div class="establishment-section">
+                <h3 class="establishment-title">Selecciona el Establecimiento</h3>
+                <div class="establishment-options">
+                    <!-- Los establecimientos se cargarán dinámicamente desde la API -->
+                </div>
+            </div>
+
+            <div class="product-list">
+                <div class="product-item">
+                    <div class="product-info">
+                        <img src="../images/burger1.jpg" alt="Hamburguesa" class="product-image">
+                        <div class="product-details">
+                            <div class="product-name">Hamburguesa Clásica</div>
+                            <div class="product-price">$12.99</div>
+                        </div>
+                    </div>
+                    <div class="quantity">x2</div>
+                </div>
+                
+                <div class="product-item">
+                    <div class="product-info">
+                        <img src="../images/burger2.jpg" alt="Hamburguesa" class="product-image">
+                        <div class="product-details">
+                            <div class="product-name">Hamburguesa Especial</div>
+                            <div class="product-price">$15.99</div>
+                        </div>
+                    </div>
+                    <div class="quantity">x1</div>
+                </div>
+            </div>
+
+            <div class="total-section">
+                <div class="total-row">
+                    <span>Subtotal:</span>
+                    <span>$41.97</span>
+                </div>
+                <div class="total-row">
+                    <span>IVA (16%):</span>
+                    <span>$6.72</span>
+                </div>
+                <div class="total-row">
+                    <span>Total:</span>
+                    <span class="total-amount">$48.69</span>
+                </div>
+            </div>
+
+            <div class="payment-methods">
+                <h3 class="payment-title">Método de pago</h3>
+                <div class="payment-options">
+                    <div class="payment-option">
+                        <i class="fas fa-credit-card"></i>
+                        <div>Tarjeta</div>
+                    </div>
+                    <div class="payment-option">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <div>Efectivo</div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="confirm-button">Confirmar Compra</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <img src="../images/LogoLingoBurguerWhite.png" alt="Lingoburguer Logo" class="footer-logo">
+        </div>
+        <div class="footer-links">
+            <span>
+                <a href="../html/about-us.html"><b>About us</b></a>
+                <a href="../html/contact-us.html"><b>Contact us</b></a>
+                <a href="../html/careers.html"><b>Careers</b></a>
+            </span>
+        </div>
+    </footer>
+
+    <script src="../js/header-footer.js"></script>
+    <script src="../js/establishments.js"></script>
+    <script src="../js/buying_details.js"></script>
 </body>
 
 </html>
