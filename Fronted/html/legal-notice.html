@@ -7,6 +7,7 @@
     <title>About us</title>
     <link rel="stylesheet" href="../css/header-footer.css">
     <link rel="stylesheet" href="../css/documents.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="../js/header-footer.js"></script>
 </head>
@@ -45,6 +46,19 @@
                 <div class="user-actions">
                     <div class="action-icon" id="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                        <div class="cart-dropdown">
+                            <div class="cart-header">
+                                <h3>Tu Carrito</h3>
+                            </div>
+                            <div class="cart-items">
+                                <!-- Los items del carrito se insertarán aquí dinámicamente -->
+                            </div>
+                            <div class="cart-total">
+                                <p>Total: <span id="cart-total-amount">$0.00</span></p>
+                                <button class="btn checkout-btn">Realizar Pedido</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="action-icon" id="user-icon">
                         <i class="fas fa-user"></i>
@@ -198,6 +212,7 @@
             </span>
         </div>
     </footer>
+    <script src="../js/script.js"></script>
 </body>
 
 </html>

@@ -44,16 +44,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         cart.forEach(item => {
-            const itemTotal = (item.price * item.quantity).toFixed(2);
             cartItemsContainer.innerHTML += `
                 <div class="cart-item" data-id="${item.id}">
                     <div class="cart-item-details">
                         <h4 class="cart-item-title">${item.name}</h4>
-                        <div class="cart-item-price">$${itemTotal}</div>
-                        <div class="cart-item-quantity">
-                            <button class="quantity-btn decrease" type="button">-</button>
-                            <span>${item.quantity}</span>
-                            <button class="quantity-btn increase" type="button">+</button>
+                        <div class="cart-item-pricing">
+                            <div class="unit-price">$${item.price.toFixed(2)}</div>
+                            <div class="cart-item-quantity">
+                                <button class="quantity-btn decrease" type="button">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="quantity-btn increase" type="button">+</button>
+                            </div>
                         </div>
                     </div>
                     <button class="cart-item-remove" type="button">
@@ -76,7 +77,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (existingItem) {
             existingItem.quantity += 1;
         } else {
-            cart.push({ ...item, quantity: 1 });
+            cart.push({ 
+                ...item, 
+                quantity: 1,
+                unitPrice: item.price // Guardamos el precio unitario original
+            });
         }
         
         // Mostrar notificación

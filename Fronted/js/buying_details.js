@@ -53,46 +53,125 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Limpiar la lista de productos
     productList.innerHTML = '';
     
-    let subtotal = 0;
+    let total = 0;
     
     // Renderizar cada producto del carrito
     cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        subtotal += itemTotal;
+        total += item.price * item.quantity;
         
         productList.innerHTML += `
-            <div class="product-item">
+            <div class="product-item" data-id="${item.id}">
                 <div class="product-info">
                     <img src="../images/${item.image || 'default-burger.jpg'}" alt="${item.name}" class="product-image">
                     <div class="product-details">
                         <div class="product-name">${item.name}</div>
-                        <div class="product-price">$${item.price.toFixed(2)}</div>
+                        <div class="price-details">
+                            <div class="unit-price">$${item.price.toFixed(2)}</div>
+                            <div class="quantity-info">
+                                <div class="product-quantity">
+                                    <button class="quantity-btn decrease" type="button">-</button>
+                                    <span>${item.quantity}</span>
+                                    <button class="quantity-btn increase" type="button">+</button>
+                                </div>
+                                <button class="remove-item" type="button">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="quantity">x${item.quantity}</div>
             </div>
         `;
     });
     
-    // Calcular totales
-    const iva = subtotal * 0.16;
-    const total = subtotal + iva;
+    // Agregar los event listeners para los botones
+    productList.addEventListener('click', function(e) {
+        const productItem = e.target.closest('.product-item');
+        if (!productItem) return;
+        
+        const itemId = productItem.dataset.id;
+        const itemIndex = cart.findIndex(item => item.id === itemId);
+        
+        if (itemIndex === -1) return;
+        
+        if (e.target.classList.contains('increase') || e.target.closest('.increase')) {
+            cart[itemIndex].quantity += 1;
+        } else if (e.target.classList.contains('decrease') || e.target.closest('.decrease')) {
+            cart[itemIndex].quantity -= 1;
+            if (cart[itemIndex].quantity <= 0) {
+                cart.splice(itemIndex, 1);
+            }
+        } else if (e.target.classList.contains('fa-trash') || e.target.closest('.remove-item')) {
+            cart.splice(itemIndex, 1);
+        }
+        
+        // Actualizar localStorage
+        localStorage.setItem('cart', JSON.stringify(cart));
+        
+        // Recalcular totales y actualizar UI
+        updateProductList();
+    });
     
-    // Actualizar la sección de totales
-    document.querySelector('.total-section').innerHTML = `
-        <div class="total-row">
-            <span>Subtotal:</span>
-            <span>$${subtotal.toFixed(2)}</span>
-        </div>
-        <div class="total-row">
-            <span>IVA (16%):</span>
-            <span>$${iva.toFixed(2)}</span>
-        </div>
-        <div class="total-row">
-            <span>Total:</span>
-            <span class="total-amount">$${total.toFixed(2)}</span>
-        </div>
-    `;
+    // Función para actualizar la lista de productos y totales
+    function updateProductList() {
+        productList.innerHTML = '';
+        
+        let total = 0;
+        
+        cart.forEach(item => {
+            total += item.price * item.quantity;
+            
+            productList.innerHTML += `
+                <div class="product-item" data-id="${item.id}">
+                    <div class="product-info">
+                        <img src="../images/${item.image || 'default-burger.jpg'}" alt="${item.name}" class="product-image">
+                        <div class="product-details">
+                            <div class="product-name">${item.name}</div>
+                            <div class="price-details">
+                                <div class="unit-price">$${item.price.toFixed(2)}</div>
+                                <div class="quantity-info">
+                                    <div class="product-quantity">
+                                        <button class="quantity-btn decrease" type="button">-</button>
+                                        <span>${item.quantity}</span>
+                                        <button class="quantity-btn increase" type="button">+</button>
+                                    </div>
+                                    <button class="remove-item" type="button">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        // Si el carrito está vacío, mostrar mensaje y redirigir
+        if (cart.length === 0) {
+            alert('El carrito está vacío');
+            window.location.href = 'index.html';
+            return;
+        }
+        
+        // Calcular y actualizar totales
+        const iva = total * 0.16;
+        const totalConIva = total + iva;
+        
+        document.querySelector('.total-section').innerHTML = `
+            <div class="total-row">
+                <span>Total productos:</span>
+                <span>$${total.toFixed(2)}</span>
+            </div>
+            <div class="total-row">
+                <span>IVA (16%):</span>
+                <span>$${iva.toFixed(2)}</span>
+            </div>
+            <div class="total-row">
+                <span>Total a pagar:</span>
+                <span class="total-amount">$${totalConIva.toFixed(2)}</span>
+            </div>
+        `;
+    }
     
     // Manejar envío del formulario
     document.querySelector('.buying_details_card').addEventListener('submit', function(e) {
