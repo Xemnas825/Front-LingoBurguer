@@ -1,6 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
-   //Referencia API Ejemplo formato: 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.FIND_ALL'
-   const apiUrlADDClient = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.ADD_CLIENT';
+   
+    app.use(cors({
+        origin: 'https://tu-dominio.com/',
+        methods: ['GET', 'POST'],
+        credentials: true
+      }));
+   
+   
+    //Referencia API Ejemplo formato: 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.FIND_ALL'
+   const apiUrlADDClient = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.ADD';
    const apiClientUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.FIND_ALL';
 
    const apiEmployeeUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.FIND_ALL';
@@ -159,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
             //url incompleta D:
             console.log("soy el userObj: ",userObj);
             console.log("soy el param: ",param);
-            console.log("soy la api: ",apiUrl);
+            console.log("soy la api: ",apiUrlADDClient);
             
             fetch(apiUrlADDClient,param) // la url y lo que mandamos a esa url pal back
                 .then(function(response){ // si el back responde ok (que ha llegado el param)
@@ -176,13 +184,13 @@ document.addEventListener('DOMContentLoaded', function() {
     ///////////////////////
     // Registro de datos //
     ///////////////////////
+    /*
     registerForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const userData = {
             name: document.getElementById('registerName').value,
             lastName: document.getElementById('registerLastName').value,
-            birthDate: document.getElementById('registerBirth').value,
             phoneNumber: document.getElementById('registerPhoneNumber').value,
             email: document.getElementById('registerEmail').value,
             password: document.getElementById('registerPassword').value
@@ -216,6 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('An error occurred during registration. Please try again.');
         }
     });
+    */
 
     forgotPasswordForm.addEventListener('submit', function(e) {
         e.preventDefault();

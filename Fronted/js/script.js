@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
+    
+    app.use(cors({
+        origin: 'https://tu-dominio.com/',
+        methods: ['GET', 'POST'],
+        credentials: true
+      }));
+    
     // Variables para elementos del DOM
     const categoryBtns = document.querySelectorAll('.category-btn');
     const cartaSections = document.querySelectorAll('.carta-items');
