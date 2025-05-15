@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
    //Referencia API Ejemplo formato: 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.FIND_ALL'
-   const apiUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.';
+   const apiUrlADDClient = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.ADD_CLIENT';
    const apiClientUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.FIND_ALL';
 
    const apiEmployeeUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.FIND_ALL';
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-    //Enseñar en clase
+    //Enseñar en clase (funcion del boton submit)
     submitBtn.addEventListener('click',function(e){
         const password = document.querySelector('input[id=registerPassword]');
         const confirm = document.querySelector('input[id=confirmPassword]');
@@ -143,15 +143,15 @@ document.addEventListener('DOMContentLoaded', function() {
             password_hash: document.getElementById('registerPassword').value,
         }
         const param = { //creamos peticion 
-            headers:{'content-type': 'application/json; charset = UTF-8'}, // Formatos del param
-            body:userObj, //lo que hay en el param
+            headers:{'content-type': 'application/json; charset=UTF-8'}, // Formatos del param
+            body:JSON.stringify(userObj) , //lo que hay en el param
             method: 'POST', // lo que hacemos con el param, se puede poner GET, PUT, POST y DELETE
             mode:'cors', //politica
         };
 
 
 
-        if(confirm.value != password.value){
+        if(confirm.value != password.value || password == null){
              alert('The password must be the same');
              document.getElementById('registerPassword').style.backgroundColor = "#ab371f" // es rojo no muy fuerte;
              document.getElementById('confirmPassword').style.backgroundColor = "#ab371f" // es rojo no muy fuerte;
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("soy el param: ",param);
             console.log("soy la api: ",apiUrl);
             
-            fetch(apiUrl,param) // la url y lo que mandamos a esa url pal back
+            fetch(apiUrlADDClient,param) // la url y lo que mandamos a esa url pal back
                 .then(function(response){ // si el back responde ok (que ha llegado el param)
                     if(response.ok){
                         return response.json();//nos devuelve 
