@@ -1,14 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar si el usuario está autenticado
-    
-    /*const userRole = sessionStorage.getItem('userRole');
-    const userData = JSON.parse(sessionStorage.getItem('userData'));
+    let userRole = sessionStorage.getItem('userRole');
+    let userData = JSON.parse(sessionStorage.getItem('userData'));
 
+    // TEMPORAL: Si no hay datos en sessionStorage, usar datos de prueba
     if (!userRole || !userData) {
-        // Si no hay datos de sesión, redirigir al login
-        window.location.href = 'login.html';
-        return;
-    }*/
+        userRole = 'employee'; // o 'client' para probar diferentes roles
+        userData = {
+            name: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com'
+        };
+        // En producción, descomentar esta redirección:
+        // window.location.href = 'login.html';
+        // return;
+    }
 
     // Elementos del DOM
     const editBtn = document.getElementById('edit-info-btn');
@@ -36,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelProductBtn = document.getElementById('cancel-product-btn');
 
     // Cargar datos del usuario
-    /*document.querySelector('.user-name').textContent = userData.name + ' ' + userData.lastName;
+    document.querySelector('.user-name').textContent = userData.name + ' ' + userData.lastName;
     document.querySelector('.user-email').textContent = userData.email;
 
     // Configurar visibilidad según el rol
@@ -47,17 +53,17 @@ document.addEventListener('DOMContentLoaded', function() {
         // Ocultar sección de administración para clientes
         if (adminSection) adminSection.style.display = 'none';
         if (adminLinks) adminLinks.style.display = 'none';
-    }*/
+    }
     
     // Función para cambiar entre paneles
     function showPanel(panelToShow) {
         // Oculta todos los paneles
         personalPannel.style.display = 'none';
         orderPannel.style.display = 'none';
-        /*if (userRole === 'employee') {
+        if (userRole === 'employee') {
             employeesPanel.style.display = 'none';
             productsPanel.style.display = 'none';
-        }*/
+        }
         
         // Muestra solo el panel seleccionado
         switch(panelToShow) {
@@ -68,14 +74,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 orderPannel.style.display = 'block';
                 break;
             case 'employees':
-                /*if (userRole === 'employee') {
+                if (userRole === 'employee') {
                     employeesPanel.style.display = 'block';
                 }
                 break;
             case 'products':
-                /*if (userRole === 'employee') {
+                if (userRole === 'employee') {
                     productsPanel.style.display = 'block';
-                }*/
+                }
                 break;
         }
     }
