@@ -165,14 +165,18 @@
                             <input type="tel" id="emp-telephone" class="form-control" required>
                         </div>
 
-                        <div class="form-group full-width">
-                            <label for="emp-address">Address</label>
-                            <textarea id="emp-address" class="form-control" rows="3" required></textarea>
+                        <div class="form-group">
+                            <label for="emp-role">Job Role</label>
+                            <select id="emp-role" class="form-control" required>
+                                <option value="">Select a role</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="emp-password">Password</label>
-                            <input type="password" id="emp-password" class="form-control" required>
+                            <label for="emp-establishment">Establishment</label>
+                            <select id="emp-establishment" class="form-control" required>
+                                <option value="">Select an establishment</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -183,6 +187,11 @@
                         <div class="form-group">
                             <label for="emp-salary">Salary</label>
                             <input type="number" id="emp-salary" class="form-control" step="0.01" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-password">Password</label>
+                            <input type="password" id="emp-password" class="form-control" placeholder="Enter password">
                         </div>
 
                         <div class="form-buttons">
@@ -198,6 +207,7 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
+                            <th>Job Role</th>
                             <th>Hire Date</th>
                             <th>Actions</th>
                         </tr>

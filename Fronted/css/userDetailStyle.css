@@ -1,8 +1,8 @@
 /* Configuración de fuente personalizada */
-@font-face {
+/*@font-face {
     font-family: 'MiFuentePersonalizada';
     src: url('../fonts/duality.otf') format('opentype');
-}
+}*/
 
 :root {
     --primary-gradient: linear-gradient(to right, #ff6600, #fbff00);

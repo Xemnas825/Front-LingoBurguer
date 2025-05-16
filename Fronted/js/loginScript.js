@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
    //Referencia API Ejemplo formato: 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.FIND_ALL'
-   const apiUrlADDClient = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.ADD_CLIENT';
+   const apiUrlADDClient = 'http://localhost:8080/PruebaDBConsola/Controller';
    const apiClientUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.FIND_ALL';
-
-   const apiEmployeeUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CLIENT.FIND_ALL';
+   const apiEmployeeUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.FIND_ALL';
    
     // Referencias a los formularios
     const loginForm = document.getElementById('loginForm');
@@ -131,91 +130,101 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     //Enseñar en clase (funcion del boton submit)
-    submitBtn.addEventListener('click',function(e){
-        const password = document.querySelector('input[id=registerPassword]');
-        const confirm = document.querySelector('input[id=confirmPassword]');
-
-        const userObj = { // creamos obj
-            first_name: document.getElementById('registerName').value,
-            last_name: document.getElementById('registerLastName').value,
-            telephone: document.getElementById('registerPhoneNumber').value,
-            email: document.getElementById('registerEmail').value,
-            password_hash: document.getElementById('registerPassword').value,
+    document.getElementById("submitBtn").addEventListener("click", function (e) {
+        e.preventDefault(); // Evita la recarga de la página al enviar el formulario
+    
+        const password = document.getElementById("registerPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+    
+        if (confirmPassword !== password || password === "") {
+            alert("Las contraseñas deben coincidir");
+            document.getElementById("registerPassword").style.backgroundColor = "#ab371f";
+            document.getElementById("confirmPassword").style.backgroundColor = "#ab371f";
+            return; // Salimos de la función si hay error
         }
-        const param = { //creamos peticion 
-            headers:{'content-type': 'application/json; charset=UTF-8'}, // Formatos del param
-            body:JSON.stringify(userObj) , //lo que hay en el param
-            method: 'POST', // lo que hacemos con el param, se puede poner GET, PUT, POST y DELETE
-            mode:'cors', //politica
+    
+        // Crear objeto con los datos en el formato esperado
+        const userObj = {
+            first_name: document.getElementById("registerName").value,
+            last_name: document.getElementById("registerLastName").value,
+            email: document.getElementById("registerEmail").value,
+            telephone: document.getElementById("registerPhoneNumber").value,
+            password_hash: password
         };
 
-
-
-        if(confirm.value != password.value || password == null){
-             alert('The password must be the same');
-             document.getElementById('registerPassword').style.backgroundColor = "#ab371f" // es rojo no muy fuerte;
-             document.getElementById('confirmPassword').style.backgroundColor = "#ab371f" // es rojo no muy fuerte;
-        }else{
-            //url incompleta D:
-            console.log("soy el userObj: ",userObj);
-            console.log("soy el param: ",param);
-            console.log("soy la api: ",apiUrl);
-            
-            fetch(apiUrlADDClient,param) // la url y lo que mandamos a esa url pal back
-                .then(function(response){ // si el back responde ok (que ha llegado el param)
-                    if(response.ok){
-                        return response.json();//nos devuelve 
-                    }else{
-                        throw new Error ('No llego capo, socorro:' + response.statusText);
-                    }
-                })
-            return true;
-        }
-    })
-
-    ///////////////////////
-    // Registro de datos //
-    ///////////////////////
-    registerForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const userData = {
-            name: document.getElementById('registerName').value,
-            lastName: document.getElementById('registerLastName').value,
-            birthDate: document.getElementById('registerBirth').value,
-            phoneNumber: document.getElementById('registerPhoneNumber').value,
-            email: document.getElementById('registerEmail').value,
-            password: document.getElementById('registerPassword').value
-        };
-
-        const confirmPassword = document.getElementById('confirmPassword').value;
-
-        if (userData.password !== confirmPassword) {
-            alert('Passwords do not match');
-            return;
-        }
-
-        try {
-            // Por defecto registramos como cliente
-            const response = await fetch(apiClientUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userData)
-            });
-
-            if (response.ok) {
-                alert('Registration successful!');
-                showForm(loginForm);
-            } else {
-                alert('Error during registration. Please try again.');
+        // Validar que todos los campos estén llenos
+        for (let key in userObj) {
+            if (!userObj[key]) {
+                alert("Por favor, complete todos los campos");
+                return;
             }
-        } catch (error) {
-            console.error('Error during registration:', error);
-            alert('An error occurred during registration. Please try again.');
         }
+
+        // Crear los parámetros de la URL
+        const params = new URLSearchParams();
+        params.append('ACTION', 'CLIENT.ADD');
+        
+        // Añadir los parámetros del usuario exactamente como los espera el backend
+        for (let key in userObj) {
+            params.append(key, userObj[key]);
+        }
+
+        // Construir la URL completa
+        const urlWithParams = `${apiUrlADDClient}?${params.toString()}`;
+
+        console.log("==== DATOS DE LA PETICIÓN ====");
+        console.log("URL completa:", urlWithParams);
+        console.log("Método:", "POST");
+        console.log("Parámetros enviados:", {
+            ACTION: 'CLIENT.ADD',
+            ...userObj
+        });
+        console.log("URL decodificada:", decodeURIComponent(urlWithParams));
+        console.log("==========================");
+
+        // Configuración de `fetch()`
+        fetch(urlWithParams, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            console.log("==== RESPUESTA DEL SERVIDOR ====");
+            console.log("Status:", response.status);
+            console.log("Status Text:", response.statusText);
+            console.log("Headers:", Object.fromEntries(response.headers));
+            
+            return response.text().then(text => {
+                console.log("Respuesta completa (raw):", text);
+                console.log("==========================");
+                
+                // Consideramos cualquier respuesta que no sea un error explícito como exitosa
+                if (text === "Faltan datos") {
+                    throw new Error("Por favor, complete todos los campos correctamente");
+                }
+                
+                if (text === "No se pudo agregar el cliente") {
+                    throw new Error("No se pudo agregar el cliente. Por favor, intente nuevamente");
+                }
+
+                // Si llegamos aquí, consideramos que el registro fue exitoso
+                alert("Cliente registrado correctamente");
+                window.location.href = 'index.html';
+                return { status: "success" };
+            });
+        })
+        .catch(error => {
+            console.error("Error en la petición:", error);
+            // Solo mostramos alert para errores específicos
+            if (error.message.includes("complete todos los campos") || 
+                error.message.includes("No se pudo agregar el cliente")) {
+                alert("Error al registrar: " + error.message);
+            }
+        });
     });
+
+
 
     forgotPasswordForm.addEventListener('submit', function(e) {
         e.preventDefault();
