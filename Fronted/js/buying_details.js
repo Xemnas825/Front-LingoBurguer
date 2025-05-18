@@ -47,84 +47,30 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     
     // Obtener el carrito del localStorage
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const productList = document.querySelector('.product-list');
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
     
-    // Limpiar la lista de productos
-    productList.innerHTML = '';
+    // Si el carrito está vacío, redirigir al inicio
+    if (cart.length === 0) {
+        alert('El carrito está vacío');
+        window.location.href = 'index.html';
+        return;
+    }
     
-    let total = 0;
-    
-    // Renderizar cada producto del carrito
-    cart.forEach(item => {
-        total += item.price * item.quantity;
-        
-        productList.innerHTML += `
-            <div class="product-item" data-id="${item.id}">
-                <div class="product-info">
-                    <img src="../images/${item.image || 'default-burger.jpg'}" alt="${item.name}" class="product-image">
-                    <div class="product-details">
-                        <div class="product-name">${item.name}</div>
-                        <div class="price-details">
-                            <div class="unit-price">$${item.price.toFixed(2)}</div>
-                            <div class="quantity-info">
-                                <div class="product-quantity">
-                                    <button class="quantity-btn decrease" type="button">-</button>
-                                    <span>${item.quantity}</span>
-                                    <button class="quantity-btn increase" type="button">+</button>
-                                </div>
-                                <button class="remove-item" type="button">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    
-    // Agregar los event listeners para los botones
-    productList.addEventListener('click', function(e) {
-        const productItem = e.target.closest('.product-item');
-        if (!productItem) return;
-        
-        const itemId = productItem.dataset.id;
-        const itemIndex = cart.findIndex(item => item.id === itemId);
-        
-        if (itemIndex === -1) return;
-        
-        if (e.target.classList.contains('increase') || e.target.closest('.increase')) {
-            cart[itemIndex].quantity += 1;
-        } else if (e.target.classList.contains('decrease') || e.target.closest('.decrease')) {
-            cart[itemIndex].quantity -= 1;
-            if (cart[itemIndex].quantity <= 0) {
-                cart.splice(itemIndex, 1);
-            }
-        } else if (e.target.classList.contains('fa-trash') || e.target.closest('.remove-item')) {
-            cart.splice(itemIndex, 1);
-        }
-        
-        // Actualizar localStorage
-        localStorage.setItem('cart', JSON.stringify(cart));
-        
-        // Recalcular totales y actualizar UI
-        updateProductList();
-    });
-    
-    // Función para actualizar la lista de productos y totales
-    function updateProductList() {
+    // Función para renderizar el carrito
+    function renderCart() {
+        const productList = document.querySelector('.product-list');
+        if (!productList) return;
+
         productList.innerHTML = '';
         
-        let total = 0;
-        
         cart.forEach(item => {
-            total += item.price * item.quantity;
-            
             productList.innerHTML += `
                 <div class="product-item" data-id="${item.id}">
                     <div class="product-info">
-                        <img src="../images/${item.image || 'default-burger.jpg'}" alt="${item.name}" class="product-image">
+                        <img src="${item.image || '../images/default-product.jpg'}" 
+                             alt="${item.name}" 
+                             class="product-image"
+                             onerror="this.onerror=null; this.src='../images/default-product.jpg';">
                         <div class="product-details">
                             <div class="product-name">${item.name}</div>
                             <div class="price-details">
@@ -145,34 +91,97 @@ document.addEventListener('DOMContentLoaded', async function() {
                 </div>
             `;
         });
-        
-        // Si el carrito está vacío, mostrar mensaje y redirigir
-        if (cart.length === 0) {
-            alert('El carrito está vacío');
-            window.location.href = 'index.html';
-            return;
-        }
-        
-        // Calcular y actualizar totales
-        const iva = total * 0.16;
-        const totalConIva = total + iva;
-        
-        document.querySelector('.total-section').innerHTML = `
-            <div class="total-row">
-                <span>Total productos:</span>
-                <span>$${total.toFixed(2)}</span>
-            </div>
-            <div class="total-row">
-                <span>IVA (16%):</span>
-                <span>$${iva.toFixed(2)}</span>
-            </div>
-            <div class="total-row">
-                <span>Total a pagar:</span>
-                <span class="total-amount">$${totalConIva.toFixed(2)}</span>
-            </div>
-        `;
     }
-    
+
+    // Función para actualizar los totales
+    function updateTotals() {
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const iva = subtotal * 0.16;
+        const total = subtotal + iva;
+        
+        const totalSection = document.querySelector('.total-section');
+        if (totalSection) {
+            totalSection.innerHTML = `
+                <div class="total-row">
+                    <span>Total productos:</span>
+                    <span id="subtotal">$${subtotal.toFixed(2)}</span>
+                </div>
+                <div class="total-row">
+                    <span>IVA (16%):</span>
+                    <span id="iva">$${iva.toFixed(2)}</span>
+                </div>
+                <div class="total-row">
+                    <span>Total a pagar:</span>
+                    <span id="total" class="total-amount">$${total.toFixed(2)}</span>
+                </div>
+            `;
+        }
+    }
+
+    // Renderizar carrito inicial
+    renderCart();
+    updateTotals();
+
+    // Event listeners para los botones de cantidad y eliminación
+    const productListContainer = document.querySelector('.product-list');
+    if (productListContainer) {
+        productListContainer.addEventListener('click', function(e) {
+            const productItem = e.target.closest('.product-item');
+            if (!productItem) return;
+            
+            const itemId = parseInt(productItem.dataset.id);
+            console.log('Click en producto con ID:', itemId);
+            
+            // Incrementar cantidad
+            if (e.target.classList.contains('increase') || e.target.closest('.increase')) {
+                console.log('Incrementando cantidad');
+                const item = cart.find(item => item.id === itemId);
+                if (item) {
+                    item.quantity += 1;
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    renderCart();
+                    updateTotals();
+                }
+            }
+            
+            // Decrementar cantidad
+            if (e.target.classList.contains('decrease') || e.target.closest('.decrease')) {
+                console.log('Decrementando cantidad');
+                const item = cart.find(item => item.id === itemId);
+                if (item) {
+                    item.quantity -= 1;
+                    if (item.quantity <= 0) {
+                        cart = cart.filter(i => i.id !== itemId);
+                    }
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    
+                    if (cart.length === 0) {
+                        alert('El carrito está vacío');
+                        window.location.href = 'index.html';
+                    } else {
+                        renderCart();
+                        updateTotals();
+                    }
+                }
+            }
+            
+            // Eliminar producto
+            if (e.target.classList.contains('fa-trash') || e.target.closest('.remove-item')) {
+                console.log('Eliminando producto');
+                cart = cart.filter(item => item.id !== itemId);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                
+                if (cart.length === 0) {
+                    alert('El carrito está vacío');
+                    window.location.href = 'index.html';
+                } else {
+                    renderCart();
+                    updateTotals();
+                }
+            }
+        });
+    }
+
     // Manejar envío del formulario
     document.querySelector('.buying_details_card').addEventListener('submit', function(e) {
         e.preventDefault();

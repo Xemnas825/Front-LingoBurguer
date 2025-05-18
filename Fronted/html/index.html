@@ -7,6 +7,7 @@
     <title>Lingoburguer - Hamburguesas Artesanales</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/header-footer.css">
+    <link rel="stylesheet" href="../css/loading.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
 </head>
@@ -98,26 +99,36 @@
     <section class="menu" id="menu">
         <h2>Nuestro Menú</h2>
         <div class="menu-categories">
+            <button class="category-btn" data-category="entrantes">Entrantes</button>
             <button class="category-btn active" data-category="hamburguesas">Hamburguesas</button>
             <button class="category-btn" data-category="acompañamientos">Acompañamientos</button>
+            <button class="category-btn" data-category="productos-compuestos">Menú</button>
             <button class="category-btn" data-category="bebidas">Bebidas</button>
             <button class="category-btn" data-category="postres">Postres</button>
         </div>
 
+        <div class="menu-items" id="entrantes" style="display: none;">
+            <!-- Los productos se cargarán dinámicamente -->
+        </div>
+
         <div class="menu-items" id="hamburguesas">
-            <!-- Los productos se cargarán dinámicamente desde la API -->
+            <!-- Los productos se cargarán dinámicamente -->
         </div>
-        
+
         <div class="menu-items" id="acompañamientos" style="display: none;">
-            <!-- Los productos se cargarán dinámicamente desde la API -->
+            <!-- Los productos se cargarán dinámicamente -->
         </div>
-        
+
+        <div class="menu-items" id="productos-compuestos" style="display: none;">
+            <!-- Los productos se cargarán dinámicamente -->
+        </div>
+
         <div class="menu-items" id="bebidas" style="display: none;">
-            <!-- Los productos se cargarán dinámicamente desde la API -->
+            <!-- Los productos se cargarán dinámicamente -->
         </div>
-        
+
         <div class="menu-items" id="postres" style="display: none;">
-            <!-- Los productos se cargarán dinámicamente desde la API -->
+            <!-- Los productos se cargarán dinámicamente -->
         </div>
     </section>
 
@@ -189,9 +200,8 @@
         </div>
     </footer>
 
-    <script src="../js/script.js"></script>
     <script src="../js/header-footer.js"></script>
-    <script src="../js/products.js"></script>
+    <script type="module" src="../js/script.js"></script>
 </body>
 
 </html>

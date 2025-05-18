@@ -2,45 +2,76 @@ const API_URL = 'http://localhost:8080/PruebaDBConsola/Controller';
 
 class EstablishmentManager {
     constructor() {
-        this.loadEstablishments();
+        this.init();
+    }
+
+    async init() {
+        try {
+            await this.loadEstablishments();
+        } catch (error) {
+            console.error('Error al inicializar EstablishmentManager:', error);
+        }
     }
 
     async loadEstablishments() {
         try {
             const response = await fetch(`${API_URL}?ACTION=ESTABLISHMENT.FIND_ALL`);
             if (!response.ok) {
-                throw new Error('Error al cargar los establecimientos');
+                throw new Error(`Error HTTP: ${response.status}`);
             }
             const establishments = await response.json();
+            if (!Array.isArray(establishments)) {
+                throw new Error('La respuesta no es un array de establecimientos');
+            }
             this.displayEstablishments(establishments);
         } catch (error) {
-            console.error('Error:', error);
-            this.showError('No se pudieron cargar los establecimientos');
+            console.error('Error al cargar establecimientos:', error);
+            this.showError('No se pudieron cargar los establecimientos. Por favor, intente de nuevo más tarde.');
         }
     }
 
     displayEstablishments(establishments) {
         const container = document.querySelector('.establishment-options');
-        if (!container) return;
+        if (!container) {
+            console.error('No se encontró el contenedor de establecimientos');
+            return;
+        }
+
+        if (establishments.length === 0) {
+            container.innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-info-circle"></i>
+                    <p>No hay establecimientos disponibles en este momento.</p>
+                </div>
+            `;
+            return;
+        }
 
         container.innerHTML = establishments.map(establishment => `
-            <div class="establishment-option" onclick="establishmentManager.selectEstablishment(this, '${establishment.m_iId}')">
+            <div class="establishment-option" data-id="${establishment.m_iId}">
                 <div class="establishment-info">
                     <div class="establishment-icon">
                         <i class="fas fa-store"></i>
                     </div>
                     <div class="establishment-details">
-                        <div class="establishment-name">${establishment.m_strName}</div>
-                        <div class="establishment-address">${establishment.m_strAddress}</div>
+                        <div class="establishment-name">${establishment.m_strName || 'Sin nombre'}</div>
+                        <div class="establishment-address">${establishment.m_strAddress || 'Dirección no disponible'}</div>
                     </div>
                 </div>
             </div>
         `).join('');
 
+        // Agregar event listeners a las opciones
+        container.querySelectorAll('.establishment-option').forEach(option => {
+            option.addEventListener('click', () => {
+                this.selectEstablishment(option, option.dataset.id);
+            });
+        });
+
         // Restaurar la selección previa si existe
         const selectedId = localStorage.getItem('selectedEstablishment');
         if (selectedId) {
-            const option = document.querySelector(`.establishment-option[onclick*="${selectedId}"]`);
+            const option = container.querySelector(`.establishment-option[data-id="${selectedId}"]`);
             if (option) {
                 option.classList.add('selected');
             }
@@ -48,18 +79,13 @@ class EstablishmentManager {
     }
 
     selectEstablishment(element, id) {
-        // Remover la selección previa
         document.querySelectorAll('.establishment-option').forEach(option => {
             option.classList.remove('selected');
         });
         
-        // Agregar la clase selected al elemento clickeado
         element.classList.add('selected');
-        
-        // Guardar la selección en localStorage
         localStorage.setItem('selectedEstablishment', id);
         
-        // Opcional: Habilitar el botón de confirmar compra solo si hay un establecimiento seleccionado
         const confirmButton = document.querySelector('.confirm-button');
         if (confirmButton) {
             confirmButton.disabled = false;
@@ -73,15 +99,22 @@ class EstablishmentManager {
                 <div class="error-message">
                     <i class="fas fa-exclamation-circle"></i>
                     <p>${message}</p>
-                    <button onclick="establishmentManager.loadEstablishments()">Reintentar</button>
+                    <button class="retry-button">Reintentar</button>
                 </div>
             `;
+
+            const retryButton = container.querySelector('.retry-button');
+            if (retryButton) {
+                retryButton.addEventListener('click', () => this.loadEstablishments());
+            }
         }
     }
 }
 
+// Exportar la clase para que pueda ser usada por otros módulos
+window.EstablishmentManager = EstablishmentManager;
+
 // Inicializar cuando el DOM esté listo
-let establishmentManager;
 document.addEventListener('DOMContentLoaded', () => {
-    establishmentManager = new EstablishmentManager();
+    window.establishmentManager = new EstablishmentManager();
 });

@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded', function() {
+import ProductAPI from './api.js';
+
+document.addEventListener('DOMContentLoaded', async function() {
     // Variables para elementos del DOM
     const categoryBtns = document.querySelectorAll('.category-btn');
     const menuSections = document.querySelectorAll('.menu-items');
@@ -8,9 +10,123 @@ document.addEventListener('DOMContentLoaded', function() {
     const cartItemsContainer = document.querySelector('.cart-items');
     const cartCount = document.querySelector('.cart-count');
     const cartTotalAmount = document.getElementById('cart-total-amount');
+    const menuContainer = document.querySelector('.menu');
 
     let cart = [];
+    let products = [];
+    let currentCategory = 'hamburguesas';
+    let isLoading = false;
     
+    // Cargar productos desde la API
+    async function loadProducts() {
+        if (isLoading || products.length > 0) return; // Evitar cargas múltiples
+        
+        try {
+            isLoading = true;
+            console.log('Cargando todos los productos...');
+            
+            const loadingElement = document.createElement('div');
+            loadingElement.className = 'loading';
+            loadingElement.textContent = 'Cargando productos...';
+            
+            const currentSection = document.getElementById(currentCategory);
+            if (currentSection) {
+                currentSection.innerHTML = '';
+                currentSection.appendChild(loadingElement);
+            }
+
+            products = await ProductAPI.getProducts();
+            console.log('Productos cargados:', products);
+
+            if (!Array.isArray(products) || products.length === 0) {
+                throw new Error('No se encontraron productos');
+            }
+
+            renderProducts(currentCategory);
+        } catch (error) {
+            console.error('Error al cargar productos:', error);
+            const errorMessage = document.createElement('p');
+            errorMessage.className = 'error-message';
+            errorMessage.textContent = 'Error al cargar los productos. Por favor, intenta más tarde.';
+            
+            const currentSection = document.getElementById(currentCategory);
+            if (currentSection) {
+                currentSection.innerHTML = '';
+                currentSection.appendChild(errorMessage);
+            }
+        } finally {
+            isLoading = false;
+        }
+    }
+
+    // Renderizar productos
+    function renderProducts(category) {
+        console.log(`Renderizando productos para categoría: ${category}`);
+        const categoryProducts = products.filter(product => {
+            console.log(`Evaluando producto: ${product.name}, Categoría: ${product.category}, Buscando: ${category}`);
+            return product.category === category;
+        });
+        
+        const menuSection = document.getElementById(category);
+        if (!menuSection) {
+            console.error(`No se encontró la sección para la categoría: ${category}`);
+            return;
+        }
+
+        if (categoryProducts.length === 0) {
+            menuSection.innerHTML = '<p class="error-message">No hay productos disponibles en esta categoría</p>';
+            return;
+        }
+
+        const productsHTML = categoryProducts.map(product => {
+            console.log('Renderizando producto:', {
+                nombre: product.name,
+                imagen: product.imageUrl,
+                precio: product.price,
+                id: product.id,
+                disponible: product.available
+            });
+
+            return `
+                <div class="menu-item">
+                    <img src="${product.imageUrl || '../images/default-product.jpg'}" 
+                         alt="${product.name}"
+                         onerror="this.onerror=null; this.src='../images/default-product.jpg';">
+                    <div class="menu-item-content">
+                        <div>
+                            <h3>${product.name}</h3>
+                            <span class="price">$${product.price.toFixed(2)}</span>
+                        </div>
+                        <button class="add-to-cart-btn" data-id="${product.id}" ${!product.available ? 'disabled' : ''}>
+                            AGREGAR
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        menuSection.innerHTML = productsHTML;
+
+        // Agregar event listeners a los botones después de insertar el HTML
+        const addToCartButtons = menuSection.querySelectorAll('.add-to-cart-btn');
+        addToCartButtons.forEach(button => {
+            if (!button.disabled) {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.dataset.id);
+                    const product = products.find(p => p.id === productId);
+                    if (product) {
+                        addToCart({
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            image: product.imageUrl
+                        });
+                    }
+                });
+            }
+        });
+    }
+
     // Cargar carrito desde localStorage
     function initCart() {
         const savedCart = localStorage.getItem('cart');
@@ -36,84 +152,54 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Renderizar items del carrito
     function renderCartItems() {
-        if (!cartItemsContainer) return;
-        
+        cartItemsContainer.innerHTML = '';
         if (cart.length === 0) {
-            cartItemsContainer.innerHTML = '<div class="empty-cart-message">Tu carrito está vacío</div>';
+            cartItemsContainer.innerHTML = '<p class="empty-cart-message">Tu carrito está vacío</p>';
             return;
         }
         
-        cartItemsContainer.innerHTML = cart.map(item => `
-            <div class="cart-item" data-id="${item.id}">
-                <img src="../images/${item.image || 'default.jpg'}" alt="${item.name}" class="cart-item-image">
-                <div class="cart-item-details">
-                    <div class="cart-item-name">${item.name}</div>
-                    <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
-                    <div class="cart-item-quantity">
-                        <button class="quantity-btn decrease">-</button>
-                        <span>${item.quantity}</span>
-                        <button class="quantity-btn increase">+</button>
+        cart.forEach(item => {
+            cartItemsContainer.innerHTML += `
+                <div class="cart-item" data-id="${item.id}">
+                    <div class="cart-item-details">
+                        <h4 class="cart-item-title">${item.name}</h4>
+                        <div class="cart-item-pricing">
+                            <div class="unit-price">$${item.price.toFixed(2)}</div>
+                            <div class="cart-item-quantity">
+                                <button class="quantity-btn decrease" type="button">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="quantity-btn increase" type="button">+</button>
+                            </div>
+                        </div>
                     </div>
+                    <button class="cart-item-remove" type="button">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </div>
-                <button class="remove-item">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `).join('');
-        
-        // Agregar event listeners a los botones de cantidad
-        cartItemsContainer.querySelectorAll('.cart-item').forEach(item => {
-            const itemId = item.dataset.id;
-            const decreaseBtn = item.querySelector('.decrease');
-            const increaseBtn = item.querySelector('.increase');
-            const removeBtn = item.querySelector('.remove-item');
-            
-            decreaseBtn.addEventListener('click', () => updateItemQuantity(itemId, -1));
-            increaseBtn.addEventListener('click', () => updateItemQuantity(itemId, 1));
-            removeBtn.addEventListener('click', () => removeFromCart(itemId));
+            `;
         });
     }
     
     // Actualizar total del carrito
     function updateCartTotal() {
-        if (!cartTotalAmount) return;
-        
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         cartTotalAmount.textContent = `$${total.toFixed(2)}`;
     }
     
     // Agregar item al carrito
-    function addToCart(product) {
-        const existingItem = cart.find(item => item.id === product.id);
+    function addToCart(item) {
+        const existingItem = cart.find(cartItem => cartItem.id === item.id);
         if (existingItem) {
             existingItem.quantity += 1;
         } else {
-            cart.push({ ...product, quantity: 1 });
+            cart.push({ 
+                ...item, 
+                quantity: 1,
+                unitPrice: item.price
+            });
         }
         
         showNotification('Producto agregado al carrito');
-        saveCart();
-        updateCartUI();
-    }
-    
-    // Actualizar cantidad de un item
-    function updateItemQuantity(itemId, change) {
-        const item = cart.find(item => item.id === itemId);
-        if (!item) return;
-        
-        item.quantity += change;
-        
-        if (item.quantity <= 0) {
-            removeFromCart(itemId);
-        } else {
-            saveCart();
-            updateCartUI();
-        }
-    }
-    
-    // Eliminar item del carrito
-    function removeFromCart(itemId) {
-        cart = cart.filter(item => item.id !== itemId);
         saveCart();
         updateCartUI();
     }
@@ -151,31 +237,121 @@ document.addEventListener('DOMContentLoaded', function() {
             cartDropdown.classList.remove('show');
         }
     });
-    
-    // Manejar cambios de categoría en el menú
+
+    cartItemsContainer.addEventListener('click', function(e) {
+        const cartItem = e.target.closest('.cart-item');
+        if (!cartItem) return;
+        
+        const itemId = cartItem.dataset.id;
+        
+        // Manejo del botón de incremento
+        if (e.target.classList.contains('increase') || e.target.closest('.increase')) {
+            const item = cart.find(item => item.id === parseInt(itemId));
+            if (item) {
+                item.quantity += 1;
+                saveCart();
+                updateCartUI();
+                showNotification('Cantidad actualizada');
+            }
+        }
+        
+        // Manejo del botón de decremento
+        if (e.target.classList.contains('decrease') || e.target.closest('.decrease')) {
+            const item = cart.find(item => item.id === parseInt(itemId));
+            if (item) {
+                item.quantity -= 1;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== parseInt(itemId));
+                    showNotification('Producto eliminado del carrito');
+                } else {
+                    showNotification('Cantidad actualizada');
+                }
+                saveCart();
+                updateCartUI();
+            }
+        }
+        
+        // Manejo del botón de eliminar
+        if (e.target.classList.contains('fa-trash') || e.target.closest('.cart-item-remove')) {
+            cart = cart.filter(item => item.id !== parseInt(itemId));
+            saveCart();
+            updateCartUI();
+            showNotification('Producto eliminado del carrito');
+        }
+    });
+
+    // Un solo event listener para los botones de categoría
     categoryBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', async function() {
+            const category = this.dataset.category;
+            console.log('Categoría seleccionada:', category);
+            
             categoryBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
-            const category = this.dataset.category;
+            currentCategory = category;
+            
             menuSections.forEach(section => {
+                console.log(`Sección: ${section.id}, Categoría actual: ${category}, Visible: ${section.id === category}`);
                 if (section.id === category) {
                     section.style.display = 'grid';
                 } else {
                     section.style.display = 'none';
                 }
             });
+
+            // Si no hay productos, cargarlos
+            if (products.length === 0) {
+                console.log('No hay productos cargados, cargando...');
+                await loadProducts();
+            }
+
+            // Filtrar y mostrar productos de la categoría actual
+            const categoryProducts = products.filter(p => p.category === category);
+            console.log(`Productos encontrados para categoría ${category}:`, categoryProducts.map(p => p.name));
+
+            renderProducts(category);
         });
     });
 
-    // Escuchar el evento personalizado de agregar al carrito
-    document.addEventListener('addToCart', function(e) {
-        addToCart(e.detail);
+    // Efecto de scroll suave para los enlaces internos
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (!targetElement) return;
+            
+            window.scrollTo({
+                top: targetElement.offsetTop - 80,
+                behavior: 'smooth'
+            });
+        });
     });
-    
-    // Inicializar carrito
+
+    // Efecto de header al hacer scroll
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 100) {
+            header.style.padding = '10px 0';
+            header.style.background = 'rgba(0, 0, 0, 0.9)';
+            header.style.color = 'white';
+        } else {
+            header.style.padding = '20px 0';
+            header.style.background = 'transparent';
+            header.style.color = 'white';
+        }
+    });
+
+    // Event listener para el botón de checkout
+    document.querySelector('.checkout-btn').addEventListener('click', function() {
+        window.location.href = './buying_details.html';
+    });
+
+    // Inicializar la aplicación
     initCart();
+    await loadProducts(); // Cargar productos una sola vez
 });
 
 
