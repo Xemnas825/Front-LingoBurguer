@@ -97,9 +97,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                             <h3>${product.name}</h3>
                             <span class="price">$${product.price.toFixed(2)}</span>
                         </div>
-                        <button class="add-to-cart-btn" data-id="${product.id}" ${!product.available ? 'disabled' : ''}>
-                            AGREGAR
-                        </button>
+                        <div class="buttons">
+                            <button class="view-details-btn" data-id="${product.id}">
+                                VIEW DETAILS
+                            </button>
+                            <button class="add-to-cart-btn" data-id="${product.id}" ${!product.available ? 'disabled' : ''}>
+                                ADD TO CART
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
@@ -107,8 +112,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         menuSection.innerHTML = productsHTML;
 
-        // Agregar event listeners a los botones después de insertar el HTML
+        // Agregar event listeners a los botones
         const addToCartButtons = menuSection.querySelectorAll('.add-to-cart-btn');
+        const viewDetailsButtons = menuSection.querySelectorAll('.view-details-btn');
+        
         addToCartButtons.forEach(button => {
             if (!button.disabled) {
                 button.addEventListener('click', function() {
@@ -125,7 +132,93 @@ document.addEventListener('DOMContentLoaded', async function() {
                 });
             }
         });
+
+        viewDetailsButtons.forEach(button => {
+            button.addEventListener('click', async function() {
+                const productId = parseInt(this.dataset.id);
+                await showProductDetails(productId);
+            });
+        });
     }
+
+    // Función para mostrar los detalles del producto en el modal
+    async function showProductDetails(productId) {
+        try {
+            console.log('Obteniendo detalles del producto con ID:', productId);
+            const product = await ProductAPI.getProductById(productId);
+            console.log('Producto obtenido:', product);
+            
+            const modalOverlay = document.getElementById('product-modal');
+            const modalProduct = modalOverlay.querySelector('.modal-product');
+            
+            // Verificar la URL de la imagen
+            console.log('URL de la imagen:', {
+                url: product.imageUrl,
+                category: product.category,
+                name: product.name
+            });
+            
+            modalProduct.innerHTML = `
+                <img src="${product.imageUrl}" 
+                     alt="${product.name}"
+                     onerror="this.onerror=null; this.src='../images/default-product.jpg';"
+                     class="modal-product-image">
+                <div class="modal-product-info">
+                    <h3>${product.name}</h3>
+                    <p class="description">${product.description || 'Sin descripción disponible'}</p>
+                    <div class="price">$${product.price.toFixed(2)}</div>
+                    <div class="modal-actions">
+                        <button class="add-to-cart-btn" data-id="${product.id}" ${!product.available ? 'disabled' : ''}>
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Verificar que la imagen se cargó correctamente
+            const modalImage = modalProduct.querySelector('img');
+            modalImage.addEventListener('load', () => {
+                console.log('Imagen cargada correctamente:', modalImage.src);
+            });
+            
+            modalImage.addEventListener('error', () => {
+                console.error('Error al cargar la imagen:', modalImage.src);
+            });
+
+            // Agregar event listener al botón de agregar al carrito en el modal
+            const addToCartBtn = modalProduct.querySelector('.add-to-cart-btn');
+            if (addToCartBtn && !addToCartBtn.disabled) {
+                addToCartBtn.addEventListener('click', function() {
+                    addToCart({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        image: product.imageUrl
+                    });
+                    modalOverlay.classList.remove('active');
+                });
+            }
+
+            modalOverlay.classList.add('active');
+        } catch (error) {
+            console.error('Error al cargar los detalles del producto:', error);
+            alert('No se pudieron cargar los detalles del producto');
+        }
+    }
+
+    // Event listener para cerrar el modal
+    const modalOverlay = document.getElementById('product-modal');
+    const closeButton = modalOverlay.querySelector('.modal-close');
+    
+    closeButton.addEventListener('click', () => {
+        modalOverlay.classList.remove('active');
+    });
+
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            modalOverlay.classList.remove('active');
+        }
+    });
 
     // Cargar carrito desde localStorage
     function initCart() {

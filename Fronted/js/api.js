@@ -153,22 +153,42 @@ class ProductAPI {
             }
             
             const data = await response.json();
-            console.log('Product received:', data);
+            console.log('Datos del producto recibidos:', data);
             
-            if (Array.isArray(data) && data.length > 0) {
-                const product = data[0];
+            if (Array.isArray(data)) {
+                // Buscar el producto específico por ID
+                const product = data.find(p => p.m_iId === id);
+                
+                if (!product) {
+                    throw new Error(`No se encontró el producto con ID ${id}`);
+                }
+                
+                console.log('Datos crudos del producto encontrado:', product);
+                
                 const categoryName = this.mapCategory(product.m_iCategory);
+                console.log('Categoría mapeada:', {
+                    originalId: product.m_iCategory,
+                    mappedName: categoryName
+                });
+                
+                const imageUrl = `../images/products/${categoryName}/${product.m_strImageURL}`;
+                console.log('URL de imagen construida:', {
+                    categoryName,
+                    imageFileName: product.m_strImageURL,
+                    fullUrl: imageUrl
+                });
+                
                 return {
                     id: product.m_iId,
                     name: product.m_strName,
                     description: product.m_strDescription,
                     price: product.m_dblPrice,
                     category: categoryName,
-                    imageUrl: `../images/products/${categoryName}/${product.m_strImageURL}`,
+                    imageUrl: imageUrl,
                     available: product.m_bAvailable
                 };
             }
-            throw new Error('Producto no encontrado');
+            throw new Error('Respuesta inválida de la API');
         } catch (error) {
             console.error('Error en getProductById:', error);
             throw error;

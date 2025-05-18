@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     src: url('../fonts/Teko-VariableFont_wght.ttf') format('truetype');
 }
 
@@ -11,7 +11,7 @@ header {
     position: sticky;
     top: 0;
     z-index: 1000;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     font-size: 22px;
 }
 
@@ -91,7 +91,7 @@ header {
     background-clip: text;
     color: transparent;
     margin: 0; /* Elimina margen por defecto */
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
 }
 
 .close-sidebar {
@@ -156,7 +156,7 @@ header {
 /*  FOOTER  */
 
 footer {
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     background-color: black;
     color: white;
     text-align: center;
@@ -186,7 +186,7 @@ footer {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
 }
 
 /* Redes sociales en contacto */

@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     src: url('../fonts/Teko-VariableFont_wght.ttf') format('truetype');
 }
 
@@ -19,7 +19,7 @@ body {
 }
 
 .main {
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     background-color: black;
     color: white;
     padding: 0 5%;

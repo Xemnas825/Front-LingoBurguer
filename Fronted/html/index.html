@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lingoburguer - Hamburguesas Artesanales</title>
+    <title>Lingo Burguer - Handmade Burgers</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/header-footer.css">
     <link rel="stylesheet" href="../css/loading.css">
@@ -50,14 +50,14 @@
                         <span class="cart-count">0</span>
                         <div class="cart-dropdown">
                             <div class="cart-header">
-                                <h3>Tu Carrito</h3>
+                                <h3>Your Cart</h3>
                             </div>
                             <div class="cart-items">
                                 <!-- Los items del carrito se insertarán aquí dinámicamente -->
                             </div>
                             <div class="cart-total">
                                 <p>Total: <span id="cart-total-amount">$0.00</span></p>
-                                <button class="btn checkout-btn">Realizar Pedido</button>
+                                <button class="btn checkout-btn">Make an Order</button>
                             </div>
                         </div>
                     </div>
@@ -80,31 +80,29 @@
         <div class="hero-content">
             <h1>HANDMADE HAMBURGERS</h1>
             <p>Made with fresh ingredients of the highest quality.</p>
-            <a href="#menu" class="btn">see letter</a>
+            <a href="#menu" class="btn">view Menu</a>
         </div>
     </section>
 
     <section class="about" id="whoarewe">
         <div class="about-content">
-            <h2>SOBRE LINGOBURGUER</h2>
-            <p>En Lingoburguer reinventamos la experiencia de la hamburguesa. Cada una de nuestras creaciones es una
-                explosión de sabores cuidadosamente equilibrados, utilizando ingredientes locales y técnicas culinarias
-                innovadoras.</p>
-            <p>Nuestro compromiso es ofrecer no solo una comida, sino una experiencia gastronómica memorable.</p>
+            <h2>ABOUT LINGOBURGUER</h2>
+            <p>In Lingoburguer, we reinvent the burger experience. Each of our creations is a carefully balanced explosion of flavors, using locally sourced ingredients and innovative culinary techniques.</p>
+            <p>Our commitment is to offer not only food, but a memorable gastronomic experience.</p>
         </div>
         <div class="about-image">
             <img src="burger-about.jpg" alt="Hamburguesa Lingoburguer">
         </div>
     </section>
     <section class="menu" id="menu">
-        <h2>Nuestro Menú</h2>
+        <h2>OUR MENU</h2>
         <div class="menu-categories">
-            <button class="category-btn" data-category="entrantes">Entrantes</button>
-            <button class="category-btn active" data-category="hamburguesas">Hamburguesas</button>
-            <button class="category-btn" data-category="acompañamientos">Acompañamientos</button>
-            <button class="category-btn" data-category="productos-compuestos">Menú</button>
-            <button class="category-btn" data-category="bebidas">Bebidas</button>
-            <button class="category-btn" data-category="postres">Postres</button>
+            <button class="category-btn" data-category="entrantes">Appetizers</button>
+            <button class="category-btn active" data-category="hamburguesas">Burgers</button>
+            <button class="category-btn" data-category="acompañamientos">Sides</button>
+            <button class="category-btn" data-category="productos-compuestos">Menu</button>
+            <button class="category-btn" data-category="bebidas">Drinks</button>
+            <button class="category-btn" data-category="postres">Desserts</button>
         </div>
 
         <div class="menu-items" id="entrantes" style="display: none;">
@@ -202,6 +200,16 @@
 
     <script src="../js/header-footer.js"></script>
     <script type="module" src="../js/script.js"></script>
+
+    <!-- Modal de detalles del producto -->
+    <div class="modal-overlay" id="product-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-product">
+                <!-- El contenido del producto se cargará dinámicamente -->
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

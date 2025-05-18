@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     src: url('../fonts/Teko-VariableFont_wght.ttf') format('truetype');
 }
 
@@ -16,7 +16,7 @@ html, body {
 
 body {
     background-color: black;
-    font-family: 'MiFuentePersonalizada', Arial, sans-serif;
+    font-family: 'MyPersonalisedSource', Arial, sans-serif;
     color: white;
     min-height: 100vh;
     display: flex;
@@ -184,7 +184,7 @@ h2 {
     width: 100%;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
 }
 
 .confirm-button:hover {
@@ -250,7 +250,7 @@ h2 {
     padding: 8px 16px;
     border-radius: 4px;
     cursor: pointer;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     transition: all 0.3s ease;
 }
 
@@ -331,7 +331,7 @@ h2 {
 .unit-price {
     color: #999;
     font-size: 16px;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
 }
 
 .quantity-info {
@@ -348,7 +348,7 @@ h2 {
     color: transparent;
     font-weight: bold;
     font-size: 18px;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
 }
 
 .product-quantity {
@@ -380,7 +380,7 @@ h2 {
 
 .product-quantity span {
     color: white;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     font-size: 18px;
     min-width: 20px;
     text-align: center;

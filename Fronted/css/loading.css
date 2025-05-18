@@ -3,7 +3,7 @@
     padding: 2rem;
     color: #ff6600;
     font-size: 1.2rem;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     display: flex;
     align-items: center;
     justify-content: center;
@@ -31,7 +31,7 @@
     padding: 2rem;
     color: #dc3545;
     font-size: 1.2rem;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     background-color: rgba(220, 53, 69, 0.1);
     border-radius: 8px;
     margin: 1rem;

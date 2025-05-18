@@ -111,7 +111,7 @@ class EstablishmentManager {
     }
 }
 
-// Exportar la clase para que pueda ser usada por otros módulos
+// Exportar la clase para que pueda ser usada pors otros módulos
 window.EstablishmentManager = EstablishmentManager;
 
 // Inicializar cuando el DOM esté listo

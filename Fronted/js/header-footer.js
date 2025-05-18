@@ -1,7 +1,7 @@
 const apiUrl = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=ESTABLISHMENT.FIND_ALL';
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Seleccionamos los elementos usando los IDs actualizados
+    // We select the elements using the updated IDs
     const menuToggle = document.getElementById('menu-toggle');
     const sidebar = document.getElementById('sidebar');
     const closeSidebar = document.getElementById('close-sidebar');
@@ -13,51 +13,51 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     const sidebarLinks = sidebar.querySelectorAll('a');
 
-    // Verificamos que los elementos existan antes de agregar event listeners
+    // We check that the elements exist before adding event listeners
     if (menuToggle) {
         menuToggle.addEventListener('click', function () {
             sidebar.classList.add('active');
             if (overlay) overlay.classList.add('active');
-            console.log('Menú abierto'); // Para depuración
+            console.log('Menu opened'); // For debugging
         });
     } else {
-        console.error('El elemento menu-toggle no fue encontrado');
+        console.error('The menu-toggle element was not found');
     }
 
-    // Función para cerrar el menú lateral
+    // Function to close the sidebar menu
     function closeSidebarMenu() {
         sidebar.classList.remove('active');
         if (overlay) overlay.classList.remove('active');
-        console.log('Menú cerrado'); // Para depuración
+        console.log('Menu closed'); // For debugging
     }
 
     if (closeSidebar) {
         closeSidebar.addEventListener('click', closeSidebarMenu);
     } else {
-        console.error('El elemento close-sidebar no fue encontrado');
+        console.error('The close-sidebar element was not found');
     }
 
-    // Solo mantener el event listener para el icono de usuario
+    // Only keep the event listener for the user icon
     if (userIcon) {
         userIcon.addEventListener('click', function () {
-            alert('Has hecho clic en el icono de usuario');
+            alert('You have clicked on the user icon');
         });
     }
 
-    // Event listeners para los enlaces del menú
+    // Event listeners for the menu links
     sidebarLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            closeSidebarMenu(); // Cerrar el menú
+            closeSidebarMenu(); // Close the menu
 
-            // Si el enlace tiene un hash (ancla)
+            // If the link has a hash (anchor)
             if (this.hash) {
-                // Si estamos en la misma página
+                // If we are on the same page
                 if (window.location.pathname.endsWith('index.html')) {
                     e.preventDefault();
                     const targetElement = document.querySelector(this.hash);
                     if (targetElement) {
                         window.scrollTo({
-                            top: targetElement.offsetTop - 80, // Offset para el header
+                            top: targetElement.offsetTop - 80, // Offset for the header
                             behavior: 'smooth'
                         });
                     }
@@ -66,13 +66,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    //Etsablecimientos Footer
+    //Establishments Footer
     async function loadEstablishments() {
         try {
-            // Realizar la llamada fetch a la URL
+            // Perform the fetch call to the URL
             const response = await fetch(`${apiUrl}`);
             if (!response.ok) {
-                throw new Error('No se pudieron cargar los establecimientos');
+                throw new Error('The establishments could not be loaded');
             }
 
             const data = await response.json();
@@ -82,11 +82,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 createEstablishmentCard(establishment);
             }
         } catch (error) {
-            console.error('Error al cargar establecimientos:', error);
+            console.error('Error loading establishments:', error);
 
-            // Usar la constante para mostrar el error
+            // Use the constant to show the error
             DOM_ELEMENTS.footerLocations.innerHTML =
-                '<p>No se pudieron cargar los establecimientos</p>';
+                '<p>The establishments could not be loaded</p>';
         }
     }
 

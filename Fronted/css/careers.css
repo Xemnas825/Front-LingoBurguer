@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     src: url('../fonts/Teko-VariableFont_wght.ttf') format('truetype');
 }
 
@@ -13,7 +13,7 @@
 
 body {
     background-color: black;
-    font-family: 'MiFuentePersonalizada', Arial, sans-serif;
+    font-family: 'MyPersonalisedSource', Arial, sans-serif;
     color: white;
     margin: 0;
     padding: 0;
@@ -55,7 +55,7 @@ main {
     background-clip: text;
     color: transparent;
     margin-bottom: 15px;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
 }
 
 .description, .salary, .details {
@@ -76,7 +76,7 @@ main {
     cursor: pointer;
     transition: 0.3s;
     margin-top: 20px;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -111,7 +111,7 @@ header {
     position: sticky;
     top: 0;
     z-index: 50;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     font-size: 22px;
     width: 100%;
     box-sizing: border-box;
@@ -474,7 +474,7 @@ main {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
 }
 
 .candidate-card input[type="text"],
@@ -490,7 +490,7 @@ main {
     color: white;
     font-size: 16px;
     transition: all 0.3s ease;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     box-sizing: border-box;
 }
 
@@ -524,7 +524,7 @@ main {
     transition: all 0.3s ease;
     width: 100%;
     margin-top: 15px;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -543,7 +543,7 @@ main {
 .candidate-card input::placeholder,
 .candidate-card textarea::placeholder {
     color: rgba(255, 255, 255, 0.6);
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     font-size: 16px;
 }
 
@@ -594,7 +594,7 @@ main {
     margin-top: 15px;
     text-align: center;
     color: white;
-    font-family: 'MiFuentePersonalizada';
+    font-family: 'MyPersonalisedSource';
     font-size: 18px;
     display: none;
     animation: fadeIn 0.5s ease-in-out;
