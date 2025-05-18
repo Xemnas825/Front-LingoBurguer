@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/userDetailStyle.css">
 </head>
+
 <body>
     <div class="container">
         <!-- Sidebar -->
@@ -22,24 +24,25 @@
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
-            
+
             <div class="user-profile">
                 <!--Get data from database-->
                 <div class="user-name">[Insert Name from DB]</div>
                 <div class="user-email">[Insert Email from DB]</div>
             </div>
-            
+
             <!-- Sidebar Menu -->
             <div class="nav-menu">
                 <h3>Account Management</h3>
                 <ul>
-                    <li><a href="#" class="active"><i class="fas fa-user" id="persInfoBtn"></i> Personal Information</a></li>
+                    <li><a href="#" class="active"><i class="fas fa-user" id="persInfoBtn"></i> Personal Information</a>
+                    </li>
                 </ul>
-                
+
                 <h3>Administration</h3>
                 <ul>
-                    <li><a href="#"><i class="fas fa-users" id="employeesBtn"></i> Employee Management</a></li>
-                    <li><a href="#"><i class="fas fa-hamburger" id="productsBtn"></i> Product Management</a></li>
+                    <li><a href="#" id="employeesBtn"><i class="fas fa-users"></i> Employee Management</a></li>
+                    <li><a href="#" id="productsBtn"><i class="fas fa-hamburger"></i> Product Management</a></li>
                 </ul>
 
                 <h3>Activity</h3>
@@ -47,12 +50,12 @@
                     <li><a href="#"><i class="fas fa-history" id="ordersBtn"></i> Order History</a></li>
                 </ul>
             </div>
-            
+
             <div class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i> Log Out
             </div>
         </div>
-        
+
         <!-- Main Content -->
         <div class="main-content">
             <!-- Statistics -->
@@ -61,30 +64,30 @@
                     <i class="fas fa-shopping-bag"></i>
                     <div class="stat-value">15</div> <!-- Get data from DB -->
                     <div class="stat-label">Total Orders</div>
-                </div>                       
+                </div>
             </div>
-            
+
             <!-- Personal Information Panel -->
             <div class="content-panel" id="persInfoPannel">
                 <div class="panel-header">
-                    <h2>Personal Information</h2>  
+                    <h2>Personal Information</h2>
                     <button class="action-button" id="edit-info-btn">
                         <i class="fas fa-edit"></i> Edit
                     </button>
                 </div>
-                
+
                 <form id="personal-info-form">
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="firstName">First Name</label>
                             <input type="text" id="firstName" class="form-control" value="[DB]" disabled>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="lastName">Last Name</label>
                             <input type="text" id="lastName" class="form-control" value="[DB]" disabled>
                         </div>
-                                                                        
+
                         <div class="form-group full-width">
                             <label for="address">Address</label>
                             <textarea id="address" class="form-control" rows="3" disabled>[DB]</textarea>
@@ -94,22 +97,17 @@
                             <label for="email">Email</label>
                             <input type="email" id="email" class="form-control" value="[DB]" disabled>
                         </div>
-    
+
                         <div class="form-group">
                             <label for="phone">Phone Number</label>
                             <input type="tel" id="phone" class="form-control" value="[DB]" disabled>
                         </div>
-    
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" id="password" class="form-control" value="[DB]" disabled>
-                        </div>
-                        
+
                         <div class="form-buttons" style="display: none;">
                             <button type="button" class="btn btn-secondary" id="cancel-btn">Cancel</button>
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                         </div>
-                    </div>                   
+                    </div>
                 </form>
             </div>
 
@@ -118,7 +116,7 @@
                 <div class="panel-header">
                     <h2>Recent Orders</h2>
                 </div>
-                
+
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -149,7 +147,7 @@
                             <label for="emp-firstName">First Name</label>
                             <input type="text" id="emp-firstName" class="form-control" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="emp-lastName">Last Name</label>
                             <input type="text" id="emp-lastName" class="form-control" required>
@@ -181,7 +179,8 @@
 
                         <div class="form-group">
                             <label for="emp-hire-date">Hire Date</label>
-                            <input type="text" id="emp-hire-date" class="form-control" placeholder="DD/MM/YYYY" required>
+                            <input type="text" id="emp-hire-date" class="form-control" placeholder="DD/MM/YYYY"
+                                required>
                         </div>
 
                         <div class="form-group">
@@ -292,4 +291,5 @@
 
     <script src="../js/userDetailScript.js"></script>
 </body>
+
 </html>

@@ -1,11 +1,29 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Variables globales
-    let jobs = {};
-    let establishments = {};
-    let categories = {};
-    let editingEmployeeId = null;
-    let currentEmployeeEmail = null;
-    let editingProductId = null;
+document.addEventListener('DOMContentLoaded', function () {
+    // Verificar si el usuario está autenticado
+    let userRole = sessionStorage.getItem('userRole');
+    let userData = JSON.parse(sessionStorage.getItem('userData'));
+
+    console.log('User role:', userRole); // Debugging
+
+    // Actualiza la sección del perfil del sidebar con los datos del usuario
+    const userNameEl = document.querySelector('.user-name');
+    const userEmailEl = document.querySelector('.user-email');
+
+    if (userData) {
+        userNameEl.textContent = `${userData.m_strFirstName} ${userData.m_strLastName}`;
+        userEmailEl.textContent = userData.m_strEmail;
+    }
+
+    // Mostrar datos personales del usuario en la sección Personal Information
+    if (userData) {
+        document.getElementById('firstName').value = userData.m_strFirstName || '';
+        document.getElementById('lastName').value = userData.m_strLastName || '';
+        document.getElementById('email').value = userData.m_strEmail || '';
+        document.getElementById('phone').value = userData.m_strTelephone || '';
+
+        // Campo address no está en la base de datos, lo dejamos en blanco
+        document.getElementById('address').value = '';
+    }
 
     // URLs del API
     const apiUrlADDEmployee = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.ADD';
@@ -20,13 +38,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const apiUrlDeleteProduct = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=PRODUCT.DELETE';
     const apiUrlGetCategories = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CATEGORY.FIND_ALL';
 
-    // Verificar autenticación
-    let userRole = sessionStorage.getItem('userRole') || 'employee';
-    let userData = JSON.parse(sessionStorage.getItem('userData')) || {
-        m_strFirstName: 'Usuario',
-        m_strLastName: 'Prueba',
-        m_strEmail: 'test@example.com'
-    };
+    // Variables globales para cuando se edita un empleado
+    let editingEmployeeId = null;
+    let currentEmployeeEmail = null;
+    let currentEmployeePassword = null;
+    let jobs = {};
+    let establishments = {};
 
     // Elementos del DOM
     const editBtn = document.getElementById('edit-info-btn');
@@ -38,14 +55,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('personal-info-form');
     const formInputs = form.querySelectorAll('input, textarea, select');
     const formButtons = form.querySelector('.form-buttons');
-    
+
     // Botones del menú lateral
     const persInfoBtn = document.getElementById('persInfoBtn')?.closest('a');
     const ordersBtn = document.getElementById('ordersBtn')?.closest('a');
-    const employeesBtn = document.getElementById('employeesBtn')?.closest('a');
-    const productsBtn = document.getElementById('productsBtn')?.closest('a');
-    
-    // Formularios
+    const employeesBtn = document.getElementById('employeesBtn');
+    const productsBtn = document.getElementById('productsBtn');
+
+
+    // Formularios de empleados y productos
     const employeeForm = document.getElementById('employee-form');
     const productForm = document.getElementById('product-form');
     const addEmployeeBtn = document.getElementById('add-employee-btn');
@@ -53,51 +71,61 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelEmployeeBtn = document.getElementById('cancel-employee-btn');
     const cancelProductBtn = document.getElementById('cancel-product-btn');
 
-    // Cargar datos del usuario
-    document.querySelector('.user-name').textContent = userData.m_strFirstName + ' ' + userData.m_strLastName;
-    document.querySelector('.user-email').textContent = userData.m_strEmail;
-
     // Configurar visibilidad según el rol
+    // Importante: hacer esto al principio para asegurar que la sección de admin esté correctamente oculta/visible
+    const adminSection = document.querySelector('.nav-menu h3:nth-of-type(2)');
+    const adminLinks = adminSection?.nextElementSibling;
+
+    // Mejorar la visibilidad de los elementos administrativos según el rol
     if (userRole === 'client') {
-        const adminSection = document.querySelector('.nav-menu h3:nth-of-type(2)');
-        const adminLinks = adminSection?.nextElementSibling;
+        // Ocultar sección de administración para clientes
         if (adminSection) adminSection.style.display = 'none';
         if (adminLinks) adminLinks.style.display = 'none';
+
+        // También ocultar paneles de administración
+        if (employeesPanel) employeesPanel.style.display = 'none';
+        if (productsPanel) productsPanel.style.display = 'none';
+
+        // Ocultar los botones relacionados si existen
+        if (employeesBtn) employeesBtn.closest('li').style.display = 'none';
+        if (productsBtn) productsBtn.closest('li').style.display = 'none';
     }
-    
-    // Event Listeners para los botones del menú
-    persInfoBtn?.addEventListener('click', function(e) {
+
+    // Event Listeners para los botones del menú - estos se añaden para todos los usuarios
+    persInfoBtn?.addEventListener('click', function (e) {
         e.preventDefault();
         showPanel('personal');
         updateActiveMenu(this);
     });
 
-    ordersBtn?.addEventListener('click', function(e) {
+    ordersBtn?.addEventListener('click', function (e) {
         e.preventDefault();
         showPanel('orders');
         updateActiveMenu(this);
     });
 
+    // Solo añadir event listeners para funciones de empleado si el usuario es empleado
     if (userRole === 'employee') {
-        employeesBtn?.addEventListener('click', function(e) {
+        // Event listeners para botones de navegación admin
+        employeesBtn?.addEventListener('click', function (e) {
             e.preventDefault();
             showPanel('employees');
             updateActiveMenu(this);
         });
 
-        productsBtn?.addEventListener('click', function(e) {
+        productsBtn?.addEventListener('click', function (e) {
             e.preventDefault();
             showPanel('products');
             updateActiveMenu(this);
         });
 
         // Event listeners para formularios de productos
-        addProductBtn?.addEventListener('click', function() {
+        addProductBtn?.addEventListener('click', function () {
             productForm.style.display = 'block';
             addProductBtn.style.display = 'none';
         });
 
-        cancelProductBtn?.addEventListener('click', function() {
+        cancelProductBtn?.addEventListener('click', function () {
             productForm.style.display = 'none';
             addProductBtn.style.display = 'block';
             productForm.reset();
@@ -105,16 +133,144 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Event listeners para formularios de empleados
-        addEmployeeBtn?.addEventListener('click', function() {
+        addEmployeeBtn?.addEventListener('click', function () {
             employeeForm.style.display = 'block';
             addEmployeeBtn.style.display = 'none';
+
+            // Mostrar y hacer requerido el campo de contraseña para nuevos empleados
+            const passwordField = document.getElementById("emp-password");
+            const passwordLabel = passwordField.previousElementSibling;
+            passwordField.style.display = 'block';
+            passwordLabel.style.display = 'block';
+            passwordField.value = '';
+            passwordField.placeholder = 'Enter password';
+            passwordField.required = true;
         });
 
-        cancelEmployeeBtn?.addEventListener('click', function() {
+        cancelEmployeeBtn?.addEventListener('click', function () {
             employeeForm.style.display = 'none';
             addEmployeeBtn.style.display = 'block';
-            employeeForm.reset();
+            // Resetear variables de edición
             editingEmployeeId = null;
+            currentEmployeeEmail = null;
+
+            // Mostrar y resetear el campo de contraseña
+            const passwordField = document.getElementById("emp-password");
+            const passwordLabel = passwordField.previousElementSibling;
+            passwordField.style.display = 'block';
+            passwordLabel.style.display = 'block';
+            passwordField.required = true;
+
+            // Cambiar el texto del botón submit de vuelta a su estado original
+            const submitBtn = employeeForm.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Save Employee';
+
+            // Resetear el formulario
+            employeeForm.reset();
+        });
+
+        // Event listener para el formulario de empleados
+        employeeForm?.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const isEditing = editingEmployeeId !== null;
+            console.log('Modo:', isEditing ? 'Edición' : 'Creación');
+
+            // 1. Recoger datos
+            const formData = {
+                firstName: document.getElementById("emp-firstName").value.trim(),
+                lastName: document.getElementById("emp-lastName").value.trim(),
+                email: document.getElementById("emp-email").value.trim(),
+                telephone: document.getElementById("emp-telephone").value.trim(),
+                password: document.getElementById("emp-password").value,
+                jobId: document.getElementById("emp-role").value,
+                establishmentId: document.getElementById("emp-establishment").value,
+                salary: document.getElementById("emp-salary").value,
+                hireDate: document.getElementById("emp-hire-date").value
+            };
+
+            // 2. Validación mínima
+            if (!formData.firstName || !formData.lastName || !formData.email) {
+                alert("Nombre, Apellido y Email son obligatorios");
+                return;
+            }
+
+            // 3. Preparar parámetros para el backend
+            const params = new URLSearchParams();
+
+            // Parámetros clave para actualización
+            if (isEditing) {
+                params.append('original_email', currentEmployeeEmail); // Email original para buscar el ID
+            }
+            params.append('email', formData.email); // Email actualizado (si ha cambiado)
+
+            // Campos obligatorios
+            params.append('first_name', formData.firstName);
+            params.append('last_name', formData.lastName);
+            params.append('email', formData.email); // Nuevo email (si cambió)
+            params.append('telephone', formData.telephone || '');
+
+            // Contraseña: solo se envía al CREAR
+            if (isEditing) {
+                params.append('password_hash', currentEmployeePassword);
+            } else {
+                if (!formData.password) {
+                    alert("La contraseña es obligatoria para nuevos empleados");
+                    return;
+                }
+                params.append('password_hash', formData.password);
+            }
+
+            params.append('job_id1', formData.jobId || '1');
+            params.append('establishment_id1', formData.establishmentId || '1');
+            params.append('salary', formData.salary || '0');
+
+            // Formatear fecha al formato YYYY-MM-DD que espera el backend
+            if (formData.hireDate) {
+                const date = new Date(formData.hireDate);
+                const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+                params.append('hire_date', formattedDate);
+            } else {
+                // Fecha por defecto si no se proporciona
+                const today = new Date();
+                const defaultDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                params.append('hire_date', defaultDate);
+            }
+
+            console.log('Parámetros finales:', Object.fromEntries(params.entries()));
+
+            // 4. Enviar petición
+            const apiUrl = isEditing ? apiUrlUpdateEmployee : apiUrlADDEmployee;
+
+            fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params
+            })
+                .then(response => response.text())
+                .then(text => {
+                    console.log('Respuesta del servidor:', text);
+
+                    if (text.includes("error") || text.includes("Error") || text === "Faltan datos") {
+                        throw new Error(text);
+                    }
+
+                    alert(`Empleado ${isEditing ? 'actualizado' : 'creado'} correctamente!`);
+                    loadEmployeesList();
+
+                    // Resetear el formulario
+                    employeeForm.style.display = 'none';
+                    addEmployeeBtn.style.display = 'block';
+                    employeeForm.reset();
+                    editingEmployeeId = null;
+                    currentEmployeeEmail = null;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(`Error: ${error.message}`);
+                });
         });
     }
 
@@ -125,17 +281,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Función para cambiar entre paneles
     function showPanel(panelToShow) {
         console.log('Mostrando panel:', panelToShow);
-        
+
         // Ocultar todos los paneles
         personalPannel.style.display = 'none';
         orderPannel.style.display = 'none';
+
+        // Solo acceder a paneles de empleado si el usuario es empleado
         if (userRole === 'employee') {
-            employeesPanel.style.display = 'none';
-            productsPanel.style.display = 'none';
+            if (employeesPanel) employeesPanel.style.display = 'none';
+            if (productsPanel) productsPanel.style.display = 'none';
         }
-        
-        // Mostrar el panel seleccionado
-        switch(panelToShow) {
+
+        // Muestra solo el panel seleccionado
+        switch (panelToShow) {
             case 'personal':
                 personalPannel.style.display = 'block';
                 break;
@@ -143,16 +301,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 orderPannel.style.display = 'block';
                 break;
             case 'employees':
-                if (userRole === 'employee') {
+                if (userRole === 'employee' && employeesPanel) {
                     employeesPanel.style.display = 'block';
-                    loadJobs()
-                        .then(() => loadEstablishments())
-                        .then(() => loadEmployeesList())
-                        .catch(error => console.error('Error al cargar datos de empleados:', error));
+                    console.log('Cargando panel de empleados...');
+
+                    // Primero cargar los jobs
+                    loadJobs().then(() => {
+                        console.log('Jobs cargados, cargando establecimientos...');
+                        return loadEstablishments();
+                    }).then(() => {
+                        console.log('Establecimientos cargados, cargando lista de empleados...');
+                        loadEmployeesList();
+                    }).catch(error => {
+                        console.error('Error en la secuencia de carga:', error);
+                    });
                 }
                 break;
             case 'products':
-                if (userRole === 'employee') {
+                if (userRole === 'employee' && productsPanel) {
                     productsPanel.style.display = 'block';
                     loadCategories()
                         .then(() => loadProductsList())
@@ -168,8 +334,8 @@ document.addEventListener('DOMContentLoaded', function() {
         clickedLink.classList.add('active');
     }
 
-      // Función para cargar la lista de empleados
-      function loadEmployeesList() {
+    // Función para cargar la lista de empleados
+    function loadEmployeesList() {
         console.log("Cargando lista de empleados...");
         fetch(apiUrlGetEmployees)
             .then(response => response.text())
@@ -180,16 +346,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         employees = JSON.parse(text);
                     }
 
-
                     const tableBody = document.getElementById('employees-table-body');
                     if (!tableBody) {
                         console.error('No se encontró la tabla de empleados');
                         return;
                     }
 
-
                     tableBody.innerHTML = '';
-
 
                     if (employees.length === 0) {
                         const row = document.createElement('tr');
@@ -197,9 +360,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         tableBody.appendChild(row);
                         return;
                     }
-
-
-
 
                     employees.forEach(employee => {
                         let hireDate = employee.m_dtHireDate || employee.m_hireDate || employee.hire_date || '';
@@ -219,14 +379,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                     return months[monthName.toLowerCase()];
                                 };
 
-
-
-
                                 if (typeof hireDate === 'string') {
                                     if (/^\d{4}\/\d{2}\/\d{2}$/.test(hireDate)) {
-                                        // Ya está en formato correcto
-                                    }
-                                    else if (/[a-zA-Z]/.test(hireDate)) {
+                                        // Ya está en formato correcto, no hacemos nada
+                                    } else if (/[a-zA-Z]/.test(hireDate)) {
                                         const parts = hireDate.replace(',', '').split(' ');
                                         if (parts.length >= 3) {
                                             const month = getMonthNumber(parts[0]);
@@ -236,8 +392,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                                 hireDate = `${year}/${month}/${day}`;
                                             }
                                         }
-                                    }
-                                    else if (hireDate.includes('T') || hireDate.includes('-')) {
+                                    } else if (hireDate.includes('T') || hireDate.includes('-')) {
                                         const parts = hireDate.split(/[-T]/);
                                         if (parts.length >= 3) {
                                             hireDate = `${parts[0]}/${parts[1]}/${parts[2].split('T')[0]}`;
@@ -250,7 +405,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                 hireDate = `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
                             }
                         }
-
 
                         const row = document.createElement('tr');
                         row.innerHTML = `
@@ -270,16 +424,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         `;
                         tableBody.appendChild(row);
 
-
-
-
                         // Añadir event listener al botón de editar
                         const editBtn = row.querySelector('.edit-btn');
-                        editBtn.addEventListener('click', function() {
+                        editBtn.addEventListener('click', function () {
                             editingEmployeeId = this.getAttribute('data-id');
                             currentEmployeeEmail = this.getAttribute('data-email');
                             currentEmployeePassword = employee.m_strPasswordHash || employee.m_strPassword || '';
-                            
+
                             console.log('Datos completos del empleado:', employee); // Log para ver la estructura
 
                             // Rellenar el formulario con los datos del empleado
@@ -606,6 +757,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+
     // Gestión del logout
     const logoutBtn = document.querySelector('.logout-btn');
     logoutBtn.addEventListener('click', function () {
@@ -754,52 +906,52 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(text => {
                 try {
                     console.log('Respuesta del servidor (categorías):', text);
-                    
+
                     // Intentar parsear la respuesta
                     let categoriesList = [];
                     if (text && text.trim()) {
                         categoriesList = JSON.parse(text);
                     }
                     console.log('Categorías parseadas:', categoriesList);
-                    
+
                     // Limpiar el objeto categories
                     categories = {};
-                    
+
                     // Procesar cada categoría
                     if (Array.isArray(categoriesList)) {
                         categoriesList.forEach(category => {
                             console.log('Procesando categoría:', category);
-                            
+
                             // Extraer datos de la categoría
                             const categoryData = {
                                 id: category.category_id1 || category.id || category.m_iId || '',
                                 name: category.name || category.m_strName || 'Sin nombre'
                             };
-                            
+
                             if (categoryData.id) {
                                 categories[categoryData.id] = categoryData.name;
                                 console.log(`Categoría agregada - ID: ${categoryData.id}, Nombre: ${categoryData.name}`);
                             }
                         });
-                        
+
                         // Actualizar el select de categorías
                         const categorySelect = document.getElementById('prod-category');
                         if (categorySelect) {
                             categorySelect.innerHTML = '<option value="">Selecciona una categoría</option>';
-                            
+
                             Object.entries(categories).forEach(([id, name]) => {
                                 const option = document.createElement('option');
                                 option.value = id;
                                 option.textContent = name;
                                 categorySelect.appendChild(option);
                             });
-                            
+
                             console.log('Select de categorías actualizado con', Object.keys(categories).length, 'opciones');
                         }
                     } else {
                         console.error('La respuesta de categorías no es un array:', categoriesList);
                     }
-                    
+
                     console.log('Categorías cargadas:', categories);
                     return categories;
                 } catch (error) {
@@ -818,7 +970,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Función para cargar la lista de productos
     function loadProductsList() {
         console.log('Cargando lista de productos...');
-        
+
         fetch(apiUrlGetProducts)
             .then(response => {
                 if (!response.ok) {
@@ -829,30 +981,30 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(text => {
                 try {
                     console.log('Respuesta del servidor (productos):', text);
-                    
+
                     // Intentar parsear la respuesta
                     let products = [];
                     if (text && text.trim()) {
                         products = JSON.parse(text);
                     }
                     console.log('Productos parseados:', products);
-                    
+
                     const tableBody = document.getElementById('products-table-body');
                     if (!tableBody) {
                         console.error('No se encontró la tabla de productos');
                         return;
                     }
-                    
+
                     tableBody.innerHTML = '';
-                    
+
                     if (!Array.isArray(products) || products.length === 0) {
                         tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No hay productos registrados</td></tr>';
                         return;
                     }
-                    
+
                     products.forEach(product => {
                         console.log('Producto original de la BD:', product);
-                        
+
                         // Extraer datos del producto
                         const productData = {
                             id: product.id || product.m_iId || '',
@@ -871,9 +1023,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <option value="false">No Disponible</option>
                             `;
                         }
-                        
+
                         const categoryName = categories[productData.categoryId] || 'Categoría Desconocida';
-                        
+
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${productData.name}</td>
@@ -889,33 +1041,33 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </button>
                             </td>
                         `;
-                        
+
                         tableBody.appendChild(row);
-                        
+
                         // Configurar botón de editar
                         const editBtn = row.querySelector('.edit-btn');
-                        editBtn.addEventListener('click', function() {
+                        editBtn.addEventListener('click', function () {
                             editingProductId = this.getAttribute('data-id');
-                            
+
                             // Guardar el nombre original para la actualización
                             productForm.setAttribute('data-original-name', productData.name);
-                            
+
                             document.getElementById("prod-name").value = productData.name;
                             document.getElementById("prod-description").value = productData.description;
                             document.getElementById("prod-category").value = productData.categoryId;
                             document.getElementById("prod-price").value = productData.price;
                             document.getElementById("prod-availability").value = productData.available === "true" ? "true" : "false";
-                            
+
                             productForm.style.display = 'block';
                             addProductBtn.style.display = 'none';
 
                             // Hacer scroll al formulario
                             productForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         });
-                        
+
                         // Configurar botón de eliminar
                         const deleteBtn = row.querySelector('.delete-btn');
-                        deleteBtn.addEventListener('click', function() {
+                        deleteBtn.addEventListener('click', function () {
                             if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
                                 deleteProduct(productData.name);
                             }
@@ -943,10 +1095,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const params = new URLSearchParams();
         params.append('name', productName);
-        
+
         const urlWithParams = `${apiUrlDeleteProduct}&${params.toString()}`;
         console.log('URL de eliminación:', urlWithParams);
-        
+
         fetch(urlWithParams, {
             method: "POST",
             headers: {
@@ -954,20 +1106,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         })
-        .then(response => response.text())
-        .then(text => {
-            console.log('Respuesta al eliminar:', text);
-            if (text.includes("error") || text.includes("Error")) {
-                throw new Error("No se pudo eliminar el producto");
-            }
+            .then(response => response.text())
+            .then(text => {
+                console.log('Respuesta al eliminar:', text);
+                if (text.includes("error") || text.includes("Error")) {
+                    throw new Error("No se pudo eliminar el producto");
+                }
 
-            alert("Producto eliminado correctamente");
-            loadProductsList();
-        })
-        .catch(error => {
-            console.error('Error al eliminar producto:', error);
-            alert("Error al eliminar producto: " + error.message);
-        });
+                alert("Producto eliminado correctamente");
+                loadProductsList();
+            })
+            .catch(error => {
+                console.error('Error al eliminar producto:', error);
+                alert("Error al eliminar producto: " + error.message);
+            });
     }
 
     // Función para resetear el formulario de productos
@@ -986,9 +1138,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Manejo del formulario de productos
-    productForm?.addEventListener('submit', function(e) {
+    productForm?.addEventListener('submit', function (e) {
         e.preventDefault();
-        
+
         // Obtener valores del formulario
         const name = document.getElementById("prod-name").value.trim();
         const description = document.getElementById("prod-description").value.trim();
@@ -1018,7 +1170,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Crear los parámetros para la URL
         const params = new URLSearchParams();
-        
+
         // Si estamos editando un producto existente o creando uno nuevo
         const isEditing = editingProductId !== null;
         const apiUrl = isEditing ? apiUrlUpdateProduct : apiUrlADDProduct;
@@ -1047,20 +1199,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         })
-        .then(response => response.text())
-        .then(text => {
-            console.log('Respuesta del servidor:', text);
-            if (text.includes("error") || text.includes("Error") || text.includes("Faltan datos") || text.includes("no encontrado")) {
-                throw new Error(text);
-            }
+            .then(response => response.text())
+            .then(text => {
+                console.log('Respuesta del servidor:', text);
+                if (text.includes("error") || text.includes("Error") || text.includes("Faltan datos") || text.includes("no encontrado")) {
+                    throw new Error(text);
+                }
 
-            alert(isEditing ? "Producto actualizado correctamente" : "Producto añadido correctamente");
-            resetProductForm();
-            loadProductsList();
-        })
-        .catch(error => {
-            console.error('Error detallado:', error);
-            alert(`Error al ${isEditing ? 'actualizar' : 'añadir'} el producto: ${error.message}`);
-        });
+                alert(isEditing ? "Producto actualizado correctamente" : "Producto añadido correctamente");
+                resetProductForm();
+                loadProductsList();
+            })
+            .catch(error => {
+                console.error('Error detallado:', error);
+                alert(`Error al ${isEditing ? 'actualizar' : 'añadir'} el producto: ${error.message}`);
+            });
     });
 });
