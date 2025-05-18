@@ -389,20 +389,24 @@ select.form-control:focus {
 .form-buttons {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 8px;
     margin-top: 20px;
     flex-wrap: wrap;
 }
 
 .btn {
-    padding: 8px 15px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
+    padding: 2px 12px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.2;
+    height: 22px;
+    min-width: 70px;
     cursor: pointer;
     border: none;
     transition: all 0.3s ease;
     font-family: 'MiFuentePersonalizada', sans-serif;
+    text-align: center;
 }
 
 .btn-primary {
@@ -532,13 +536,16 @@ select.form-control:focus {
     }
     
     .btn {
-        padding: 10px 20px;
-        font-size: 1rem;
-        border-radius: 8px;
+        padding: 2px 12px;
+        font-size: 0.75rem;
+        border-radius: 3px;
+        height: 22px;
+        line-height: 1.2;
+        min-width: 70px;
     }
     
     .form-buttons {
-        gap: 15px;
+        gap: 8px;
     }
 }
 

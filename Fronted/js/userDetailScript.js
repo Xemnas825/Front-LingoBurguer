@@ -169,6 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Función para cargar la lista de empleados
+    // Función para cargar la lista de empleados
     function loadEmployeesList() {
         console.log("Cargando lista de empleados...");
         fetch(apiUrlGetEmployees)
@@ -179,14 +180,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (text.trim()) {
                         employees = JSON.parse(text);
                     }
-                    
+
+
                     const tableBody = document.getElementById('employees-table-body');
                     if (!tableBody) {
                         console.error('No se encontró la tabla de empleados');
                         return;
                     }
-                    
+
+
                     tableBody.innerHTML = '';
+
 
                     if (employees.length === 0) {
                         const row = document.createElement('tr');
@@ -194,6 +198,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         tableBody.appendChild(row);
                         return;
                     }
+
+
+
 
                     employees.forEach(employee => {
                         let hireDate = employee.m_dtHireDate || employee.m_hireDate || employee.hire_date || '';
@@ -213,6 +220,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                     return months[monthName.toLowerCase()];
                                 };
 
+
+
+
                                 if (typeof hireDate === 'string') {
                                     if (/^\d{4}\/\d{2}\/\d{2}$/.test(hireDate)) {
                                         // Ya está en formato correcto
@@ -224,24 +234,25 @@ document.addEventListener('DOMContentLoaded', function() {
                                             const day = String(parseInt(parts[1])).padStart(2, '0');
                                             const year = parts[2];
                                             if (month && day && year) {
-                                                hireDate = `${year}/${month}/${day}`;
+                                                hireDate = ${year}/${month}/${day};
                                             }
                                         }
                                     }
                                     else if (hireDate.includes('T') || hireDate.includes('-')) {
                                         const parts = hireDate.split(/[-T]/);
                                         if (parts.length >= 3) {
-                                            hireDate = `${parts[0]}/${parts[1]}/${parts[2].split('T')[0]}`;
+                                            hireDate = ${parts[0]}/${parts[1]}/${parts[2].split('T')[0]};
                                         }
                                     }
                                 }
                             } catch (e) {
                                 console.error('Error al formatear la fecha:', e);
                                 const today = new Date();
-                                hireDate = `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
+                                hireDate = ${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')};
                             }
                         }
-                        
+
+
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${employee.m_strFirstName || ''} ${employee.m_strLastName || ''}</td>
@@ -260,11 +271,19 @@ document.addEventListener('DOMContentLoaded', function() {
                         `;
                         tableBody.appendChild(row);
 
+
+
+
                         // Añadir event listener al botón de editar
                         const editBtn = row.querySelector('.edit-btn');
-                        editBtn.addEventListener('click', function() {
+                        editBtn.addEventListener('click', function () {
                             editingEmployeeId = this.getAttribute('data-id');
                             currentEmployeeEmail = this.getAttribute('data-email');
+                            currentEmployeePassword = employee.m_strPasswordHash || employee.m_strPassword || '';
+                            console.log("Contraseña original recuperada:", currentEmployeePassword);
+
+
+
                             
                             // Rellenar el formulario con los datos del empleado
                             document.getElementById("emp-firstName").value = employee.m_strFirstName || '';
@@ -586,7 +605,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     
                     products.forEach(product => {
-                        console.log('Procesando producto:', product);
+                        console.log('Producto original de la BD:', product);
                         
                         // Extraer datos del producto
                         const productData = {
@@ -595,10 +614,17 @@ document.addEventListener('DOMContentLoaded', function() {
                             description: product.description || product.m_strDescription || '',
                             price: parseFloat(product.price || product.m_dblPrice || 0).toFixed(2),
                             categoryId: product.category_id1 || product.m_fkCategory || '',
-                            availability: product.availability || product.m_bAvailability || '0'
+                            available: String(product.available || product.m_bAvailable || false).toLowerCase()
                         };
-                        
-                        console.log('Datos procesados del producto:', productData);
+
+                        // Crear el select de disponibilidad si no existe
+                        const availabilitySelect = document.getElementById('prod-availability');
+                        if (availabilitySelect && availabilitySelect.options.length === 0) {
+                            availabilitySelect.innerHTML = `
+                                <option value="true">Disponible</option>
+                                <option value="false">No Disponible</option>
+                            `;
+                        }
                         
                         const categoryName = categories[productData.categoryId] || 'Categoría Desconocida';
                         
@@ -625,22 +651,27 @@ document.addEventListener('DOMContentLoaded', function() {
                         editBtn.addEventListener('click', function() {
                             editingProductId = this.getAttribute('data-id');
                             
+                            // Guardar el nombre original para la actualización
+                            productForm.setAttribute('data-original-name', productData.name);
+                            
                             document.getElementById("prod-name").value = productData.name;
                             document.getElementById("prod-description").value = productData.description;
                             document.getElementById("prod-category").value = productData.categoryId;
                             document.getElementById("prod-price").value = productData.price;
-                            document.getElementById("prod-availability").value = 
-                                productData.availability === '1' || productData.availability === true ? 'true' : 'false';
+                            document.getElementById("prod-availability").value = productData.available === "true" ? "true" : "false";
                             
                             productForm.style.display = 'block';
                             addProductBtn.style.display = 'none';
+
+                            // Hacer scroll al formulario
+                            productForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         });
                         
                         // Configurar botón de eliminar
                         const deleteBtn = row.querySelector('.delete-btn');
                         deleteBtn.addEventListener('click', function() {
                             if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
-                                deleteProduct(this.getAttribute('data-id'));
+                                deleteProduct(productData.name);
                             }
                         });
                     });
@@ -656,16 +687,135 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+    // Manejo del formulario de productos
+    productForm?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Obtener valores del formulario
+        const name = document.getElementById("prod-name").value.trim();
+        const description = document.getElementById("prod-description").value.trim();
+        const price = document.getElementById("prod-price").value.trim();
+        const category = document.getElementById("prod-category").value.trim();
+        const available = document.getElementById("prod-availability").value;
+
+        // Validar campos requeridos
+        if (!name || !description || !price || !category) {
+            alert('Por favor, complete todos los campos requeridos');
+            return;
+        }
+
+        // Validar y convertir precio a número
+        const priceNum = parseFloat(price);
+        if (isNaN(priceNum)) {
+            alert('El precio debe ser un número válido');
+            return;
+        }
+
+        // Determinar la imagen a usar
+        let imageUrl = "img/default-product.jpg";
+        const imageInput = document.getElementById("prod-image");
+        if (imageInput && imageInput.files && imageInput.files.length > 0) {
+            imageUrl = "img/" + imageInput.files[0].name.toLowerCase();
+        }
+
+        // Crear los parámetros para la URL
+        const params = new URLSearchParams();
+        
+        // Si estamos editando, usar UPDATE, si no, usar ADD
+        if (editingProductId) {
+            params.append('name', name);
+            params.append('description', description);
+            params.append('price', priceNum);
+            params.append('available', available);
+            params.append('image', imageUrl);
+            params.append('category_id1', category);
+
+            // Construir la URL final para UPDATE
+            const urlWithParams = `${apiUrlUpdateProduct}&${params.toString()}`;
+
+            // Enviar la petición de UPDATE
+            fetch(urlWithParams, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.text())
+            .then(text => {
+                if (text.includes("error") || text.includes("Error")) {
+                    throw new Error(text);
+                }
+                alert("Producto actualizado correctamente");
+                resetProductForm();
+                loadProductsList();
+            })
+            .catch(error => {
+                console.error('Error al actualizar producto:', error);
+                alert("Error al actualizar producto: " + error.message);
+            });
+        } else {
+            // Es una operación de ADD
+            params.append('id', Date.now()); // Generamos un ID temporal
+            params.append('name', name);
+            params.append('description', description);
+            params.append('price', priceNum);
+            params.append('available', available);
+            params.append('image', imageUrl);
+            params.append('category_id1', category);
+
+            // Construir la URL final para ADD
+            const urlWithParams = `${apiUrlADDProduct}&${params.toString()}`;
+
+            // Enviar la petición de ADD
+            fetch(urlWithParams, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.text())
+            .then(text => {
+                if (text.includes("error") || text.includes("Error")) {
+                    throw new Error(text);
+                }
+                alert("Producto agregado correctamente");
+                resetProductForm();
+                loadProductsList();
+            })
+            .catch(error => {
+                console.error('Error al agregar producto:', error);
+                alert("Error al agregar producto: " + error.message);
+            });
+        }
+    });
+
+    // Función para resetear el formulario de productos
+    function resetProductForm() {
+        // Oculta el formulario
+        productForm.style.display = 'none';
+        // Muestra el botón de añadir producto
+        addProductBtn.style.display = 'block';
+        // Reinicia el formulario
+        productForm.reset();
+        // Reinicia el estado de edición
+        editingProductId = null;
+        // Cambia el texto del botón submit
+        const submitBtn = productForm.querySelector('button[type="submit"]');
+        submitBtn.textContent = 'Save Product';
+    }
+
     // Función para eliminar producto
-    function deleteProduct(productId) {
-        if (!productId) {
-            console.error('ID de producto no válido');
-            alert('Error: ID de producto no válido');
+    function deleteProduct(productName) {
+        if (!productName) {
+            console.error('Nombre de producto no válido');
+            alert('Error: Nombre de producto no válido');
             return;
         }
 
         const params = new URLSearchParams();
-        params.append('id', productId);
+        params.append('name', encodeURIComponent(productName));
         
         const urlWithParams = `${apiUrlDeleteProduct}&${params.toString()}`;
         
@@ -691,168 +841,4 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("Error al eliminar producto: " + error.message);
         });
     }
-
-// Función para resetear el formulario de productos
-function resetProductForm() {
-    // Oculta el formulario
-    productForm.style.display = 'none';
-    // Muestra el botón de añadir producto
-    addProductBtn.style.display = 'block';
-    // Reinicia el formulario
-    productForm.reset();
-    // Reinicia el estado de edición
-    editingProductId = null;
-    // Cambia el texto del botón submit
-    const submitBtn = productForm.querySelector('button[type="submit"]');
-    submitBtn.textContent = 'Save Product';
-}
-
-// Gestión de formularios de productos
-if (userRole === 'employee') {
-    // Cargar categorías primero y luego productos
-    loadCategories().then(() => {
-        loadProductsList();
-    });
-
-    // Manejo del formulario de productos
-    productForm?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Obtener valores del formulario
-        const name = document.getElementById("prod-name").value.trim();
-        const description = document.getElementById("prod-description").value.trim();
-        const price = document.getElementById("prod-price").value.trim();
-        const category = document.getElementById("prod-category").value.trim();
-        const available = document.getElementById("prod-availability").value === 'true';
-        
-        // Validar campos requeridos
-        if (!name || !description || !price || !category) {
-            alert('Por favor, complete todos los campos requeridos');
-            return;
-        }
-
-        // Validar y convertir precio a número
-        const priceNum = parseFloat(price);
-        if (isNaN(priceNum)) {
-            alert('El precio debe ser un número válido');
-            return;
-        }
-
-        // Determinar la imagen a usar
-        let imageUrl = "img/default-product.jpg";
-        const imageInput = document.getElementById("prod-image");
-        if (imageInput && imageInput.files && imageInput.files.length > 0) {
-            imageUrl = "img/" + imageInput.files[0].name.toLowerCase();
-        }
-
-        // Crear los parámetros con los nombres CORRECTOS según la URL que funciona
-        const params = new URLSearchParams();
-        params.append('product_name', name);
-        params.append('product_description', description);
-        params.append('product_price', priceNum);
-        params.append('product_category', category);
-        params.append('product_available', available);
-        params.append('product_image', imageUrl);
-        
-        // Si es edición, añadir el ID con el nombre correcto
-        if (editingProductId !== null) {
-            params.append('product_id', editingProductId);
-        }
-
-        // Construir la URL exactamente como en el ejemplo que funciona
-        const action = editingProductId !== null ? 'PRODUCT.UPDATE' : 'PRODUCT.ADD';
-        const apiUrl = `http://localhost:8080/PruebaDBConsola/Controller?ACTION=${action}&${params.toString()}`;
-
-        console.log('Enviando producto con URL correcta:', apiUrl);
-
-        // Enviar la petición
-        fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
-        .then(response => {
-            console.log('Código de estado:', response.status);
-            return response.text();
-        })
-        .then(text => {
-            console.log('Respuesta del servidor:', text);
-            
-            if (text.includes("error") || text.includes("Error") || text.includes("Faltan datos")) {
-                throw new Error(text);
-            }
-
-            alert(`Producto ${editingProductId !== null ? 'actualizado' : 'agregado'} correctamente`);
-            
-            // Resetear formulario
-            resetProductForm();
-            
-            // Recargar lista de productos
-            loadProductsList();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert(`Error al ${editingProductId !== null ? 'actualizar' : 'agregar'} el producto: ${error.message}`);
-        });
-    });
-
-    // Configurar botón de cancelar si existe
-    const cancelProductBtn = document.getElementById('cancel-product-btn');
-    if (cancelProductBtn) {
-        cancelProductBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            resetProductForm();
-        });
-    }
-
-    // Versión optimizada del manejador del formulario de productos
-productForm?.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Obtener todos los valores del formulario en un solo objeto
-    const productData = {
-        name: document.getElementById("prod-name").value.trim(),
-        description: document.getElementById("prod-description").value.trim(),
-        price: document.getElementById("prod-price").value.trim(),
-        category: document.getElementById("prod-category").value.trim(),
-        available: document.getElementById("prod-availability").value === 'true'
-    };
-    
-    // Validar campos requeridos de una sola vez
-    if (!productData.name || !productData.description || 
-        !productData.price || !productData.category) {
-        alert('Por favor, complete todos los campos requeridos');
-        return;
-    }
-
-    // Determinar la imagen a usar
-    productData.image = "img/default-product.jpg";
-    const imageInput = document.getElementById("prod-image");
-    if (imageInput && imageInput.files && imageInput.files.length > 0) {
-        productData.image = "img/" + imageInput.files[0].name.toLowerCase();
-    }
-
-    console.log('Datos del formulario:', productData);
-    
-    // Usar operador ternario para decidir qué función llamar
-    const actionPromise = editingProductId !== null
-        ? updateProduct({ ...productData, id: editingProductId })
-        : addProduct(productData);
-    
-    // Manejar el resultado de la promesa de manera unificada
-    actionPromise
-        .then(result => {
-            console.log('Operación completada:', result);
-            alert(result.message);
-            resetProductForm();
-            loadProductsList();
-        })
-        .catch(error => {
-            console.error('Error en operación de producto:', error);
-            const action = editingProductId !== null ? 'actualizar' : 'agregar';
-            alert(`Error al ${action} el producto: ${error.message}`);
-        });
 });
-
-}})
