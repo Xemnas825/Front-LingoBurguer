@@ -168,9 +168,8 @@ document.addEventListener('DOMContentLoaded', function() {
         clickedLink.classList.add('active');
     }
 
-    // Función para cargar la lista de empleados
-    // Función para cargar la lista de empleados
-    function loadEmployeesList() {
+      // Función para cargar la lista de empleados
+      function loadEmployeesList() {
         console.log("Cargando lista de empleados...");
         fetch(apiUrlGetEmployees)
             .then(response => response.text())
@@ -234,21 +233,21 @@ document.addEventListener('DOMContentLoaded', function() {
                                             const day = String(parseInt(parts[1])).padStart(2, '0');
                                             const year = parts[2];
                                             if (month && day && year) {
-                                                hireDate = ${year}/${month}/${day};
+                                                hireDate = `${year}/${month}/${day}`;
                                             }
                                         }
                                     }
                                     else if (hireDate.includes('T') || hireDate.includes('-')) {
                                         const parts = hireDate.split(/[-T]/);
                                         if (parts.length >= 3) {
-                                            hireDate = ${parts[0]}/${parts[1]}/${parts[2].split('T')[0]};
+                                            hireDate = `${parts[0]}/${parts[1]}/${parts[2].split('T')[0]}`;
                                         }
                                     }
                                 }
                             } catch (e) {
                                 console.error('Error al formatear la fecha:', e);
                                 const today = new Date();
-                                hireDate = ${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')};
+                                hireDate = `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
                             }
                         }
 
@@ -276,15 +275,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         // Añadir event listener al botón de editar
                         const editBtn = row.querySelector('.edit-btn');
-                        editBtn.addEventListener('click', function () {
+                        editBtn.addEventListener('click', function() {
                             editingEmployeeId = this.getAttribute('data-id');
                             currentEmployeeEmail = this.getAttribute('data-email');
                             currentEmployeePassword = employee.m_strPasswordHash || employee.m_strPassword || '';
-                            console.log("Contraseña original recuperada:", currentEmployeePassword);
-
-
-
                             
+                            console.log('Datos completos del empleado:', employee); // Log para ver la estructura
+
                             // Rellenar el formulario con los datos del empleado
                             document.getElementById("emp-firstName").value = employee.m_strFirstName || '';
                             document.getElementById("emp-lastName").value = employee.m_strLastName || '';
@@ -292,8 +289,10 @@ document.addEventListener('DOMContentLoaded', function() {
                             document.getElementById("emp-telephone").value = employee.m_strTelephone || '';
                             document.getElementById("emp-role").value = employee.m_fkJob || '';
                             document.getElementById("emp-establishment").value = employee.m_fkEstablishment || '';
-                            document.getElementById("emp-salary").value = employee.m_dblSalary || '';
+                            document.getElementById("emp-salary").value = employee.salary || employee.m_dblSalary || employee.m_salary || '';
+                            console.log('Valor del salario:', employee.salary, employee.m_dblSalary, employee.m_salary); // Log para ver los valores posibles
                             document.getElementById("emp-hire-date").value = hireDate;
+
 
                             // Ocultar y hacer no requerido el campo de contraseña durante edición
                             const passwordField = document.getElementById("emp-password");
@@ -301,22 +300,31 @@ document.addEventListener('DOMContentLoaded', function() {
                             passwordField.style.display = 'none';
                             passwordLabel.style.display = 'none';
                             passwordField.required = false;
+                            passwordField.value = ''; // Limpiar el campo de contraseña
+
+
+
 
                             // Mostrar el formulario
                             employeeForm.style.display = 'block';
                             addEmployeeBtn.style.display = 'none';
-                            
+
+
                             // Cambiar el texto del botón submit
                             const submitBtn = employeeForm.querySelector('button[type="submit"]');
                             submitBtn.textContent = 'Update Employee';
-                            
+
+
                             // Desplazarse suavemente hasta el formulario
                             employeeForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         });
 
+
+
+
                         // Añadir event listener al botón de eliminar
                         const deleteBtn = row.querySelector('.delete-btn');
-                        deleteBtn.addEventListener('click', function() {
+                        deleteBtn.addEventListener('click', function () {
                             const employeeId = this.getAttribute('data-id');
                             const employeeEmail = employee.m_strEmail;
                             if (confirm('¿Estás seguro de que deseas eliminar este empleado?')) {
@@ -334,6 +342,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+
+
+
     // Función para eliminar empleado
     function deleteEmployee(employeeId, employeeEmail) {
         if (!employeeId || !employeeEmail) {
@@ -342,11 +353,14 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+
         const params = new URLSearchParams();
         params.append('email', employeeEmail);
-        
+
+
         const urlWithParams = `${apiUrlDeleteEmployee}&${params.toString()}`;
-        
+
+
         fetch(urlWithParams, {
             method: "POST",
             headers: {
@@ -354,35 +368,220 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         })
-        .then(response => response.text())
-        .then(text => {
-            if (text.includes("error") || text.includes("Error")) {
-                throw new Error("No se pudo eliminar el empleado");
+            .then(response => response.text())
+            .then(text => {
+                if (text.includes("error") || text.includes("Error")) {
+                    throw new Error("No se pudo eliminar el empleado");
+                }
+
+
+                alert("Empleado eliminado correctamente");
+                loadEmployeesList();
+            })
+            .catch(error => {
+                console.error('Error al eliminar empleado:', error);
+                alert("Error al eliminar empleado: " + error.message);
+            });
+    }
+
+
+
+
+    // Gestión de formularios de empleados
+    if (userRole === 'employee') {
+        if (employeesPanel.style.display === 'block') {
+            loadEmployeesList();
+        }
+
+
+
+
+        addEmployeeBtn?.addEventListener('click', function () {
+            employeeForm.style.display = 'block';
+            addEmployeeBtn.style.display = 'none';
+            const passwordField = document.getElementById("emp-password");
+            const passwordLabel = passwordField.previousElementSibling;
+            passwordField.style.display = 'block';
+            passwordLabel.style.display = 'block';
+            passwordField.value = '';
+            passwordField.placeholder = 'Enter password';
+            passwordField.required = true;
+        });
+
+
+
+
+        cancelEmployeeBtn?.addEventListener('click', function () {
+            employeeForm.style.display = 'none';
+            addEmployeeBtn.style.display = 'block';
+            // Resetear variables de edición
+            editingEmployeeId = null;
+            currentEmployeeEmail = null;
+
+
+            // Mostrar y resetear el campo de contraseña
+            const passwordField = document.getElementById("emp-password");
+            const passwordLabel = passwordField.previousElementSibling;
+            passwordField.style.display = 'block';
+            passwordLabel.style.display = 'block';
+            passwordField.required = true;
+
+
+            // Cambiar el texto del botón submit de vuelta a su estado original
+            const submitBtn = employeeForm.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Save Employee';
+
+
+            // Resetear el formulario
+            employeeForm.reset();
+        });
+
+
+
+
+        employeeForm?.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+
+            const isEditing = editingEmployeeId !== null;
+            console.log('Modo:', isEditing ? 'Edición' : 'Creación');
+
+
+            // 1. Recoger datos
+            const formData = {
+                firstName: document.getElementById("emp-firstName").value.trim(),
+                lastName: document.getElementById("emp-lastName").value.trim(),
+                email: document.getElementById("emp-email").value.trim(),
+                telephone: document.getElementById("emp-telephone").value.trim(),
+                password: document.getElementById("emp-password").value,
+                jobId: document.getElementById("emp-role").value,
+                establishmentId: document.getElementById("emp-establishment").value,
+                salary: document.getElementById("emp-salary").value,
+                hireDate: document.getElementById("emp-hire-date").value
+            };
+
+
+
+
+            // 2. Validación mínima
+            if (!formData.firstName || !formData.lastName || !formData.email) {
+                alert("Nombre, Apellido y Email son obligatorios");
+                return;
             }
 
-            alert("Empleado eliminado correctamente");
-            loadEmployeesList();
-        })
-        .catch(error => {
-            console.error('Error al eliminar empleado:', error);
-            alert("Error al eliminar empleado: " + error.message);
+
+
+
+            // 3. Preparar parámetros para el backend
+            const params = new URLSearchParams();
+
+
+            // Parámetros clave para actualización
+            if (isEditing) {
+                params.append('original_email', currentEmployeeEmail); // Email original para buscar el ID
+            }
+            params.append('email', formData.email); // Email actualizado (si ha cambiado)
+
+
+            // Campos obligatorios
+            params.append('first_name', formData.firstName);
+            params.append('last_name', formData.lastName);
+            params.append('email', formData.email); // Nuevo email (si cambió)
+            params.append('telephone', formData.telephone || '');
+
+
+            // Contraseña: solo se envía al CREAR
+            if (isEditing) {
+                params.append('password_hash', currentEmployeePassword);
+            } else {
+                if (!formData.password) {
+                    alert("La contraseña es obligatoria para nuevos empleados");
+                    return;
+                }
+                params.append('password_hash', formData.password);
+            }
+
+
+            // 🔁 Elimina esta validación duplicada:
+            // if (!formData.password && !isEditing) { ... }
+
+
+            params.append('job_id1', formData.jobId || '1');
+            params.append('establishment_id1', formData.establishmentId || '1');
+            params.append('salary', formData.salary || '0');
+
+
+            // Formatear fecha al formato YYYY-MM-DD que espera el backend
+            if (formData.hireDate) {
+                const date = new Date(formData.hireDate);
+                const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+                params.append('hire_date', formattedDate);
+            } else {
+                // Fecha por defecto si no se proporciona
+                const today = new Date();
+                const defaultDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                params.append('hire_date', defaultDate);
+            }
+
+
+
+
+            console.log('Parámetros finales:', Object.fromEntries(params.entries()));
+
+
+
+
+            // 4. Enviar petición
+            const apiUrl = isEditing ? apiUrlUpdateEmployee : apiUrlADDEmployee;
+
+
+            fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params
+            })
+                .then(response => response.text())
+                .then(text => {
+                    console.log('Respuesta del servidor:', text);
+
+
+                    if (text.includes("error") || text.includes("Error") || text === "Faltan datos") {
+                        throw new Error(text);
+                    }
+
+
+                    alert(`Empleado ${isEditing ? 'actualizado' : 'creado'} correctamente!`);
+                    loadEmployeesList();
+                    resetEmployeeForm();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(`Error: ${error.message}`);
+                });
         });
     }
 
+
+
+
     // Eventos para edición de información personal
-    editBtn.addEventListener('click', function() {
+    editBtn.addEventListener('click', function () {
         formInputs.forEach(input => input.disabled = false);
         formButtons.style.display = 'flex';
         editBtn.style.display = 'none';
     });
-    
-    cancelBtn.addEventListener('click', function() {
+
+
+    cancelBtn.addEventListener('click', function () {
         formInputs.forEach(input => input.disabled = true);
         formButtons.style.display = 'none';
         editBtn.style.display = 'flex';
     });
-    
-    form.addEventListener('submit', function(e) {
+
+
+    form.addEventListener('submit', function (e) {
         e.preventDefault();
         formInputs.forEach(input => input.disabled = true);
         formButtons.style.display = 'none';
@@ -390,32 +589,48 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('Information updated successfully!');
     });
 
+
+
+
     // Menú móvil (toggle)
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
     const navMenu = document.querySelector('.nav-menu');
-    
+
+
     if (mobileMenuToggle) {
-        mobileMenuToggle.addEventListener('click', function() {
+        mobileMenuToggle.addEventListener('click', function () {
             navMenu.classList.toggle('active');
         });
     }
 
+
+
+
     // Gestión del logout
     const logoutBtn = document.querySelector('.logout-btn');
-    logoutBtn.addEventListener('click', function() {
+    logoutBtn.addEventListener('click', function () {
         sessionStorage.clear();
         window.location.href = 'login.html';
     });
 
+
+
+
     // Mostrar "Información Personal" por defecto al cargar la página
     showPanel('personal');
     persInfoBtn.classList.add('active');
+
+
+
 
     // Función para obtener el nombre del trabajo según el ID
     function getJobName(jobId) {
         if (!jobId) return 'N/A';
         return jobs[jobId] || 'Unknown';
     }
+
+
+
 
     // Función para cargar los trabajos
     function loadJobs() {
@@ -430,14 +645,17 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.error('No se encontró el elemento select de jobs');
                         return;
                     }
-                    
+
+
                     jobSelect.innerHTML = '<option value="">Select a role</option>';
-                    
+
+
                     jobsList.forEach(job => {
                         const jobId = job.m_iId || job.id;
                         const jobTitle = job.m_strTitle || job.title || job.getTitle || job.m_strName || 'Unknown';
                         jobs[jobId] = jobTitle;
-                        
+
+
                         const option = document.createElement('option');
                         option.value = jobId;
                         option.textContent = jobTitle;
@@ -452,6 +670,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+
+
+
     // Función para cargar los establecimientos
     function loadEstablishments() {
         return fetch(apiUrlGetEstablishments)
@@ -461,24 +682,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     const establishmentsList = JSON.parse(text);
                     const establishmentSelect = document.getElementById('emp-establishment');
                     const productEstablishmentSelect = document.getElementById('product-establishment');
-                    
+
+
                     if (establishmentSelect) {
                         establishmentSelect.innerHTML = '<option value="">Select an establishment</option>';
                     }
                     if (productEstablishmentSelect) {
                         productEstablishmentSelect.innerHTML = '<option value="">Select an establishment</option>';
                     }
-                    
+
+
                     establishmentsList.forEach(establishment => {
                         establishments[establishment.m_iId] = establishment.m_strName || establishment.getName || establishment.name || 'Unknown';
-                        
+
+
                         if (establishmentSelect) {
                             const option = document.createElement('option');
                             option.value = establishment.m_iId;
                             option.textContent = establishments[establishment.m_iId];
                             establishmentSelect.appendChild(option);
                         }
-                        
+
+
                         if (productEstablishmentSelect) {
                             const option = document.createElement('option');
                             option.value = establishment.m_iId;
@@ -493,6 +718,27 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('Error al cargar establishments:', error);
             });
+    }
+
+    function resetEmployeeForm() {
+        // Oculta el formulario
+        employeeForm.style.display = 'none';
+        // Muestra el botón de añadir empleado
+        addEmployeeBtn.style.display = 'block';
+        // Reinicia el formulario
+        employeeForm.reset();
+        // Reinicia los estados de edición
+        editingEmployeeId = null;
+        currentEmployeeEmail = null;
+        // Muestra el campo de contraseña nuevamente y lo hace requerido
+        const passwordField = document.getElementById("emp-password");
+        const passwordLabel = passwordField.previousElementSibling;
+        passwordField.style.display = 'block';
+        passwordLabel.style.display = 'block';
+        passwordField.required = true;
+        // Cambia el texto del botón submit
+        const submitBtn = employeeForm.querySelector('button[type="submit"]');
+        submitBtn.textContent = 'Save Employee';
     }
 
     // Función para cargar las categorías
@@ -687,6 +933,58 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+    // Función para eliminar producto
+    function deleteProduct(productName) {
+        if (!productName) {
+            console.error('Nombre de producto no válido');
+            alert('Error: Nombre de producto no válido');
+            return;
+        }
+
+        const params = new URLSearchParams();
+        params.append('name', productName);
+        
+        const urlWithParams = `${apiUrlDeleteProduct}&${params.toString()}`;
+        console.log('URL de eliminación:', urlWithParams);
+        
+        fetch(urlWithParams, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(response => response.text())
+        .then(text => {
+            console.log('Respuesta al eliminar:', text);
+            if (text.includes("error") || text.includes("Error")) {
+                throw new Error("No se pudo eliminar el producto");
+            }
+
+            alert("Producto eliminado correctamente");
+            loadProductsList();
+        })
+        .catch(error => {
+            console.error('Error al eliminar producto:', error);
+            alert("Error al eliminar producto: " + error.message);
+        });
+    }
+
+    // Función para resetear el formulario de productos
+    function resetProductForm() {
+        // Oculta el formulario
+        productForm.style.display = 'none';
+        // Muestra el botón de añadir producto
+        addProductBtn.style.display = 'block';
+        // Reinicia el formulario
+        productForm.reset();
+        // Reinicia el estado de edición
+        editingProductId = null;
+        // Cambia el texto del botón submit
+        const submitBtn = productForm.querySelector('button[type="submit"]');
+        submitBtn.textContent = 'Save Product';
+    }
+
     // Manejo del formulario de productos
     productForm?.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -721,106 +1019,29 @@ document.addEventListener('DOMContentLoaded', function() {
         // Crear los parámetros para la URL
         const params = new URLSearchParams();
         
-        // Si estamos editando, usar UPDATE, si no, usar ADD
-        if (editingProductId) {
-            params.append('name', name);
-            params.append('description', description);
-            params.append('price', priceNum);
-            params.append('available', available);
-            params.append('image', imageUrl);
-            params.append('category_id1', category);
+        // Si estamos editando un producto existente o creando uno nuevo
+        const isEditing = editingProductId !== null;
+        const apiUrl = isEditing ? apiUrlUpdateProduct : apiUrlADDProduct;
 
-            // Construir la URL final para UPDATE
-            const urlWithParams = `${apiUrlUpdateProduct}&${params.toString()}`;
-
-            // Enviar la petición de UPDATE
-            fetch(urlWithParams, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            })
-            .then(response => response.text())
-            .then(text => {
-                if (text.includes("error") || text.includes("Error")) {
-                    throw new Error(text);
-                }
-                alert("Producto actualizado correctamente");
-                resetProductForm();
-                loadProductsList();
-            })
-            .catch(error => {
-                console.error('Error al actualizar producto:', error);
-                alert("Error al actualizar producto: " + error.message);
-            });
-        } else {
-            // Es una operación de ADD
-            params.append('id', Date.now()); // Generamos un ID temporal
-            params.append('name', name);
-            params.append('description', description);
-            params.append('price', priceNum);
-            params.append('available', available);
-            params.append('image', imageUrl);
-            params.append('category_id1', category);
-
-            // Construir la URL final para ADD
-            const urlWithParams = `${apiUrlADDProduct}&${params.toString()}`;
-
-            // Enviar la petición de ADD
-            fetch(urlWithParams, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            })
-            .then(response => response.text())
-            .then(text => {
-                if (text.includes("error") || text.includes("Error")) {
-                    throw new Error(text);
-                }
-                alert("Producto agregado correctamente");
-                resetProductForm();
-                loadProductsList();
-            })
-            .catch(error => {
-                console.error('Error al agregar producto:', error);
-                alert("Error al agregar producto: " + error.message);
-            });
-        }
-    });
-
-    // Función para resetear el formulario de productos
-    function resetProductForm() {
-        // Oculta el formulario
-        productForm.style.display = 'none';
-        // Muestra el botón de añadir producto
-        addProductBtn.style.display = 'block';
-        // Reinicia el formulario
-        productForm.reset();
-        // Reinicia el estado de edición
-        editingProductId = null;
-        // Cambia el texto del botón submit
-        const submitBtn = productForm.querySelector('button[type="submit"]');
-        submitBtn.textContent = 'Save Product';
-    }
-
-    // Función para eliminar producto
-    function deleteProduct(productName) {
-        if (!productName) {
-            console.error('Nombre de producto no válido');
-            alert('Error: Nombre de producto no válido');
-            return;
+        if (!isEditing) {
+            // Para nuevos productos, generamos un ID único
+            const randomId = Math.floor(Math.random() * 1000) + 1;
+            params.append('id', randomId);
         }
 
-        const params = new URLSearchParams();
-        params.append('name', encodeURIComponent(productName));
-        
-        const urlWithParams = `${apiUrlDeleteProduct}&${params.toString()}`;
-        
-        fetch(urlWithParams, {
-            method: "POST",
+        params.append('name', name);
+        params.append('description', description);
+        params.append('price', priceNum);
+        params.append('available', available);
+        params.append('image', imageUrl);
+        params.append('category_id1', category);
+
+        const finalUrl = `${apiUrl}&${params.toString()}`;
+        console.log('URL de la operación:', finalUrl);
+
+        // Enviar la petición
+        fetch(finalUrl, {
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -828,17 +1049,18 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.text())
         .then(text => {
-            console.log('Respuesta al eliminar:', text);
-            if (text.includes("error") || text.includes("Error")) {
-                throw new Error("No se pudo eliminar el producto");
+            console.log('Respuesta del servidor:', text);
+            if (text.includes("error") || text.includes("Error") || text.includes("Faltan datos") || text.includes("no encontrado")) {
+                throw new Error(text);
             }
 
-            alert("Producto eliminado correctamente");
+            alert(isEditing ? "Producto actualizado correctamente" : "Producto añadido correctamente");
+            resetProductForm();
             loadProductsList();
         })
         .catch(error => {
-            console.error('Error al eliminar producto:', error);
-            alert("Error al eliminar producto: " + error.message);
+            console.error('Error detallado:', error);
+            alert(`Error al ${isEditing ? 'actualizar' : 'añadir'} el producto: ${error.message}`);
         });
-    }
+    });
 });
