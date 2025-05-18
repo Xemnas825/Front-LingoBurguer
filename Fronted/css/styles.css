@@ -619,9 +619,12 @@ a {
 /* Grid de elementos del carta */
 .menu-items {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    padding: 2rem 0;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 1rem;
+    padding: 1rem 0;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .menu-item {
@@ -635,95 +638,85 @@ a {
         rgba(251, 255, 0, 0.45),
         rgba(255, 102, 0, 0.45)
     );
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(255, 102, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(255, 102, 0, 0.2);
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.3s ease;
     backdrop-filter: blur(5px);
-    border: 2px solid #ff6600;
+    border: 1px solid #ff6600;
     position: relative;
-    padding: 0; /* Quitamos el padding general */
+    padding: 0;
 }
 
 .menu-item img {
     width: 100%;
-    height: 200px; /* Altura fija para todas las imágenes */
-    object-fit: cover; /* Asegura que la imagen cubra todo el espacio sin deformarse */
-    border-top-left-radius: 8px; /* Ajustamos los bordes para que coincidan con la tarjeta */
+    height: 120px;
+    object-fit: cover;
+    border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    display: block; /* Elimina el espacio extra debajo de la imagen */
+    display: block;
 }
 
 .menu-item-content {
-    padding: 1.5rem; /* Movemos el padding aquí */
+    padding: 0.5rem;
     background: transparent;
-}
-
-.menu-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(255, 102, 0, 0.4);
-    background: linear-gradient(
-        45deg,
-        rgba(17, 17, 17, 0.88),
-        rgba(17, 17, 17, 0.88)
-    ),
-    linear-gradient(
-        45deg,
-        rgba(251, 255, 0, 0.5),
-        rgba(255, 102, 0, 0.5)
-    );
-    border-color: #ff8533;
+    text-align: center;
 }
 
 .menu-item h3 {
-    margin-top: 0.5rem; /* Ajustamos el espacio después de la imagen */
-    margin-bottom: 0.5rem;
-    font-size: 22px;
+    margin: 0.2rem 0;
+    font-size: 16px;
     background-image: linear-gradient(45deg, #ff6600, #fbff00);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-}
-
-.menu-item p {
-    color: white;
-    margin-bottom: 1rem;
-    font-size: 18px;
-    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .menu-item .price {
     color: #ff6600;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 16px;
+    display: block;
+    margin: 0.2rem 0;
 }
 
 .add-to-cart-btn {
     width: 100%;
-    padding: 12px 25px;
+    padding: 6px 12px;
     background: linear-gradient(45deg, #ff6600, #fbff00);
     color: black;
-    font-size: 20px;
+    font-size: 14px;
     font-weight: bold;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
     transition: 0.3s;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     font-family: 'MiFuentePersonalizada';
-    margin-top: 0.5rem; /* Espacio consistente antes del botón */
 }
 
-.add-to-cart-btn:hover {
-    background: linear-gradient(45deg, #fbff00, #ff6600);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 102, 0, 0.4);
+/* Ajustes responsivos */
+@media (max-width: 1200px) {
+    .menu-items {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto;
+    }
 }
 
-/* Mostrar el carrito cuando está activo */
-.cart-dropdown.show {
-    display: block;
+@media (max-width: 768px) {
+    .menu-items {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-items {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ==========================================================================
