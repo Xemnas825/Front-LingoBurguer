@@ -238,11 +238,6 @@
                             <label for="prod-category">Category</label>
                             <select id="prod-category" class="form-control" required>
                                 <option value="">Select a category</option>
-                                <option value="hamburgers">Hamburgers</option>
-                                <option value="drinks">Drinks</option>
-                                <option value="sides">Sides</option>
-                                <option value="desserts">Desserts</option>
-                                <option value="menus">Menus</option>
                             </select>
                         </div>
 
@@ -266,8 +261,8 @@
 
                         <div class="form-group">
                             <label for="prod-image">Product Image</label>
-                            <input type="file" id="prod-image" class="form-control" accept=".jpg, .jpeg" required>
-                            <small class="form-text text-muted">Select a JPG image</small>
+                            <input type="file" id="prod-image" class="form-control" accept=".jpg, .jpeg">
+                            <small class="form-text text-muted">Select a JPG image (optional)</small>
                         </div>
 
                         <div class="form-buttons">
@@ -280,10 +275,10 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Image</th>
                             <th>Name</th>
+                            <th>Description</th>
                             <th>Price</th>
-                            <th>Availability</th>
+                            <th>Category</th>
                             <th>Actions</th>
                         </tr>
                     </thead>

@@ -555,3 +555,62 @@ select.form-control:focus {
         grid-column: span 2;
     }
 }
+
+/* Estilos para la tabla de productos */
+.data-table td strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.data-table td small {
+    color: #666;
+    font-size: 0.9em;
+    display: block;
+    max-width: 300px;
+    white-space: normal;
+    line-height: 1.4;
+}
+
+.data-table td img {
+    display: block;
+    margin: 0 auto;
+}
+
+/* Ajuste del ancho de las columnas */
+.data-table th:nth-child(1), /* Name */
+.data-table td:nth-child(1) {
+    width: 150px;
+}
+
+.data-table th:nth-child(2), /* Description */
+.data-table td:nth-child(2) {
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.data-table th:nth-child(3), /* Price */
+.data-table td:nth-child(3) {
+    width: 100px;
+}
+
+.data-table th:nth-child(4), /* Category */
+.data-table td:nth-child(4) {
+    width: 150px;
+}
+
+.data-table th:nth-child(5), /* Actions */
+.data-table td:nth-child(5) {
+    width: 100px;
+}
+
+/* Estilos para el texto en la tabla */
+.data-table td {
+    vertical-align: top;
+    padding: 15px;
+}
+
+.data-table td:nth-child(2) { /* Description column */
+    white-space: normal;
+    line-height: 1.4;
+}
