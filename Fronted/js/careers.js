@@ -117,11 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchJobOffer();
 
     async function fetchJobOffer() {
-        // Mostrar estado de carga
-        // if (DOM_ELEMENTS.title) {
-        //     DOM_ELEMENTS.title.classList.add("loading");
-        // }
-
+        
         try {
             // Intentar obtener datos de la API
             const response = await fetch(apiJobOfferUrl);
@@ -157,13 +153,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const endDate = formatDate(data.m_dEndDate);
 
         // Actualizar elementos de la UI
-        if (DOM_ELEMENTS.title) DOM_ELEMENTS.title.innerText = data.m_strTitle || "Sin título";
-        if (DOM_ELEMENTS.description) DOM_ELEMENTS.description.innerText = data.m_strDescription || "Sin descripción";
-        if (DOM_ELEMENTS.salary) DOM_ELEMENTS.salary.innerText = `💰 $${data.m_dblMinSalary || 0} - $${data.m_dblMaxSalary || 0} por mes`;
-        if (DOM_ELEMENTS.journal) DOM_ELEMENTS.journal.innerText = `🕒 Tipo de trabajo: ${data.journal || "No especificado"}`;
-        if (DOM_ELEMENTS.details1) DOM_ELEMENTS.details1.innerText = `📅 Publicado: ${pubDate} | Finaliza: ${endDate}`;
-        if (DOM_ELEMENTS.details2) DOM_ELEMENTS.details2.innerText = `📌 Experiencia: ${data.m_strExperienceRequired || "No especificada"}`;
-        if (DOM_ELEMENTS.details3) DOM_ELEMENTS.details3.innerText = `🎓 Requisitos: ${data.m_strEducationRequired || "No especificados"}`;
+        if (DOM_ELEMENTS.title) DOM_ELEMENTS.title.innerText = data.m_strTitle || "No title";
+        if (DOM_ELEMENTS.description) DOM_ELEMENTS.description.innerText = data.m_strDescription || "No description";
+        if (DOM_ELEMENTS.salary) DOM_ELEMENTS.salary.innerText = `💰 $${data.m_dblMinSalary || 0} - $${data.m_dblMaxSalary || 0} per month`;
+        if (DOM_ELEMENTS.journal) DOM_ELEMENTS.journal.innerText = `🕒 Job type: ${data.journal || "No specified"}`;
+        if (DOM_ELEMENTS.details1) DOM_ELEMENTS.details1.innerText = `📅 Published: ${pubDate} | Ends: ${endDate}`;
+        if (DOM_ELEMENTS.details2) DOM_ELEMENTS.details2.innerText = `📌 Experience: ${data.m_strExperienceRequired || "No specified"}`;
+        if (DOM_ELEMENTS.details3) DOM_ELEMENTS.details3.innerText = `🎓 Requirements: ${data.m_strEducationRequired || "No specified"}`;
     }
 
     function formatDate(dateString) {

@@ -3,7 +3,7 @@
     src: url('../fonts/Teko-VariableFont_wght.ttf') format('truetype');
 }
 
-/* Reset margins and padding */
+/* Resetear márgenes y relleno */
 * {
     margin: 0;
     padding: 0;
@@ -68,7 +68,7 @@ body {
 }
 
 
-/* Responsive adjustments */
+/* Ajustes responsivos */
 @media (max-width: 768px) {
     .main {
         padding: 0 3%;
