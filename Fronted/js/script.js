@@ -176,6 +176,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <div class="modal-product-info">
                     <h3>${product.name}</h3>
                     <p class="description">${product.description || 'Sin descripción disponible'}</p>
+                    <div class="allergens" style="margin: 10px 0; color: #ff6600; font-weight: bold;">
+                        ${product.allergens ? `<span>Alergenos: ${product.allergens}</span>` : ''}
+                    </div>
                     <div class="price">$${product.price.toFixed(2)}</div>
                     <div class="modal-actions">
                         <button class="add-to-cart-btn" data-id="${product.id}" ${!product.available ? 'disabled' : ''}>

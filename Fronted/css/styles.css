@@ -743,10 +743,6 @@ a {
         margin-bottom: 50px;
     }
     
-    /* Ajuste de la galería a 2 columnas */
-    .gallery-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
 /* Para móviles y tablets pequeñas */
@@ -772,10 +768,6 @@ a {
 
 /* Para móviles pequeños */
 @media (max-width: 576px) {
-    /* Galería en una sola columna */
-    .gallery-grid {
-        grid-template-columns: 1fr;
-    }
     
     /* carta de navegación en columna */
     nav ul {

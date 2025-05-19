@@ -210,4 +210,19 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Redirigir al inicio
         window.location.href = 'index.html';
     });
+
+    const pickupBtn = document.getElementById('pickup-btn');
+    const deliveryBtn = document.getElementById('delivery-btn');
+
+    pickupBtn.addEventListener('click', function() {
+        pickupBtn.classList.add('active');
+        deliveryBtn.classList.remove('active');
+        // Aquí puedes guardar la opción seleccionada en una variable o en localStorage
+    });
+
+    deliveryBtn.addEventListener('click', function() {
+        deliveryBtn.classList.add('active');
+        pickupBtn.classList.remove('active');
+        // Aquí puedes guardar la opción seleccionada en una variable o en localStorage
+    });
 }); 
