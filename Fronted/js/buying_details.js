@@ -1,7 +1,44 @@
 const apiEstUrl = "http://localhost:8080/PruebaDBConsola/Controller?ACTION=ESTABLISHMENT.FIND_ALL";
 const apiPaymentUrl = "http://localhost:8080/PruebaDBConsola/Controller?ACTION=PAYMENTMETHOD.FIND_ALL";
+const apiOrderTypeUrl = "http://localhost:8080/PruebaDBConsola/Controller?ACTION=ORDER.FIND_ALL";
 
 document.addEventListener('DOMContentLoaded', async function() {
+    // Configuración de tipos de pedido fijos
+    const orderTypes = [
+        { name: 'LOCAL', icon: 'fa-store' },
+        { name: 'TAKEAWAY', icon: 'fa-shopping-bag' }
+    ];
+    
+    // Actualizar el contenedor de tipos de pedido
+    const orderTypeContainer = document.querySelector('.order-type-options');
+    if (orderTypeContainer) {
+        orderTypeContainer.innerHTML = '';  // Limpiar contenedor
+        
+        orderTypes.forEach(type => {
+            const div = document.createElement('div');
+            div.className = 'order-type-option';
+            div.setAttribute('data-type', type.name);
+            div.innerHTML = `
+                <i class="fas ${type.icon}"></i>
+                <div>${type.name}</div>
+            `;
+            
+            // Agregar evento click
+            div.addEventListener('click', function() {
+                // Remover clase selected de todas las opciones
+                document.querySelectorAll('.order-type-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                // Agregar clase selected a la opción clickeada
+                this.classList.add('selected');
+                // Guardar el tipo de pedido seleccionado
+                localStorage.setItem('selectedOrderType', type.name);
+            });
+            
+            orderTypeContainer.appendChild(div);
+        });
+    }
+
     // Cargar métodos de pago desde la API
     try {
         const response = await fetch(apiPaymentUrl);
@@ -61,10 +98,19 @@ document.addEventListener('DOMContentLoaded', async function() {
         const productList = document.querySelector('.product-list');
         if (!productList) return;
 
-        productList.innerHTML = '';
+        // Crear o actualizar el contenedor de productos
+        let productsContainer = productList.querySelector('.products-container');
+        if (!productsContainer) {
+            productsContainer = document.createElement('div');
+            productsContainer.className = 'products-container';
+            productList.appendChild(productsContainer);
+        }
+
+        // Limpiar y actualizar solo el contenedor de productos
+        productsContainer.innerHTML = '';
         
         cart.forEach(item => {
-            productList.innerHTML += `
+            productsContainer.innerHTML += `
                 <div class="product-item" data-id="${item.id}">
                     <div class="product-info">
                         <img src="${item.image || '../images/default-product.jpg'}" 
@@ -183,20 +229,27 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // Manejar envío del formulario
-    document.querySelector('.buying_details_card').addEventListener('submit', function(e) {
+    document.querySelector('.buying_details_card').addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        // Verificar que se haya seleccionado un establecimiento
+        // Check if establishment is selected
         const selectedEstablishment = localStorage.getItem('selectedEstablishment');
         if (!selectedEstablishment) {
-            alert('Por favor selecciona un establecimiento');
+            alert('Please select an establishment');
             return;
         }
         
-        // Verificar que se haya seleccionado un método de pago
+        // Check if payment method is selected
         const selectedPayment = document.querySelector('.payment-option.selected');
         if (!selectedPayment) {
-            alert('Por favor selecciona un método de pago');
+            alert('Please select a payment method');
+            return;
+        }
+
+        // Check if order type is selected
+        const selectedOrderType = document.querySelector('.order-type-option.selected');
+        if (!selectedOrderType) {
+            alert('Please select an order type');
             return;
         }
         
@@ -209,20 +262,5 @@ document.addEventListener('DOMContentLoaded', async function() {
         
         // Redirigir al inicio
         window.location.href = 'index.html';
-    });
-
-    const pickupBtn = document.getElementById('pickup-btn');
-    const deliveryBtn = document.getElementById('delivery-btn');
-
-    pickupBtn.addEventListener('click', function() {
-        pickupBtn.classList.add('active');
-        deliveryBtn.classList.remove('active');
-        // Aquí puedes guardar la opción seleccionada en una variable o en localStorage
-    });
-
-    deliveryBtn.addEventListener('click', function() {
-        deliveryBtn.classList.add('active');
-        pickupBtn.classList.remove('active');
-        // Aquí puedes guardar la opción seleccionada en una variable o en localStorage
     });
 }); 
