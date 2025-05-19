@@ -69,6 +69,12 @@ document.addEventListener('DOMContentLoaded', function () {
     //Establishments Footer
     async function loadEstablishments() {
         try {
+            // Verificar si el elemento existe
+            if (!DOM_ELEMENTS.footerLocations) {
+                console.log('El elemento footer-locations no existe en esta página');
+                return;
+            }
+
             // Perform the fetch call to the URL
             const response = await fetch(`${apiUrl}`);
             if (!response.ok) {
@@ -84,13 +90,21 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (error) {
             console.error('Error loading establishments:', error);
 
-            // Use the constant to show the error
-            DOM_ELEMENTS.footerLocations.innerHTML =
-                '<p>The establishments could not be loaded</p>';
+            // Verificar si el elemento existe antes de mostrar el error
+            if (DOM_ELEMENTS.footerLocations) {
+                DOM_ELEMENTS.footerLocations.innerHTML =
+                    '<p>The establishments could not be loaded</p>';
+            }
         }
     }
 
     function createEstablishmentCard(establishment) {
+        // Verificar si el elemento existe
+        if (!DOM_ELEMENTS.footerLocations) {
+            console.log('El elemento footer-locations no existe en esta página');
+            return;
+        }
+
         const ubicationElement = document.createElement('div');
         ubicationElement.classList.add('footer-locations-pack');
         ubicationElement.innerHTML = `

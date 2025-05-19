@@ -39,15 +39,25 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.log('Productos cargados:', products);
 
             if (!Array.isArray(products) || products.length === 0) {
-                throw new Error('No se encontraron productos');
+                throw new Error('No se encontraron productos en la base de datos');
             }
 
             renderProducts(currentCategory);
         } catch (error) {
             console.error('Error al cargar productos:', error);
-            const errorMessage = document.createElement('p');
+            const errorMessage = document.createElement('div');
             errorMessage.className = 'error-message';
-            errorMessage.textContent = 'Error al cargar los productos. Por favor, intenta más tarde.';
+            errorMessage.innerHTML = `
+                <p>Error al cargar los productos:</p>
+                <p>${error.message}</p>
+                <p>Por favor, verifica que:</p>
+                <ul>
+                    <li>El servidor esté funcionando en http://localhost:8080</li>
+                    <li>La base de datos esté conectada</li>
+                    <li>Haya productos disponibles</li>
+                </ul>
+                <button onclick="loadProducts()" class="retry-button">Reintentar</button>
+            `;
             
             const currentSection = document.getElementById(currentCategory);
             if (currentSection) {
@@ -89,9 +99,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             return `
                 <div class="menu-item">
-                    <img src="${product.imageUrl || '../images/default-product.jpg'}" 
+                    <img src="${product.imageUrl}" 
                          alt="${product.name}"
-                         onerror="this.onerror=null; this.src='../images/default-product.jpg';">
+                         onerror="this.onerror=null; this.src='/Fronted/images/LogoLingoBurguerWhite.png'; console.error('Error al cargar imagen:', this.src);">
                     <div class="menu-item-content">
                         <div>
                             <h3>${product.name}</h3>
@@ -161,7 +171,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             modalProduct.innerHTML = `
                 <img src="${product.imageUrl}" 
                      alt="${product.name}"
-                     onerror="this.onerror=null; this.src='../images/default-product.jpg';"
+                     onerror="this.style.display='none';"
                      class="modal-product-image">
                 <div class="modal-product-info">
                     <h3>${product.name}</h3>
@@ -254,6 +264,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         cart.forEach(item => {
             cartItemsContainer.innerHTML += `
                 <div class="cart-item" data-id="${item.id}">
+                    <img src="${item.image}" alt="${item.name}" class="cart-item-image" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px;" onerror="this.style.display='none';">
                     <div class="cart-item-details">
                         <h4 class="cart-item-title">${item.name}</h4>
                         <div class="cart-item-pricing">
@@ -281,12 +292,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // Agregar item al carrito
     function addToCart(item) {
+        // Asegurarse de que la propiedad image provenga de imageUrl
+        const image = item.imageUrl || item.image;
         const existingItem = cart.find(cartItem => cartItem.id === item.id);
         if (existingItem) {
             existingItem.quantity += 1;
         } else {
             cart.push({ 
                 ...item, 
+                image: image, // Siempre usar la propiedad image
                 quantity: 1,
                 unitPrice: item.price
             });

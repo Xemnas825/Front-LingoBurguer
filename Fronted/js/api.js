@@ -1,5 +1,36 @@
 const API_BASE_URL = 'http://localhost:8080/PruebaDBConsola/Controller';
 
+// Función auxiliar para formatear el nombre del archivo
+const formatImageFileName = (fileName) => {
+    if (!fileName) return 'LogoLingoBurguerWhite.png';
+    
+    // Mapeo específico para nombres de archivo conocidos
+    const fileNameMap = {
+        'cookie.jpg': 'cookie.jpg.jpg',
+        'brownie.jpg': 'brownie-overflow-dessert.jpg',
+        'smoothie.jpg': 'Strawberry-Debug-Smoothie.jpg',
+        'shake.jpg': 'Binary-Brownie-Shake.jpg'
+    };
+
+    // Si el nombre del archivo está en nuestro mapa, usar el nombre correcto
+    if (fileNameMap[fileName]) {
+        console.log('Mapeando nombre de archivo:', {
+            original: fileName,
+            mapeado: fileNameMap[fileName]
+        });
+        return fileNameMap[fileName];
+    }
+
+    // Si no está en el mapa, intentar con la lógica general
+    if (fileName.toLowerCase().endsWith('.jpg.jpg')) {
+        return fileName;
+    }
+    if (!fileName.toLowerCase().endsWith('.jpg')) {
+        return `${fileName}.jpg`;
+    }
+    return fileName;
+};
+
 class ProductAPI {
     static async getProducts(category = '') {
         try {
@@ -30,15 +61,18 @@ class ProductAPI {
             );
             console.table(posiblesDulces.map(p => ({
                 nombre: p.m_strName,
-                categoriaId: p.m_iCategory,
-                tipoCategoria: typeof p.m_iCategory,
+                categoriaId: p.m_iCategory || p.m_fkCategory,
+                tipoCategoria: typeof (p.m_iCategory || p.m_fkCategory),
                 deberiaSerPostre: true
             })));
             
             // Verificar inconsistencias en la categorización
             posiblesDulces.forEach(p => {
-                if (p.m_iCategory !== 6) {
-                    console.error(`Posible error de categorización: ${p.m_strName} parece ser un postre pero está en la categoría ${p.m_iCategory}`);
+                const categoryId = p.m_iCategory || p.m_fkCategory;
+                if (categoryId !== 6) {
+                    console.error(`Posible error de categorización: ${p.m_strName} parece ser un postre pero está en la categoría ${categoryId}`);
+                    // Si es un postre pero no tiene categoría 6, lo forzamos a ser postre
+                    p.m_iCategory = 6;
                 }
             });
             
@@ -51,6 +85,15 @@ class ProductAPI {
                 }))
             );
             
+            // Log específico para productos de categoría 3 (sides)
+            const sides = data.filter(p => (p.m_iCategory === 3 || p.m_fkCategory === 3));
+            console.table(sides.map(p => ({
+                nombre: p.m_strName,
+                id: p.m_iId,
+                categoria: p.m_iCategory || p.m_fkCategory,
+                imagen: p.m_strImageURL
+            })));
+            
             console.log('Datos recibidos de la API:', JSON.stringify(data, null, 2));
             
             // Validar que los datos sean un array
@@ -62,12 +105,12 @@ class ProductAPI {
             // Transformar los datos al formato esperado por el frontend
             const mappedProducts = data.map(product => {
                 // Validar que el producto tenga los campos necesarios
-                if (!product.m_iId || !product.m_strName || !product.m_iCategory) {
+                if (!product.m_iId || !product.m_strName || (!product.m_iCategory && !product.m_fkCategory)) {
                     console.error('Producto con datos incompletos:', JSON.stringify(product, null, 2));
                     return null;
                 }
                 
-                const categoryId = product.m_iCategory;
+                const categoryId = product.m_iCategory || product.m_fkCategory;
                 console.table({
                     nombre: product.m_strName,
                     categoriaId: categoryId,
@@ -76,6 +119,36 @@ class ProductAPI {
                 });
                 
                 const categoryName = this.mapCategory(categoryId);
+                
+                // Log de la construcción de la URL de la imagen
+                const imageFileName = formatImageFileName(product.m_strImageURL);
+                const imageUrl = `/Fronted/images/products/${categoryName}/${imageFileName}`;
+                console.log('Construyendo URL de imagen:', {
+                    nombreOriginal: product.m_strImageURL,
+                    nombreFormateado: imageFileName,
+                    categoria: categoryName,
+                    urlFinal: imageUrl,
+                    producto: product.m_strName
+                });
+                
+                // Verificar si la imagen existe
+                fetch(imageUrl, { method: 'HEAD' })
+                    .then(response => {
+                        if (!response.ok) {
+                            console.error('Imagen no encontrada:', {
+                                url: imageUrl,
+                                producto: product.m_strName,
+                                status: response.status
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al verificar imagen:', {
+                            url: imageUrl,
+                            producto: product.m_strName,
+                            error: error.message
+                        });
+                    });
                 
                 // Log específico si el producto debería ser un postre pero no se está mapeando como tal
                 if ((product.m_strName.toLowerCase().includes('cookie') ||
@@ -91,13 +164,23 @@ class ProductAPI {
                     });
                 }
                 
+                // Log específico para productos de sides
+                if (categoryId === 3) {
+                    console.log('Procesando producto de sides:', {
+                        nombre: product.m_strName,
+                        categoriaId: categoryId,
+                        categoriaMapeada: categoryName,
+                        imagen: product.m_strImageURL
+                    });
+                }
+                
                 return {
                     id: product.m_iId,
                     name: product.m_strName,
                     description: product.m_strDescription,
                     price: product.m_dblPrice,
                     category: categoryName,
-                    imageUrl: `../images/products/${categoryName}/${product.m_strImageURL}`,
+                    imageUrl: imageUrl,
                     available: product.m_bAvailable
                 };
             }).filter(product => product !== null);
@@ -105,6 +188,13 @@ class ProductAPI {
             // Validar que haya productos después del mapeo
             if (mappedProducts.length === 0) {
                 console.error('No se encontraron productos válidos después del mapeo');
+                console.error('Productos originales:', data.map(p => ({
+                    id: p.m_iId,
+                    nombre: p.m_strName,
+                    categoria: p.m_iCategory || p.m_fkCategory,
+                    precio: p.m_dblPrice,
+                    disponible: p.m_bAvailable
+                })));
                 throw new Error('No se encontraron productos válidos');
             }
 
@@ -165,13 +255,13 @@ class ProductAPI {
                 
                 console.log('Datos crudos del producto encontrado:', product);
                 
-                const categoryName = this.mapCategory(product.m_iCategory);
+                const categoryName = this.mapCategory(product.m_iCategory || product.m_fkCategory);
                 console.log('Categoría mapeada:', {
-                    originalId: product.m_iCategory,
+                    originalId: product.m_iCategory || product.m_fkCategory,
                     mappedName: categoryName
                 });
                 
-                const imageUrl = `../images/products/${categoryName}/${product.m_strImageURL}`;
+                const imageUrl = `/Fronted/images/products/${categoryName}/${product.m_strImageURL}`;
                 console.log('URL de imagen construida:', {
                     categoryName,
                     imageFileName: product.m_strImageURL,
@@ -218,6 +308,12 @@ class ProductAPI {
 
     // Mapear IDs de categoría a nombres de categoría según la base de datos
     static mapCategory(categoryId) {
+        // Si no hay categoría, intentar determinar por el nombre
+        if (!categoryId) {
+            console.warn('Categoría no definida, intentando determinar por nombre');
+            return 'otros';
+        }
+
         // Asegurarse de que categoryId sea un número
         const numericId = parseInt(categoryId, 10);
         
@@ -242,7 +338,7 @@ class ProductAPI {
         const categoryMap = {
             1: 'entrantes',      // Starters
             2: 'hamburguesas',   // Burgers
-            3: 'acompañamientos', // Sides
+            3: 'accompaniments', // Sides
             4: 'productos-compuestos', // Menú
             5: 'bebidas',        // Drinks
             6: 'postres'         // Desserts
@@ -265,18 +361,12 @@ class ProductAPI {
             categoriaResultante: mappedCategory,
             categoriasDisponibles: Object.entries(categoryMap).map(([id, cat]) => `${id}:${cat}`).join(', '),
             esPostre: numericId === 6,
-            esBebida: numericId === 5
+            esBebida: numericId === 5,
+            esSide: numericId === 3
         });
-        
-        // Verificación adicional para postres y bebidas
-        if (numericId === 6 && mappedCategory !== 'postres') {
-            console.error('Error crítico: Producto de categoría 6 no mapeado como postre');
-        } else if (numericId === 5 && mappedCategory !== 'bebidas') {
-            console.error('Error crítico: Producto de categoría 5 no mapeado como bebida');
-        }
         
         return mappedCategory;
     }
 }
 
-export default ProductAPI; 
+export default ProductAPI;
