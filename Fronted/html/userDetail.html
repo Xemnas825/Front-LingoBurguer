@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/userDetailStyle.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <img src="../images/LogoLingoBurguerWhite.png" alt="Logo" class="logo">
+                </div>
+                <br>
+                <h2>My Portal</h2>
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <div class="user-profile">
+                <!--Get data from database-->
+                <div class="user-name">[Insert Name from DB]</div>
+                <div class="user-email">[Insert Email from DB]</div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <div class="nav-menu">
+                <h3>Account Management</h3>
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-user" id="persInfoBtn"></i> Personal Information</a>
+                    </li>
+                </ul>
+
+                <h3>Administration</h3>
+                <ul>
+                    <li><a href="#" id="employeesBtn"><i class="fas fa-users"></i> Employee Management</a></li>
+                    <li><a href="#" id="productsBtn"><i class="fas fa-hamburger"></i> Product Management</a></li>
+                </ul>
+
+                <h3>Activity</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-history" id="ordersBtn"></i> Order History</a></li>
+                </ul>
+            </div>
+
+            <div class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-shopping-bag"></i>
+                    <div class="stat-value">15</div> <!-- Get data from DB -->
+                    <div class="stat-label">Total Orders</div>
+                </div>
+            </div>
+
+            <!-- Personal Information Panel -->
+            <div class="content-panel" id="persInfoPannel">
+                <div class="panel-header">
+                    <h2>Personal Information</h2>
+                    <button class="action-button" id="edit-info-btn">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                </div>
+
+                <form id="personal-info-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" class="form-control" value="[DB]" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" class="form-control" value="[DB]" disabled>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="address">Address</label>
+                            <textarea id="address" class="form-control" rows="3" disabled>[DB]</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" class="form-control" value="[DB]" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" class="form-control" value="[DB]" disabled>
+                        </div>
+
+                        <div class="form-buttons" style="display: none;">
+                            <button type="button" class="btn btn-secondary" id="cancel-btn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Recent Orders Panel -->
+            <div class="content-panel" id="orders-pannel" style="display: none;">
+                <div class="panel-header">
+                    <h2>Recent Orders</h2>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Example orders [Get data from database, last 4] -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Employee Management Panel -->
+            <div class="content-panel" id="employees-panel" style="display: none;">
+                <div class="panel-header">
+                    <h2>Employee Management</h2>
+                    <button class="action-button" id="add-employee-btn">
+                        <i class="fas fa-plus"></i> Add Employee
+                    </button>
+                </div>
+
+                <form id="employee-form" style="display: none;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="emp-firstName">First Name</label>
+                            <input type="text" id="emp-firstName" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-lastName">Last Name</label>
+                            <input type="text" id="emp-lastName" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-email">Email</label>
+                            <input type="email" id="emp-email" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-telephone">Phone Number</label>
+                            <input type="tel" id="emp-telephone" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-role">Job Role</label>
+                            <select id="emp-role" class="form-control" required>
+                                <option value="">Select a role</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-establishment">Establishment</label>
+                            <select id="emp-establishment" class="form-control" required>
+                                <option value="">Select an establishment</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-hire-date">Hire Date</label>
+                            <input type="text" id="emp-hire-date" class="form-control" placeholder="DD/MM/YYYY"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-salary">Salary</label>
+                            <input type="number" id="emp-salary" class="form-control" step="0.01" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-password">Password</label>
+                            <input type="password" id="emp-password" class="form-control" placeholder="Enter password">
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-secondary" id="cancel-employee-btn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Employee</button>
+                        </div>
+                    </div>
+                </form>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Job Role</th>
+                            <th>Hire Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employees-table-body">
+                        <!-- Employees will be loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Product Management Panel -->
+            <div class="content-panel" id="products-panel" style="display: none;">
+                <div class="panel-header">
+                    <h2>Product Management</h2>
+                    <button class="action-button" id="add-product-btn">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                </div>
+
+                <form id="product-form" style="display: none;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="prod-name">Product Name</label>
+                            <input type="text" id="prod-name" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prod-category">Category</label>
+                            <select id="prod-category" class="form-control" required>
+                                <option value="">Select a category</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="prod-description">Description</label>
+                            <textarea id="prod-description" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prod-price">Price</label>
+                            <input type="text" id="prod-price" class="form-control" placeholder="0.00" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prod-availability">Availability</label>
+                            <select id="prod-availability" class="form-control" required>
+                                <option value="true">Available</option>
+                                <option value="false">Not Available</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prod-image">Product Image</label>
+                            <input type="file" id="prod-image" class="form-control" accept=".jpg, .jpeg">
+                            <small class="form-text text-muted">Select a JPG image (optional)</small>
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-secondary" id="cancel-product-btn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Product</button>
+                        </div>
+                    </div>
+                </form>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body">
+                        <!-- Products will be loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/userDetailScript.js"></script>
+</body>
+
+</html>
