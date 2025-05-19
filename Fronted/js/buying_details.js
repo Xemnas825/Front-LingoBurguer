@@ -229,8 +229,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // Manejar envío del formulario
-    document.querySelector('.buying_details_card').addEventListener('submit', async function(e) {
-        e.preventDefault();
+    document.querySelector('.confirm-button').addEventListener('click', async function (e) {
+    e.preventDefault();
         
         // Check if establishment is selected
         const selectedEstablishment = localStorage.getItem('selectedEstablishment');

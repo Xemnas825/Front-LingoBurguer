@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Añadir event listener al logo
     const logo = document.querySelector('.logo');
     if (logo) {
-        logo.addEventListener('click', function() {
+        logo.addEventListener('click', function () {
             window.location.href = 'index.html';
         });
         // Hacer el logo clickeable
@@ -31,8 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('email').value = userData.m_strEmail || '';
         document.getElementById('phone').value = userData.m_strTelephone || '';
 
-        // Campo address no está en la base de datos, lo dejamos en blanco
-        document.getElementById('address').value = '';
     }
 
     // URLs del API
@@ -186,6 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const isEditing = editingEmployeeId !== null;
             console.log('Mode:', isEditing ? 'Editing' : 'Creation');
 
+
             // 1. Recoger datos
             const formData = {
                 firstName: document.getElementById("emp-firstName").value.trim(),
@@ -202,6 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // 2. Validación mínima
             if (!formData.firstName || !formData.lastName || !formData.email) {
                 alert("First name, last name and email are required");
+
                 return;
             }
 
@@ -226,6 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 if (!formData.password) {
                     alert("The password is required for new employees");
+
                     return;
                 }
                 params.append('password_hash', formData.password);
@@ -263,11 +264,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(text => {
                     console.log('Server response:', text);
 
+
                     if (text.includes("error") || text.includes("Error") || text === "Faltan datos") {
                         throw new Error(text);
                     }
 
                     alert(`Employee ${isEditing ? 'updated' : 'created'} correctly!`);
+
                     loadEmployeesList();
 
                     // Resetear el formulario
@@ -309,21 +312,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 break;
             case 'orders':
                 orderPannel.style.display = 'block';
+                loadUserOrders();
                 break;
             case 'employees':
                 if (userRole === 'employee' && employeesPanel) {
                     employeesPanel.style.display = 'block';
                     console.log('Loading employees panel...');
 
+
                     // Primero cargar los jobs
                     loadJobs().then(() => {
                         console.log('Jobs loaded, loading establishments...');
+
                         return loadEstablishments();
                     }).then(() => {
                         console.log('Establishments loaded, loading employees list...');
+
                         loadEmployeesList();
                     }).catch(error => {
                         console.error('Error in the loading sequence:', error);
+
                     });
                 }
                 break;
@@ -333,6 +341,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     loadCategories()
                         .then(() => loadProductsList())
                         .catch(error => console.error('Error loading product data:', error));
+
                 }
                 break;
         }
@@ -347,6 +356,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para cargar la lista de empleados
     function loadEmployeesList() {
         console.log("Loading employees list...");
+
         fetch(apiUrlGetEmployees)
             .then(response => response.text())
             .then(text => {
@@ -359,6 +369,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const tableBody = document.getElementById('employees-table-body');
                     if (!tableBody) {
                         console.error('No table of employees found');
+
                         return;
                     }
 
@@ -367,6 +378,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (employees.length === 0) {
                         const row = document.createElement('tr');
                         row.innerHTML = '<td colspan="6" style="text-align: center;">No employees registered</td>';
+
                         tableBody.appendChild(row);
                         return;
                     }
@@ -411,6 +423,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 }
                             } catch (e) {
                                 console.error('Error formatting the date:', e);
+
                                 const today = new Date();
                                 hireDate = `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
                             }
@@ -489,6 +502,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             const employeeId = this.getAttribute('data-id');
                             const employeeEmail = employee.m_strEmail;
                             if (confirm('Are you sure you want to delete this employee?')) {
+
                                 deleteEmployee(employeeId, employeeEmail);
                             }
                         });
@@ -496,10 +510,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 } catch (e) {
                     console.error('Error parsing the response:', e);
                     console.error('Text that caused the error:', text);
+
                 }
             })
             .catch(error => {
                 console.error('Error loading employees:', error);
+
             });
     }
 
@@ -511,6 +527,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!employeeId || !employeeEmail) {
             console.error('Invalid employee ID or email');
             alert('Error: Invalid employee data');
+
             return;
         }
 
@@ -533,15 +550,18 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(text => {
                 if (text.includes("error") || text.includes("Error")) {
                     throw new Error("Could not delete employee");
+
                 }
 
 
                 alert("Employee deleted correctly");
+
                 loadEmployeesList();
             })
             .catch(error => {
                 console.error('Error deleting employee:', error);
                 alert("Error deleting employee: " + error.message);
+
             });
     }
 
@@ -608,6 +628,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Mode:', isEditing ? 'Editing' : 'Creation');
 
 
+
             // 1. Recoger datos
             const formData = {
                 firstName: document.getElementById("emp-firstName").value.trim(),
@@ -627,6 +648,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // 2. Validación mínima
             if (!formData.firstName || !formData.lastName || !formData.email) {
                 alert("First name, last name and email are required");
+
                 return;
             }
 
@@ -657,6 +679,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 if (!formData.password) {
                     alert("The password is required for new employees");
+
                     return;
                 }
                 params.append('password_hash', formData.password);
@@ -692,6 +715,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
             // 4. Enviar petición
             const apiUrl = isEditing ? apiUrlUpdateEmployee : apiUrlADDEmployee;
 
@@ -708,12 +732,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.log('Server response:', text);
 
 
+
                     if (text.includes("error") || text.includes("Error") || text === "Faltan datos") {
                         throw new Error(text);
                     }
 
 
                     alert(`Employee ${isEditing ? 'updated' : 'created'} correctly!`);
+
                     loadEmployeesList();
                     resetEmployeeForm();
                 })
@@ -741,7 +767,7 @@ document.addEventListener('DOMContentLoaded', function () {
         editBtn.style.display = 'flex';
     });
 
-
+    //Aceptar Cambios
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         formInputs.forEach(input => input.disabled = true);
@@ -763,8 +789,6 @@ document.addEventListener('DOMContentLoaded', function () {
             navMenu.classList.toggle('active');
         });
     }
-
-
 
 
 
@@ -797,6 +821,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para cargar los trabajos
     function loadJobs() {
         console.log('Starting jobs loading...');
+
         return fetch(apiUrlGetJobs)
             .then(response => response.text())
             .then(text => {
@@ -805,6 +830,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const jobSelect = document.getElementById('emp-role');
                     if (!jobSelect) {
                         console.error('No table of jobs found');
+
                         return;
                     }
 
@@ -825,10 +851,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 } catch (e) {
                     console.error('Error parsing jobs:', e);
+
                 }
             })
             .catch(error => {
                 console.error('Error loading jobs:', error);
+
             });
     }
 
@@ -875,10 +903,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 } catch (e) {
                     console.error('Error parsing establishments:', e);
+
                 }
             })
             .catch(error => {
                 console.error('Error loading establishments:', error);
+
             });
     }
 
@@ -906,6 +936,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para cargar las categorías
     function loadCategories() {
         console.log('Loading categories...');
+
         return fetch(apiUrlGetCategories)
             .then(response => {
                 if (!response.ok) {
@@ -917,12 +948,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 try {
                     console.log('Server response (categories):', text);
 
+
                     // Intentar parsear la respuesta
                     let categoriesList = [];
                     if (text && text.trim()) {
                         categoriesList = JSON.parse(text);
                     }
                     console.log('Parsed categories:', categoriesList);
+
 
                     // Limpiar el objeto categories
                     categories = {};
@@ -932,6 +965,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         categoriesList.forEach(category => {
                             console.log('Processing category:', category);
 
+
                             // Extraer datos de la categoría
                             const categoryData = {
                                 id: category.category_id1 || category.id || category.m_iId || '',
@@ -940,7 +974,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             if (categoryData.id) {
                                 categories[categoryData.id] = categoryData.name;
-                                console.log(`Categoría agregada - ID: ${categoryData.id}, Nombre: ${categoryData.name}`);
+                                console.log(`Category added - ID: ${categoryData.id}, Name: ${categoryData.name}`);
+
                             }
                         });
 
@@ -948,6 +983,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         const categorySelect = document.getElementById('prod-category');
                         if (categorySelect) {
                             categorySelect.innerHTML = '<option value="">Select a category</option>';
+
 
                             Object.entries(categories).forEach(([id, name]) => {
                                 const option = document.createElement('option');
@@ -957,22 +993,27 @@ document.addEventListener('DOMContentLoaded', function () {
                             });
 
                             console.log('Select of categories updated with', Object.keys(categories).length, 'options');
+
                         }
                     } else {
                         console.error('The response of categories is not an array:', categoriesList);
+
                     }
 
                     console.log('Categories loaded:', categories);
+
                     return categories;
                 } catch (error) {
                     console.error('Error processing categories:', error);
                     console.error('Text that caused the error:', text);
+
                     throw error;
                 }
             })
             .catch(error => {
                 console.error('Error loading categories:', error);
                 alert('Error loading categories');
+
                 return {};
             });
     }
@@ -980,6 +1021,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para cargar la lista de productos
     function loadProductsList() {
         console.log('Loading products list...');
+
 
         fetch(apiUrlGetProducts)
             .then(response => {
@@ -999,9 +1041,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     console.log('Parsed products:', products);
 
+
                     const tableBody = document.getElementById('products-table-body');
                     if (!tableBody) {
                         console.error('No table of products found');
+
                         return;
                     }
 
@@ -1009,11 +1053,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (!Array.isArray(products) || products.length === 0) {
                         tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No products registered</td></tr>';
+
                         return;
                     }
 
                     products.forEach(product => {
                         console.log('Original product from the DB:', product);
+
 
                         // Extraer datos del producto
                         const productData = {
@@ -1031,10 +1077,12 @@ document.addEventListener('DOMContentLoaded', function () {
                             availabilitySelect.innerHTML = `
                                 <option value="true">Available</option>
                                 <option value="false">Not available</option>
+
                             `;
                         }
 
                         const categoryName = categories[productData.categoryId] || 'Unknown category';
+
 
                         const row = document.createElement('tr');
                         row.innerHTML = `
@@ -1090,8 +1138,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
             .catch(error => {
-                console.error('Error loading products:', error);
-                alert('Error loading products');
+                console.error('Invalid product name');
+                alert('Error: Invalid product name');
+
             });
     }
 
@@ -1100,6 +1149,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!productName) {
             console.error('Invalid product name');
             alert('Error: Invalid product name');
+
             return;
         }
 
@@ -1108,6 +1158,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const urlWithParams = `${apiUrlDeleteProduct}&${params.toString()}`;
         console.log('URL of deletion:', urlWithParams);
+
 
         fetch(urlWithParams, {
             method: "POST",
@@ -1119,16 +1170,20 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.text())
             .then(text => {
                 console.log('Response to delete:', text);
+
                 if (text.includes("error") || text.includes("Error")) {
                     throw new Error("Could not delete product");
+
                 }
 
                 alert("Product deleted correctly");
+
                 loadProductsList();
             })
             .catch(error => {
                 console.error('Error deleting product:', error);
                 alert("Error deleting product: " + error.message);
+
             });
     }
 
@@ -1147,6 +1202,63 @@ document.addEventListener('DOMContentLoaded', function () {
         submitBtn.textContent = 'Save Product';
     }
 
+
+    async function loadUserOrders() {
+        const userData = JSON.parse(sessionStorage.getItem('userData'));
+        const userRole = sessionStorage.getItem('userRole');
+
+        if (!userData || userRole !== 'client') {
+            console.warn('Solo los clientes pueden ver sus pedidos.');
+            return;
+        }
+
+        const clientId = userData.m_iId;
+        const ordersContainer = document.getElementById('orders-list'); // Asegúrate de tener un contenedor con este ID
+
+        try {
+            const response = await fetch('http://localhost:8080/PruebaDBConsola/Controller?ACTION=ORDER.FIND_ALL');
+            if (!response.ok) throw new Error('Error al cargar pedidos');
+
+            const allOrders = await response.json();
+            console.log('Todas las órdenes del backend:', allOrders);
+
+
+            // Filtrar solo los pedidos del cliente actual
+            const userOrders = allOrders.filter(order => order.m_fkClient === clientId);
+            console.log('Client ID desde sessionStorage:', clientId);
+
+
+            ordersContainer.innerHTML = ''; // Limpiar contenido anterior
+
+            if (userOrders.length === 0) {
+                ordersContainer.innerHTML = '<p>No tienes pedidos registrados.</p>';
+                return;
+            }
+
+            userOrders.forEach(order => {
+                const row = document.createElement('tr');
+
+                const idCell = document.createElement('td');
+                idCell.textContent = order.m_iId;
+
+                const totalCell = document.createElement('td');
+                totalCell.textContent = `$${parseFloat(order.m_dblTotalPrice).toFixed(2)}`;
+
+                row.appendChild(idCell);
+                row.appendChild(totalCell);
+
+                ordersContainer.appendChild(row);
+            });
+
+
+        } catch (error) {
+            console.error('Error al cargar pedidos del cliente:', error);
+            ordersContainer.innerHTML = '<p>Error al cargar tus pedidos.</p>';
+        }
+    }
+
+
+
     // Manejo del formulario de productos
     productForm?.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -1161,6 +1273,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Validar campos requeridos
         if (!name || !description || !price || !category) {
             alert('Please complete all required fields');
+
             return;
         }
 
@@ -1168,6 +1281,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const priceNum = parseFloat(price);
         if (isNaN(priceNum)) {
             alert('The price must be a valid number');
+
             return;
         }
 
@@ -1202,6 +1316,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const finalUrl = `${apiUrl}&${params.toString()}`;
         console.log('URL of the operation:', finalUrl);
 
+
         // Enviar la petición
         fetch(finalUrl, {
             method: 'POST',
@@ -1214,16 +1329,19 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(text => {
                 console.log('Server response:', text);
                 if (text.includes("error") || text.includes("Error") || text.includes("Faulty data") || text.includes("not found")) {
+
                     throw new Error(text);
                 }
 
                 alert(isEditing ? "Product updated correctly" : "Product added correctly");
+
                 resetProductForm();
                 loadProductsList();
             })
             .catch(error => {
                 console.error('Detailed error:', error);
                 alert(`Error ${isEditing ? 'updating' : 'adding'} the product: ${error.message}`);
+
             });
     });
 });

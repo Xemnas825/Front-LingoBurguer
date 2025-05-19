@@ -89,11 +89,6 @@
                             <input type="text" id="lastName" class="form-control" value="[DB]" disabled>
                         </div>
 
-                        <div class="form-group full-width">
-                            <label for="address">Address</label>
-                            <textarea id="address" class="form-control" rows="3" disabled>[DB]</textarea>
-                        </div>
-
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" id="email" class="form-control" value="[DB]" disabled>
@@ -122,16 +117,15 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Date</th>
                             <th>Total</th>
-                            <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Example orders [Get data from database, last 4] -->
+                    <tbody id="orders-list">
+                        <!-- Orders will be inserted here -->
                     </tbody>
                 </table>
             </div>
+
 
             <!-- Employee Management Panel -->
             <div class="content-panel" id="employees-panel" style="display: none;">
