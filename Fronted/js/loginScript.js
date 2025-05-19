@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Es un empleado
                 sessionStorage.setItem('userRole', 'employee');
                 sessionStorage.setItem('userData', JSON.stringify(employee));
-                window.location.href = 'userDetail.html';
+                window.location.href = 'index.html';
                 return;
             }
 
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Es un cliente
                 sessionStorage.setItem('userRole', 'client');
                 sessionStorage.setItem('userData', JSON.stringify(client));
-                window.location.href = 'userDetail.html';
+                window.location.href = 'index.html';
                 return;
             }
 

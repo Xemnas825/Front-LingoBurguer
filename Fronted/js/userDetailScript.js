@@ -3,6 +3,16 @@ document.addEventListener('DOMContentLoaded', function () {
     let userRole = sessionStorage.getItem('userRole');
     let userData = JSON.parse(sessionStorage.getItem('userData'));
 
+    // Añadir event listener al logo
+    const logo = document.querySelector('.logo');
+    if (logo) {
+        logo.addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+        // Hacer el logo clickeable
+        logo.style.cursor = 'pointer';
+    }
+
     console.log('User role:', userRole); // Debugging
 
     // Actualiza la sección del perfil del sidebar con los datos del usuario
@@ -1172,6 +1182,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const params = new URLSearchParams();
 
         // Si estamos editando un producto existente o creando uno nuevo
+        let editingProductId = null;
         const isEditing = editingProductId !== null;
         const apiUrl = isEditing ? apiUrlUpdateProduct : apiUrlADDProduct;
 

@@ -173,7 +173,10 @@ body {
 }
 
 .logo {
-    height: 80px;
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    max-width: 100%;
 }
 
 /* Toggle para menú móvil */
@@ -528,7 +531,10 @@ select.form-control:focus {
     }
     
     .logo {
-        height: 120px;
+        height: 60px;
+        width: auto;
+        object-fit: contain;
+        max-width: 100%;
     }
     
     .data-table {

@@ -40,7 +40,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // Mantener solo el escuchador de eventos para el icono de usuario
     if (userIcon) {
         userIcon.addEventListener('click', function () {
-            window.location.href = 'login.html';
+            // Verificar si estamos en la página de userDetail
+            if (window.location.pathname.includes('userDetail.html')) {
+                // Si estamos en userDetail, redirigir al index
+                window.location.href = 'index.html';
+            } else {
+                // Verificar si el usuario está logueado
+                const userData = sessionStorage.getItem('userData');
+                if (userData) {
+                    // Si está logueado, ir a userDetail
+                    window.location.href = 'userDetail.html';
+                } else {
+                    // Si no está logueado, ir a login
+                    window.location.href = 'login.html';
+                }
+            }
         });
     }
 
