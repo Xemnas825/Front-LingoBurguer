@@ -1,0 +1,84 @@
+@font-face {
+    font-family: 'MyPersonalisedSource';
+    src: url('../fonts/Teko-VariableFont_wght.ttf') format('truetype');
+}
+
+/* Resetear márgenes y relleno */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.main {
+    font-family: 'MyPersonalisedSource';
+    background-color: black;
+    color: white;
+    padding: 0 5%;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.main h1 {
+    font-size: 375%;
+    padding-top: 5%;
+    margin-bottom: 20px;
+}
+
+.main h2 {
+    font-size: 200%;
+    background-image: linear-gradient(to top, #ff6600, #fbff00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.main p {
+    font-size: 125%;
+    letter-spacing: 1px;
+    padding-bottom: 3%;
+    line-height: 1.5;
+}
+
+.main a{
+    text-decoration: none;
+    color: inherit;
+}
+.main ul {
+    padding-left: 25px;
+    margin-bottom: 20px;
+    color: white;
+    font-size: 125%;
+    letter-spacing: 1px;
+}
+
+.main ul li {
+    margin-bottom: 10px;
+}
+
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .main {
+        padding: 0 3%;
+    }
+    
+    .main h1 {
+        font-size: 300%;
+    }
+    
+    .main h2 {
+        font-size: 160%;
+    }
+}
