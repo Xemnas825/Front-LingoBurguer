@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
         menuToggle.addEventListener('click', function () {
             sidebar.classList.add('active');
             if (overlay) overlay.classList.add('active');
-            console.log('Menu opened'); 
+            console.log('Menu opened');
         });
     } else {
         console.error('The menu-toggle element was not found');
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function closeSidebarMenu() {
         sidebar.classList.remove('active');
         if (overlay) overlay.classList.remove('active');
-        console.log('Menu closed'); 
+        console.log('Menu closed');
     }
 
     if (closeSidebar) {
@@ -40,14 +40,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Mantener solo el escuchador de eventos para el icono de usuario
     if (userIcon) {
         userIcon.addEventListener('click', function () {
-            alert('Has hecho clic en el icono de usuario');
+            window.location.href = 'login.html';
         });
     }
 
     // Escuchadores de eventos para los enlaces del menú
     sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            closeSidebarMenu(); 
+        link.addEventListener('click', function (e) {
+            closeSidebarMenu();
 
             // Si el enlace tiene un hash (anclaje)
             if (this.hash) {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const targetElement = document.querySelector(this.hash);
                     if (targetElement) {
                         window.scrollTo({
-                            top: targetElement.offsetTop - 80, 
+                            top: targetElement.offsetTop - 80,
                             behavior: 'smooth'
                         });
                     }
