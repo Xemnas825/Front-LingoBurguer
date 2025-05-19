@@ -9,7 +9,7 @@ class EstablishmentManager {
         try {
             await this.loadEstablishments();
         } catch (error) {
-            console.error('Error al inicializar EstablishmentManager:', error);
+            console.error('Error initializing EstablishmentManager:', error);
         }
     }
 
@@ -21,19 +21,19 @@ class EstablishmentManager {
             }
             const establishments = await response.json();
             if (!Array.isArray(establishments)) {
-                throw new Error('La respuesta no es un array de establecimientos');
+                throw new Error('The response is not an array of establishments');
             }
             this.displayEstablishments(establishments);
         } catch (error) {
-            console.error('Error al cargar establecimientos:', error);
-            this.showError('No se pudieron cargar los establecimientos. Por favor, intente de nuevo más tarde.');
+            console.error('Error loading establishments:', error);
+            this.showError('The establishments could not be loaded. Please try again later.');
         }
     }
 
     displayEstablishments(establishments) {
         const container = document.querySelector('.establishment-options');
         if (!container) {
-            console.error('No se encontró el contenedor de establecimientos');
+            console.error('The establishment container was not found');
             return;
         }
 
@@ -41,7 +41,7 @@ class EstablishmentManager {
             container.innerHTML = `
                 <div class="error-message">
                     <i class="fas fa-info-circle"></i>
-                    <p>No hay establecimientos disponibles en este momento.</p>
+                    <p>There are no establishments available at this time.</p>
                 </div>
             `;
             return;
@@ -54,14 +54,13 @@ class EstablishmentManager {
                         <i class="fas fa-store"></i>
                     </div>
                     <div class="establishment-details">
-                        <div class="establishment-name">${establishment.m_strName || 'Sin nombre'}</div>
-                        <div class="establishment-address">${establishment.m_strAddress || 'Dirección no disponible'}</div>
+                        <div class="establishment-name">${establishment.m_strName || 'No name'}</div>
+                        <div class="establishment-address">${establishment.m_strAddress || 'No address available'}</div>
                     </div>
                 </div>
             </div>
         `).join('');
 
-        // Agregar event listeners a las opciones
         container.querySelectorAll('.establishment-option').forEach(option => {
             option.addEventListener('click', () => {
                 this.selectEstablishment(option, option.dataset.id);

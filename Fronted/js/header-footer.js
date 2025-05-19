@@ -85,14 +85,14 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             // Comprobar si el elemento existe
             if (!DOM_ELEMENTS.footerLocations) {
-                console.log('El elemento footer-locations no existe en esta página');
+                console.log('The footer-locations element does not exist on this page');
                 return;
             }
 
             // Realizar la llamada fetch a la URL
             const response = await fetch(`${apiUrl}`);
             if (!response.ok) {
-                throw new Error('No se pudieron cargar las sucursales');
+                throw new Error('The branches could not be loaded');
             }
 
             const data = await response.json();
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Comprobar si el elemento existe antes de mostrar el error
             if (DOM_ELEMENTS.footerLocations) {
                 DOM_ELEMENTS.footerLocations.innerHTML =
-                    '<p>No se pudieron cargar las sucursales</p>';
+                    '<p>The branches could not be loaded</p>';
             }
         }
     }
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function createEstablishmentCard(establishment) {
         // Comprobar si el elemento existe
         if (!DOM_ELEMENTS.footerLocations) {
-            console.log('El elemento footer-locations no existe en esta página');
+            console.log('The footer-locations element does not exist on this page');
             return;
         }
 

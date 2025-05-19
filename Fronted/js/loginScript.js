@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if(response.ok){
                         return response.json(); 
                     }else{
-                        throw new Error ('No llego capo, socorro:' + response.statusText);
+                        throw new Error ('I can not get the data:' + response.statusText);
                     }
                 })
             return true;

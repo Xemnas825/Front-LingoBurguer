@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Actualizar el contenedor de tipos de pedido
     const orderTypeContainer = document.querySelector('.order-type-options');
     if (orderTypeContainer) {
-        orderTypeContainer.innerHTML = '';  // Limpiar contenedor
+        orderTypeContainer.innerHTML = '';  
         
         orderTypes.forEach(type => {
             const div = document.createElement('div');
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
         const response = await fetch(apiPaymentUrl);
         if (!response.ok) {
-            throw new Error('Error al cargar los métodos de pago');
+            throw new Error('Error loading payment methods');
         }
         const paymentMethods = await response.json();
         
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
     } catch (error) {
-        console.error('Error al cargar los métodos de pago:', error);
+        console.error('Error loading payment methods:', error);
     }
     
     // Obtener el carrito del localStorage
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // Si el carrito está vacío, redirigir al inicio
     if (cart.length === 0) {
-        alert('El carrito está vacío');
+        alert('The cart is empty');
         window.location.href = 'index.html';
         return;
     }
@@ -149,15 +149,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (totalSection) {
             totalSection.innerHTML = `
                 <div class="total-row">
-                    <span>Total productos:</span>
+                    <span>Total products:</span>
                     <span id="subtotal">$${subtotal.toFixed(2)}</span>
                 </div>
                 <div class="total-row">
-                    <span>IVA (16%):</span>
+                    <span>Tip (16%):</span>
                     <span id="iva">$${iva.toFixed(2)}</span>
                 </div>
                 <div class="total-row">
-                    <span>Total a pagar:</span>
+                    <span>Total to pay:</span>
                     <span id="total" class="total-amount">$${total.toFixed(2)}</span>
                 </div>
             `;

@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
 
             const isEditing = editingEmployeeId !== null;
-            console.log('Modo:', isEditing ? 'Edición' : 'Creación');
+            console.log('Mode:', isEditing ? 'Editing' : 'Creation');
 
             // 1. Recoger datos
             const formData = {
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 2. Validación mínima
             if (!formData.firstName || !formData.lastName || !formData.email) {
-                alert("Nombre, Apellido y Email son obligatorios");
+                alert("First name, last name and email are required");
                 return;
             }
 
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 params.append('password_hash', currentEmployeePassword);
             } else {
                 if (!formData.password) {
-                    alert("La contraseña es obligatoria para nuevos empleados");
+                    alert("The password is required for new employees");
                     return;
                 }
                 params.append('password_hash', formData.password);
@@ -261,13 +261,13 @@ document.addEventListener('DOMContentLoaded', function () {
             })
                 .then(response => response.text())
                 .then(text => {
-                    console.log('Respuesta del servidor:', text);
+                    console.log('Server response:', text);
 
                     if (text.includes("error") || text.includes("Error") || text === "Faltan datos") {
                         throw new Error(text);
                     }
 
-                    alert(`Empleado ${isEditing ? 'actualizado' : 'creado'} correctamente!`);
+                    alert(`Employee ${isEditing ? 'updated' : 'created'} correctly!`);
                     loadEmployeesList();
 
                     // Resetear el formulario
@@ -313,17 +313,17 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'employees':
                 if (userRole === 'employee' && employeesPanel) {
                     employeesPanel.style.display = 'block';
-                    console.log('Cargando panel de empleados...');
+                    console.log('Loading employees panel...');
 
                     // Primero cargar los jobs
                     loadJobs().then(() => {
-                        console.log('Jobs cargados, cargando establecimientos...');
+                        console.log('Jobs loaded, loading establishments...');
                         return loadEstablishments();
                     }).then(() => {
-                        console.log('Establecimientos cargados, cargando lista de empleados...');
+                        console.log('Establishments loaded, loading employees list...');
                         loadEmployeesList();
                     }).catch(error => {
-                        console.error('Error en la secuencia de carga:', error);
+                        console.error('Error in the loading sequence:', error);
                     });
                 }
                 break;
@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     productsPanel.style.display = 'block';
                     loadCategories()
                         .then(() => loadProductsList())
-                        .catch(error => console.error('Error al cargar datos de productos:', error));
+                        .catch(error => console.error('Error loading product data:', error));
                 }
                 break;
         }
@@ -346,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Función para cargar la lista de empleados
     function loadEmployeesList() {
-        console.log("Cargando lista de empleados...");
+        console.log("Loading employees list...");
         fetch(apiUrlGetEmployees)
             .then(response => response.text())
             .then(text => {
@@ -358,7 +358,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     const tableBody = document.getElementById('employees-table-body');
                     if (!tableBody) {
-                        console.error('No se encontró la tabla de empleados');
+                        console.error('No table of employees found');
                         return;
                     }
 
@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (employees.length === 0) {
                         const row = document.createElement('tr');
-                        row.innerHTML = '<td colspan="6" style="text-align: center;">No hay empleados registrados</td>';
+                        row.innerHTML = '<td colspan="6" style="text-align: center;">No employees registered</td>';
                         tableBody.appendChild(row);
                         return;
                     }
@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     }
                                 }
                             } catch (e) {
-                                console.error('Error al formatear la fecha:', e);
+                                console.error('Error formatting the date:', e);
                                 const today = new Date();
                                 hireDate = `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
                             }
@@ -488,18 +488,18 @@ document.addEventListener('DOMContentLoaded', function () {
                         deleteBtn.addEventListener('click', function () {
                             const employeeId = this.getAttribute('data-id');
                             const employeeEmail = employee.m_strEmail;
-                            if (confirm('¿Estás seguro de que deseas eliminar este empleado?')) {
+                            if (confirm('Are you sure you want to delete this employee?')) {
                                 deleteEmployee(employeeId, employeeEmail);
                             }
                         });
                     });
                 } catch (e) {
-                    console.error('Error al parsear la respuesta:', e);
-                    console.error('Texto que causó el error:', text);
+                    console.error('Error parsing the response:', e);
+                    console.error('Text that caused the error:', text);
                 }
             })
             .catch(error => {
-                console.error('Error al cargar empleados:', error);
+                console.error('Error loading employees:', error);
             });
     }
 
@@ -509,8 +509,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para eliminar empleado
     function deleteEmployee(employeeId, employeeEmail) {
         if (!employeeId || !employeeEmail) {
-            console.error('ID o email de empleado no válido');
-            alert('Error: Datos de empleado no válidos');
+            console.error('Invalid employee ID or email');
+            alert('Error: Invalid employee data');
             return;
         }
 
@@ -532,16 +532,16 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.text())
             .then(text => {
                 if (text.includes("error") || text.includes("Error")) {
-                    throw new Error("No se pudo eliminar el empleado");
+                    throw new Error("Could not delete employee");
                 }
 
 
-                alert("Empleado eliminado correctamente");
+                alert("Employee deleted correctly");
                 loadEmployeesList();
             })
             .catch(error => {
-                console.error('Error al eliminar empleado:', error);
-                alert("Error al eliminar empleado: " + error.message);
+                console.error('Error deleting employee:', error);
+                alert("Error deleting employee: " + error.message);
             });
     }
 
@@ -605,7 +605,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             const isEditing = editingEmployeeId !== null;
-            console.log('Modo:', isEditing ? 'Edición' : 'Creación');
+            console.log('Mode:', isEditing ? 'Editing' : 'Creation');
 
 
             // 1. Recoger datos
@@ -626,7 +626,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 2. Validación mínima
             if (!formData.firstName || !formData.lastName || !formData.email) {
-                alert("Nombre, Apellido y Email son obligatorios");
+                alert("First name, last name and email are required");
                 return;
             }
 
@@ -656,7 +656,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 params.append('password_hash', currentEmployeePassword);
             } else {
                 if (!formData.password) {
-                    alert("La contraseña es obligatoria para nuevos empleados");
+                    alert("The password is required for new employees");
                     return;
                 }
                 params.append('password_hash', formData.password);
@@ -687,7 +687,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-            console.log('Parámetros finales:', Object.fromEntries(params.entries()));
+            console.log('Final parameters:', Object.fromEntries(params.entries()));
 
 
 
@@ -705,7 +705,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
                 .then(response => response.text())
                 .then(text => {
-                    console.log('Respuesta del servidor:', text);
+                    console.log('Server response:', text);
 
 
                     if (text.includes("error") || text.includes("Error") || text === "Faltan datos") {
@@ -713,7 +713,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
 
-                    alert(`Empleado ${isEditing ? 'actualizado' : 'creado'} correctamente!`);
+                    alert(`Employee ${isEditing ? 'updated' : 'created'} correctly!`);
                     loadEmployeesList();
                     resetEmployeeForm();
                 })
@@ -796,7 +796,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Función para cargar los trabajos
     function loadJobs() {
-        console.log('Iniciando carga de jobs...');
+        console.log('Starting jobs loading...');
         return fetch(apiUrlGetJobs)
             .then(response => response.text())
             .then(text => {
@@ -804,7 +804,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const jobsList = JSON.parse(text);
                     const jobSelect = document.getElementById('emp-role');
                     if (!jobSelect) {
-                        console.error('No se encontró el elemento select de jobs');
+                        console.error('No table of jobs found');
                         return;
                     }
 
@@ -824,11 +824,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         jobSelect.appendChild(option);
                     });
                 } catch (e) {
-                    console.error('Error al parsear jobs:', e);
+                    console.error('Error parsing jobs:', e);
                 }
             })
             .catch(error => {
-                console.error('Error al cargar jobs:', error);
+                console.error('Error loading jobs:', error);
             });
     }
 
@@ -874,11 +874,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     });
                 } catch (e) {
-                    console.error('Error al parsear establecimientos:', e);
+                    console.error('Error parsing establishments:', e);
                 }
             })
             .catch(error => {
-                console.error('Error al cargar establishments:', error);
+                console.error('Error loading establishments:', error);
             });
     }
 
@@ -905,7 +905,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Función para cargar las categorías
     function loadCategories() {
-        console.log('Cargando categorías...');
+        console.log('Loading categories...');
         return fetch(apiUrlGetCategories)
             .then(response => {
                 if (!response.ok) {
@@ -915,14 +915,14 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(text => {
                 try {
-                    console.log('Respuesta del servidor (categorías):', text);
+                    console.log('Server response (categories):', text);
 
                     // Intentar parsear la respuesta
                     let categoriesList = [];
                     if (text && text.trim()) {
                         categoriesList = JSON.parse(text);
                     }
-                    console.log('Categorías parseadas:', categoriesList);
+                    console.log('Parsed categories:', categoriesList);
 
                     // Limpiar el objeto categories
                     categories = {};
@@ -930,7 +930,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Procesar cada categoría
                     if (Array.isArray(categoriesList)) {
                         categoriesList.forEach(category => {
-                            console.log('Procesando categoría:', category);
+                            console.log('Processing category:', category);
 
                             // Extraer datos de la categoría
                             const categoryData = {
@@ -947,7 +947,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Actualizar el select de categorías
                         const categorySelect = document.getElementById('prod-category');
                         if (categorySelect) {
-                            categorySelect.innerHTML = '<option value="">Selecciona una categoría</option>';
+                            categorySelect.innerHTML = '<option value="">Select a category</option>';
 
                             Object.entries(categories).forEach(([id, name]) => {
                                 const option = document.createElement('option');
@@ -956,30 +956,30 @@ document.addEventListener('DOMContentLoaded', function () {
                                 categorySelect.appendChild(option);
                             });
 
-                            console.log('Select de categorías actualizado con', Object.keys(categories).length, 'opciones');
+                            console.log('Select of categories updated with', Object.keys(categories).length, 'options');
                         }
                     } else {
-                        console.error('La respuesta de categorías no es un array:', categoriesList);
+                        console.error('The response of categories is not an array:', categoriesList);
                     }
 
-                    console.log('Categorías cargadas:', categories);
+                    console.log('Categories loaded:', categories);
                     return categories;
                 } catch (error) {
-                    console.error('Error al procesar categorías:', error);
-                    console.error('Texto que causó el error:', text);
+                    console.error('Error processing categories:', error);
+                    console.error('Text that caused the error:', text);
                     throw error;
                 }
             })
             .catch(error => {
-                console.error('Error al cargar categorías:', error);
-                alert('Error al cargar las categorías');
+                console.error('Error loading categories:', error);
+                alert('Error loading categories');
                 return {};
             });
     }
 
     // Función para cargar la lista de productos
     function loadProductsList() {
-        console.log('Cargando lista de productos...');
+        console.log('Loading products list...');
 
         fetch(apiUrlGetProducts)
             .then(response => {
@@ -990,30 +990,30 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(text => {
                 try {
-                    console.log('Respuesta del servidor (productos):', text);
+                    console.log('Server response (products):', text);
 
                     // Intentar parsear la respuesta
                     let products = [];
                     if (text && text.trim()) {
                         products = JSON.parse(text);
                     }
-                    console.log('Productos parseados:', products);
+                    console.log('Parsed products:', products);
 
                     const tableBody = document.getElementById('products-table-body');
                     if (!tableBody) {
-                        console.error('No se encontró la tabla de productos');
+                        console.error('No table of products found');
                         return;
                     }
 
                     tableBody.innerHTML = '';
 
                     if (!Array.isArray(products) || products.length === 0) {
-                        tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No hay productos registrados</td></tr>';
+                        tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No products registered</td></tr>';
                         return;
                     }
 
                     products.forEach(product => {
-                        console.log('Producto original de la BD:', product);
+                        console.log('Original product from the DB:', product);
 
                         // Extraer datos del producto
                         const productData = {
@@ -1029,12 +1029,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         const availabilitySelect = document.getElementById('prod-availability');
                         if (availabilitySelect && availabilitySelect.options.length === 0) {
                             availabilitySelect.innerHTML = `
-                                <option value="true">Disponible</option>
-                                <option value="false">No Disponible</option>
+                                <option value="true">Available</option>
+                                <option value="false">Not available</option>
                             `;
                         }
 
-                        const categoryName = categories[productData.categoryId] || 'Categoría Desconocida';
+                        const categoryName = categories[productData.categoryId] || 'Unknown category';
 
                         const row = document.createElement('tr');
                         row.innerHTML = `
@@ -1078,28 +1078,28 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Configurar botón de eliminar
                         const deleteBtn = row.querySelector('.delete-btn');
                         deleteBtn.addEventListener('click', function () {
-                            if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+                            if (confirm('Are you sure you want to delete this product?')) {
                                 deleteProduct(productData.name);
                             }
                         });
                     });
                 } catch (error) {
-                    console.error('Error al procesar productos:', error);
-                    console.error('Texto que causó el error:', text);
-                    alert('Error al procesar los productos');
+                    console.error('Error processing products:', error);
+                    console.error('Text that caused the error:', text);
+                    alert('Error processing products');
                 }
             })
             .catch(error => {
-                console.error('Error al cargar productos:', error);
-                alert('Error al cargar los productos');
+                console.error('Error loading products:', error);
+                alert('Error loading products');
             });
     }
 
     // Función para eliminar producto
     function deleteProduct(productName) {
         if (!productName) {
-            console.error('Nombre de producto no válido');
-            alert('Error: Nombre de producto no válido');
+            console.error('Invalid product name');
+            alert('Error: Invalid product name');
             return;
         }
 
@@ -1107,7 +1107,7 @@ document.addEventListener('DOMContentLoaded', function () {
         params.append('name', productName);
 
         const urlWithParams = `${apiUrlDeleteProduct}&${params.toString()}`;
-        console.log('URL de eliminación:', urlWithParams);
+        console.log('URL of deletion:', urlWithParams);
 
         fetch(urlWithParams, {
             method: "POST",
@@ -1118,17 +1118,17 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.text())
             .then(text => {
-                console.log('Respuesta al eliminar:', text);
+                console.log('Response to delete:', text);
                 if (text.includes("error") || text.includes("Error")) {
-                    throw new Error("No se pudo eliminar el producto");
+                    throw new Error("Could not delete product");
                 }
 
-                alert("Producto eliminado correctamente");
+                alert("Product deleted correctly");
                 loadProductsList();
             })
             .catch(error => {
-                console.error('Error al eliminar producto:', error);
-                alert("Error al eliminar producto: " + error.message);
+                console.error('Error deleting product:', error);
+                alert("Error deleting product: " + error.message);
             });
     }
 
@@ -1160,14 +1160,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Validar campos requeridos
         if (!name || !description || !price || !category) {
-            alert('Por favor, complete todos los campos requeridos');
+            alert('Please complete all required fields');
             return;
         }
 
         // Validar y convertir precio a número
         const priceNum = parseFloat(price);
         if (isNaN(priceNum)) {
-            alert('El precio debe ser un número válido');
+            alert('The price must be a valid number');
             return;
         }
 
@@ -1200,7 +1200,7 @@ document.addEventListener('DOMContentLoaded', function () {
         params.append('category_id1', category);
 
         const finalUrl = `${apiUrl}&${params.toString()}`;
-        console.log('URL de la operación:', finalUrl);
+        console.log('URL of the operation:', finalUrl);
 
         // Enviar la petición
         fetch(finalUrl, {
@@ -1212,18 +1212,18 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.text())
             .then(text => {
-                console.log('Respuesta del servidor:', text);
-                if (text.includes("error") || text.includes("Error") || text.includes("Faltan datos") || text.includes("no encontrado")) {
+                console.log('Server response:', text);
+                if (text.includes("error") || text.includes("Error") || text.includes("Faulty data") || text.includes("not found")) {
                     throw new Error(text);
                 }
 
-                alert(isEditing ? "Producto actualizado correctamente" : "Producto añadido correctamente");
+                alert(isEditing ? "Product updated correctly" : "Product added correctly");
                 resetProductForm();
                 loadProductsList();
             })
             .catch(error => {
-                console.error('Error detallado:', error);
-                alert(`Error al ${isEditing ? 'actualizar' : 'añadir'} el producto: ${error.message}`);
+                console.error('Detailed error:', error);
+                alert(`Error ${isEditing ? 'updating' : 'adding'} the product: ${error.message}`);
             });
     });
 });

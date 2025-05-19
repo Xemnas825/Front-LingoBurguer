@@ -35,11 +35,11 @@ class ProductAPI {
     static async getProducts(category = '') {
         try {
             const url = `${API_BASE_URL}?ACTION=PRODUCT.FIND_ALL`;
-            console.log('Obteniendo productos desde:', url);
+            console.log('Obtaining products from', url);
             
             const response = await fetch(url);
             if (!response.ok) {
-                throw new Error(`Error al obtener los productos: ${response.status}`);
+                throw new Error(`Obtaining products from: ${response.status}`);
             }
             
             const data = await response.json();
@@ -70,14 +70,13 @@ class ProductAPI {
             posiblesDulces.forEach(p => {
                 const categoryId = p.m_iCategory || p.m_fkCategory;
                 if (categoryId !== 6) {
-                    console.error(`Posible error de categorización: ${p.m_strName} parece ser un postre pero está en la categoría ${categoryId}`);
-                    // Si es un postre pero no tiene categoría 6, lo forzamos a ser postre narices ya
+                    console.error(`Possible categorization error: ${p.m_strName} seems to be a dessert but is in category ${categoryId}`);
                     p.m_iCategory = 6;
                 }
             });
             
             // Log de todos los productos con sus categorías
-            console.log('DEBUG - Todas las categorías:', 
+            console.log('DEBUG - All categories:', 
                 data.map(p => ({
                     nombre: p.m_strName,
                     categoriaId: p.m_iCategory,
@@ -94,19 +93,19 @@ class ProductAPI {
                 imagen: p.m_strImageURL
             })));
             
-            console.log('Datos recibidos de la API:', JSON.stringify(data, null, 2));
+            console.log('Data received from API:', JSON.stringify(data, null, 2));
             
             // Validar que los datos sean un array
             if (!Array.isArray(data)) {
-                console.error('Los datos recibidos no son un array:', data);
-                throw new Error('Formato de datos inválido');
+                console.error('The received data is not an array:', data);
+                throw new Error('Invalid data format');
             }
             
             // Transformar los datos al formato esperado por el frontend
             const mappedProducts = data.map(product => {
                 // Validar que el producto tenga los campos necesarios
                 if (!product.m_iId || !product.m_strName || (!product.m_iCategory && !product.m_fkCategory)) {
-                    console.error('Producto con datos incompletos:', JSON.stringify(product, null, 2));
+                    console.error('Product with incomplete data:', JSON.stringify(product, null, 2));
                     return null;
                 }
                 
@@ -115,7 +114,7 @@ class ProductAPI {
                     nombre: product.m_strName,
                     categoriaId: categoryId,
                     tipoCategoria: typeof categoryId,
-                    categoriaOriginal: product.m_strCategory || 'No disponible'
+                    categoriaOriginal: product.m_strCategory || 'Not available'
                 });
                 
                 const categoryName = this.mapCategory(categoryId);
@@ -123,7 +122,7 @@ class ProductAPI {
                 // Log de la construcción de la URL de la imagen
                 const imageFileName = formatImageFileName(product.m_strImageURL);
                 const imageUrl = `/Fronted/images/products/${categoryName}/${imageFileName}`;
-                console.log('Construyendo URL de imagen:', {
+                console.log('Constructing image URLs:', {
                     nombreOriginal: product.m_strImageURL,
                     nombreFormateado: imageFileName,
                     categoria: categoryName,
@@ -135,7 +134,7 @@ class ProductAPI {
                 fetch(imageUrl, { method: 'HEAD' })
                     .then(response => {
                         if (!response.ok) {
-                            console.error('Imagen no encontrada:', {
+                            console.error('Image not found:', {
                                 url: imageUrl,
                                 producto: product.m_strName,
                                 status: response.status
@@ -143,7 +142,7 @@ class ProductAPI {
                         }
                     })
                     .catch(error => {
-                        console.error('Error al verificar imagen:', {
+                        console.error('Error verifying image:', {
                             url: imageUrl,
                             producto: product.m_strName,
                             error: error.message
@@ -166,7 +165,7 @@ class ProductAPI {
                 
                 // Log específico para productos de sides
                 if (categoryId === 3) {
-                    console.log('Procesando producto de sides:', {
+                    console.log('Processing side product:', {
                         nombre: product.m_strName,
                         categoriaId: categoryId,
                         categoriaMapeada: categoryName,
@@ -187,15 +186,15 @@ class ProductAPI {
             
             // Validar que haya productos después del mapeo
             if (mappedProducts.length === 0) {
-                console.error('No se encontraron productos válidos después del mapeo');
-                console.error('Productos originales:', data.map(p => ({
+                console.error('No valid products found after mapping');
+                console.error('Original products:', data.map(p => ({
                     id: p.m_iId,
                     nombre: p.m_strName,
                     categoria: p.m_iCategory || p.m_fkCategory,
                     precio: p.m_dblPrice,
                     disponible: p.m_bAvailable
                 })));
-                throw new Error('No se encontraron productos válidos');
+                throw new Error('No valid products found');
             }
 
             // Mostrar resumen de productos por categoría
@@ -217,7 +216,7 @@ class ProductAPI {
                 })
                 : mappedProducts;
             
-            console.log(`Productos filtrados para categoría '${category}':`, 
+            console.log(`Products filtered for category '${category}':`, 
                 filteredProducts.map(p => ({
                     nombre: p.name,
                     categoria: p.category
@@ -225,7 +224,7 @@ class ProductAPI {
 
             return filteredProducts;
         } catch (error) {
-            console.error('Error en getProducts:', error);
+            console.error('Error in getProducts:', error);
             throw error;
         }
     }
@@ -239,30 +238,30 @@ class ProductAPI {
             console.log('Response status:', response.status);
             
             if (!response.ok) {
-                throw new Error(`Producto no encontrado: ${response.status}`);
+                throw new Error(`Product not found: ${response.status}`);
             }
             
             const data = await response.json();
-            console.log('Datos del producto recibidos:', data);
+            console.log('Product data received:', data);
             
             if (Array.isArray(data)) {
                 // Buscar el producto específico por ID
                 const product = data.find(p => p.m_iId === id);
                 
                 if (!product) {
-                    throw new Error(`No se encontró el producto con ID ${id}`);
+                    throw new Error(`Product with ID ${id} not found`);
                 }
                 
-                console.log('Datos crudos del producto encontrado:', product);
+                console.log('Raw product data found:', product);
                 
                 const categoryName = this.mapCategory(product.m_iCategory || product.m_fkCategory);
-                console.log('Categoría mapeada:', {
+                console.log('Mapped category:', {
                     originalId: product.m_iCategory || product.m_fkCategory,
                     mappedName: categoryName
                 });
                 
                 const imageUrl = `/Fronted/images/products/${categoryName}/${product.m_strImageURL}`;
-                console.log('URL de imagen construida:', {
+                console.log('Constructed image URL:', {
                     categoryName,
                     imageFileName: product.m_strImageURL,
                     fullUrl: imageUrl
@@ -278,9 +277,9 @@ class ProductAPI {
                     available: product.m_bAvailable
                 };
             }
-            throw new Error('Respuesta inválida de la API');
+            throw new Error('Invalid API response');
         } catch (error) {
-            console.error('Error en getProductById:', error);
+            console.error('Error in getProductById:', error);
             throw error;
         }
     }
@@ -294,14 +293,14 @@ class ProductAPI {
             console.log('Response status:', response.status);
             
             if (!response.ok) {
-                throw new Error(`Error al obtener las categorías: ${response.status}`);
+                throw new Error(`Error obtaining categories: ${response.status}`);
             }
             
             const data = await response.json();
             console.log('Categories received:', data);
             return data;
         } catch (error) {
-            console.error('Error en getCategories:', error);
+            console.error('Error in getCategories:', error);
             throw error;
         }
     }
@@ -310,8 +309,8 @@ class ProductAPI {
     static mapCategory(categoryId) {
         // Si no hay categoría, intentar determinar por el nombre
         if (!categoryId) {
-            console.warn('Categoría no definida, intentando determinar por nombre');
-            return 'otros';
+            console.warn('Category not defined, trying to determine by name');
+            return 'others';
         }
 
         // Asegurarse de que categoryId sea un número
@@ -328,16 +327,16 @@ class ProductAPI {
         
         // Validar que el ID sea un número válido
         if (isNaN(numericId)) {
-            console.error('ERROR - ID de categoría inválido:', JSON.stringify({
+            console.error('ERROR - Invalid Category ID:', JSON.stringify({
                 valorRecibido: categoryId,
                 tipo: typeof categoryId
             }, null, 2));
-            return 'otros';
+            return 'other';
         }
         
         const categoryMap = {
             1: 'entrantes',      
-            2: 'hamburguesas',   
+            2: 'burgers',   
             3: 'accompaniments', 
             4: 'productos-compuestos', 
             5: 'bebidas',        
@@ -346,11 +345,11 @@ class ProductAPI {
         
         // Verificar si el ID está en el rango válido
         if (numericId < 1 || numericId > 6) {
-            console.error('ERROR - ID de categoría fuera de rango:', JSON.stringify({
+            console.error('ERROR - Category ID out of range:', JSON.stringify({
                 id: numericId,
                 rangoValido: '1-6'
             }, null, 2));
-            return 'otros';
+            return 'other';
         }
         
         const mappedCategory = categoryMap[numericId];

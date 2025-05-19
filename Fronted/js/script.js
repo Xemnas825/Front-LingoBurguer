@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     let cart = [];
     let products = [];
-    let currentCategory = 'hamburguesas';
+    let currentCategory = 'burgers';
     let isLoading = false;
     
     // Cargar productos desde la API
@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', async function() {
         
         try {
             isLoading = true;
-            console.log('Cargando todos los productos...');
+            console.log('loading all products...');
             
             const loadingElement = document.createElement('div');
             loadingElement.className = 'loading';
-            loadingElement.textContent = 'Cargando productos...';
+            loadingElement.textContent = 'loading products...';
             
             const currentSection = document.getElementById(currentCategory);
             if (currentSection) {
@@ -36,27 +36,27 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             products = await ProductAPI.getProducts();
-            console.log('Productos cargados:', products);
+            console.log('products loaded:', products);
 
             if (!Array.isArray(products) || products.length === 0) {
-                throw new Error('No se encontraron productos en la base de datos');
+                throw new Error('No products found in the database');
             }
 
             renderProducts(currentCategory);
         } catch (error) {
-            console.error('Error al cargar productos:', error);
+            console.error('Error loading products:', error);
             const errorMessage = document.createElement('div');
             errorMessage.className = 'error-message';
             errorMessage.innerHTML = `
-                <p>Error al cargar los productos:</p>
+                <p>Error loading products:</p>
                 <p>${error.message}</p>
-                <p>Por favor, verifica que:</p>
+                <p>Please check that:</p>
                 <ul>
-                    <li>El servidor esté funcionando en http://localhost:8080</li>
-                    <li>La base de datos esté conectada</li>
-                    <li>Haya productos disponibles</li>
+                    <li>The server is working on http://localhost:8080</li>
+                    <li>The database is connected</li>
+                    <li>There are products available</li>
                 </ul>
-                <button onclick="loadProducts()" class="retry-button">Reintentar</button>
+                <button onclick="loadProducts()" class="retry-button">Try again</button>
             `;
             
             const currentSection = document.getElementById(currentCategory);
@@ -71,25 +71,25 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Renderizar productos
     function renderProducts(category) {
-        console.log(`Renderizando productos para categoría: ${category}`);
+        console.log(`Rendering products for category: ${category}`);
         const categoryProducts = products.filter(product => {
-            console.log(`Evaluando producto: ${product.name}, Categoría: ${product.category}, Buscando: ${category}`);
+            console.log(`Evaluating product: ${product.name}, Category: ${product.category}, Searching for: ${category}`);
             return product.category === category;
         });
         
         const menuSection = document.getElementById(category);
         if (!menuSection) {
-            console.error(`No se encontró la sección para la categoría: ${category}`);
+            console.error(`The section for the category was not found: ${category}`);
             return;
         }
 
         if (categoryProducts.length === 0) {
-            menuSection.innerHTML = '<p class="error-message">No hay productos disponibles en esta categoría</p>';
+            menuSection.innerHTML = '<p class="error-message">No products available in this category</p>';
             return;
         }
 
         const productsHTML = categoryProducts.map(product => {
-            console.log('Renderizando producto:', {
+            console.log('Rendering product:', {
                 nombre: product.name,
                 imagen: product.imageUrl,
                 precio: product.price,
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <div class="menu-item">
                     <img src="${product.imageUrl}" 
                          alt="${product.name}"
-                         onerror="this.onerror=null; this.src='/Fronted/images/LogoLingoBurguerWhite.png'; console.error('Error al cargar imagen:', this.src);">
+                         onerror="this.onerror=null; this.src='/Fronted/images/LogoLingoBurguerWhite.png'; console.error('Error loading image:', this.src);">
                     <div class="menu-item-content">
                         <div>
                             <h3>${product.name}</h3>
@@ -154,15 +154,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Función para mostrar los detalles del producto en el modal
     async function showProductDetails(productId) {
         try {
-            console.log('Obteniendo detalles del producto con ID:', productId);
+            console.log('Getting product details with ID:', productId);
             const product = await ProductAPI.getProductById(productId);
-            console.log('Producto obtenido:', product);
+            console.log('Product obtained:', product);
             
             const modalOverlay = document.getElementById('product-modal');
             const modalProduct = modalOverlay.querySelector('.modal-product');
             
             // Verificar la URL de la imagen
-            console.log('URL de la imagen:', {
+            console.log('Image URL:', {
                 url: product.imageUrl,
                 category: product.category,
                 name: product.name
@@ -175,9 +175,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                      class="modal-product-image">
                 <div class="modal-product-info">
                     <h3>${product.name}</h3>
-                    <p class="description">${product.description || 'Sin descripción disponible'}</p>
+                    <p class="description">${product.description || 'No description available'}</p>
                     <div class="allergens" style="margin: 10px 0; color: #ff6600; font-weight: bold;">
-                        ${product.allergens ? `<span>Alergenos: ${product.allergens}</span>` : ''}
+                        ${product.allergens ? `<span>Allergens: ${product.allergens}</span>` : ''}
                     </div>
                     <div class="price">$${product.price.toFixed(2)}</div>
                     <div class="modal-actions">
@@ -191,11 +191,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             // Verificar que la imagen se cargó correctamente
             const modalImage = modalProduct.querySelector('img');
             modalImage.addEventListener('load', () => {
-                console.log('Imagen cargada correctamente:', modalImage.src);
+                console.log('Image loaded correctly:', modalImage.src);
             });
             
             modalImage.addEventListener('error', () => {
-                console.error('Error al cargar la imagen:', modalImage.src);
+                console.error('Error loading image:', modalImage.src);
             });
 
             // Agregar event listener al botón de agregar al carrito en el modal
@@ -214,8 +214,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             modalOverlay.classList.add('active');
         } catch (error) {
-            console.error('Error al cargar los detalles del producto:', error);
-            alert('No se pudieron cargar los detalles del producto');
+            console.error('Error loading product details:', error);
+            alert('The product details could not be loaded');
         }
     }
 
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     function renderCartItems() {
         cartItemsContainer.innerHTML = '';
         if (cart.length === 0) {
-            cartItemsContainer.innerHTML = '<p class="empty-cart-message">Tu carrito está vacío</p>';
+            cartItemsContainer.innerHTML = '<p class="empty-cart-message">Your cart is empty</p>';
             return;
         }
         
@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
         
-        showNotification('Producto agregado al carrito');
+        showNotification('Product added to cart');
         saveCart();
         updateCartUI();
     }
@@ -361,7 +361,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 item.quantity += 1;
                 saveCart();
                 updateCartUI();
-                showNotification('Cantidad actualizada');
+                showNotification('Quantity updated');
             }
         }
         
@@ -372,9 +372,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 item.quantity -= 1;
                 if (item.quantity <= 0) {
                     cart = cart.filter(i => i.id !== parseInt(itemId));
-                    showNotification('Producto eliminado del carrito');
+                    showNotification('Product removed from cart');
                 } else {
-                    showNotification('Cantidad actualizada');
+                    showNotification('Quantity updated');
                 }
                 saveCart();
                 updateCartUI();
@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             cart = cart.filter(item => item.id !== parseInt(itemId));
             saveCart();
             updateCartUI();
-            showNotification('Producto eliminado del carrito');
+            showNotification('Product removed from cart');
         }
     });
 
@@ -394,7 +394,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     categoryBtns.forEach(btn => {
         btn.addEventListener('click', async function() {
             const category = this.dataset.category;
-            console.log('Categoría seleccionada:', category);
+            console.log('Selected category:', category);
             
             categoryBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             currentCategory = category;
             
             menuSections.forEach(section => {
-                console.log(`Sección: ${section.id}, Categoría actual: ${category}, Visible: ${section.id === category}`);
+                console.log(`Section: ${section.id}, Current category: ${category}, Visible: ${section.id === category}`);
                 if (section.id === category) {
                     section.style.display = 'grid';
                 } else {
@@ -412,13 +412,13 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             // Si no hay productos, cargarlos
             if (products.length === 0) {
-                console.log('No hay productos cargados, cargando...');
+                console.log('No products loaded, loading...');
                 await loadProducts();
             }
 
             // Filtrar y mostrar productos de la categoría actual
             const categoryProducts = products.filter(p => p.category === category);
-            console.log(`Productos encontrados para categoría ${category}:`, categoryProducts.map(p => p.name));
+            console.log(`Products found for category ${category}:`, categoryProducts.map(p => p.name));
 
             renderProducts(category);
         });

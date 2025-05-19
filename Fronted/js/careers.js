@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Verificamos que los elementos esenciales existan
     if (!DOM_ELEMENTS.title) {
-        console.error('Elemento title no encontrado');
+        console.error('Element title not found');
     }
 
     // Crear y añadir el overlay
@@ -119,28 +119,22 @@ document.addEventListener('DOMContentLoaded', function () {
     async function fetchJobOffer() {
         
         try {
-            // Intentar obtener datos de la API
             const response = await fetch(apiJobOfferUrl);
 
-            // Verificar si la respuesta es exitosa
             if (!response.ok) {
                 throw new Error(`API returned status: ${response.status}`);
             }
 
-            // Analizar datos JSON
             const data = await response.json();
 
-            // Si data es un array, tomamos el primer elemento (asumiendo que es una lista de ofertas)
             const jobOffer = Array.isArray(data) ? data[0] : data;
 
-            // Actualizar la UI con los datos del trabajo
             updateJobDisplay(jobOffer);
         } catch (error) {
             console.error("Error fetching job data:", error);
 
             updateJobDisplay(fallbackJobData);
         } finally {
-            // Eliminar estado de carga
             if (DOM_ELEMENTS.title) {
                 DOM_ELEMENTS.title.classList.remove("loading");
             }
