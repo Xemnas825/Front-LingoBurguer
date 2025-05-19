@@ -13,22 +13,22 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     const sidebarLinks = sidebar.querySelectorAll('a');
 
-    // We check that the elements exist before adding event listeners
+    // Comprobamos que los elementos existen antes de añadir escuchadores de eventos
     if (menuToggle) {
         menuToggle.addEventListener('click', function () {
             sidebar.classList.add('active');
             if (overlay) overlay.classList.add('active');
-            console.log('Menu opened'); // For debugging
+            console.log('Menu opened'); 
         });
     } else {
         console.error('The menu-toggle element was not found');
     }
 
-    // Function to close the sidebar menu
+    // Función para cerrar el menú lateral
     function closeSidebarMenu() {
         sidebar.classList.remove('active');
         if (overlay) overlay.classList.remove('active');
-        console.log('Menu closed'); // For debugging
+        console.log('Menu closed'); 
     }
 
     if (closeSidebar) {
@@ -37,27 +37,27 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('The close-sidebar element was not found');
     }
 
-    // Only keep the event listener for the user icon
+    // Mantener solo el escuchador de eventos para el icono de usuario
     if (userIcon) {
         userIcon.addEventListener('click', function () {
-            alert('You have clicked on the user icon');
+            alert('Has hecho clic en el icono de usuario');
         });
     }
 
-    // Event listeners for the menu links
+    // Escuchadores de eventos para los enlaces del menú
     sidebarLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            closeSidebarMenu(); // Close the menu
+            closeSidebarMenu(); 
 
-            // If the link has a hash (anchor)
+            // Si el enlace tiene un hash (anclaje)
             if (this.hash) {
-                // If we are on the same page
+                // Si estamos en la misma página
                 if (window.location.pathname.endsWith('index.html')) {
                     e.preventDefault();
                     const targetElement = document.querySelector(this.hash);
                     if (targetElement) {
                         window.scrollTo({
-                            top: targetElement.offsetTop - 80, // Offset for the header
+                            top: targetElement.offsetTop - 80, 
                             behavior: 'smooth'
                         });
                     }
@@ -69,16 +69,16 @@ document.addEventListener('DOMContentLoaded', function () {
     //Establishments Footer
     async function loadEstablishments() {
         try {
-            // Verificar si el elemento existe
+            // Comprobar si el elemento existe
             if (!DOM_ELEMENTS.footerLocations) {
                 console.log('El elemento footer-locations no existe en esta página');
                 return;
             }
 
-            // Perform the fetch call to the URL
+            // Realizar la llamada fetch a la URL
             const response = await fetch(`${apiUrl}`);
             if (!response.ok) {
-                throw new Error('The establishments could not be loaded');
+                throw new Error('No se pudieron cargar las sucursales');
             }
 
             const data = await response.json();
@@ -90,16 +90,16 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (error) {
             console.error('Error loading establishments:', error);
 
-            // Verificar si el elemento existe antes de mostrar el error
+            // Comprobar si el elemento existe antes de mostrar el error
             if (DOM_ELEMENTS.footerLocations) {
                 DOM_ELEMENTS.footerLocations.innerHTML =
-                    '<p>The establishments could not be loaded</p>';
+                    '<p>No se pudieron cargar las sucursales</p>';
             }
         }
     }
 
     function createEstablishmentCard(establishment) {
-        // Verificar si el elemento existe
+        // Comprobar si el elemento existe
         if (!DOM_ELEMENTS.footerLocations) {
             console.log('El elemento footer-locations no existe en esta página');
             return;

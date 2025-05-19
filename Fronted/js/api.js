@@ -71,7 +71,7 @@ class ProductAPI {
                 const categoryId = p.m_iCategory || p.m_fkCategory;
                 if (categoryId !== 6) {
                     console.error(`Posible error de categorización: ${p.m_strName} parece ser un postre pero está en la categoría ${categoryId}`);
-                    // Si es un postre pero no tiene categoría 6, lo forzamos a ser postre
+                    // Si es un postre pero no tiene categoría 6, lo forzamos a ser postre narices ya
                     p.m_iCategory = 6;
                 }
             });
@@ -336,12 +336,12 @@ class ProductAPI {
         }
         
         const categoryMap = {
-            1: 'entrantes',      // Starters
-            2: 'hamburguesas',   // Burgers
-            3: 'accompaniments', // Sides
-            4: 'productos-compuestos', // Menú
-            5: 'bebidas',        // Drinks
-            6: 'postres'         // Desserts
+            1: 'entrantes',      
+            2: 'hamburguesas',   
+            3: 'accompaniments', 
+            4: 'productos-compuestos', 
+            5: 'bebidas',        
+            6: 'postres'         
         };
         
         // Verificar si el ID está en el rango válido

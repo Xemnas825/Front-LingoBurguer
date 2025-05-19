@@ -18,93 +18,91 @@ document.addEventListener('DOMContentLoaded', function() {
     const backToLoginFromRegister = document.getElementById('backToLoginFromRegister');
     const backToLoginFromForgot = document.getElementById('backToLoginFromForgot');
 
-    // Register elements
-    // const registerBtn = documentElement.getElementById('registerPassword').value;
-    // const confirRegister = documentElement.getElementById('confirmPassword').value;
+    
     const submitBtn = document.getElementById('submitButton');
     
 
-    // Function to show a form and hide the others
+    // Función para mostrar un formulario y ocultar los demás
     function showForm(formToShow) {
-        // Hide all forms
+        // Ocultar todos los formularios
         loginForm.style.display = 'none';
         registerForm.style.display = 'none';
         forgotPasswordForm.style.display = 'none';
         
-        // Show the selected form
+        // Mostrar el formulario seleccionado
         formToShow.style.display = 'block';
     }
 
-    // Event to change to the registration form
+    // Evento para cambiar al formulario de registro
     registerLink.addEventListener('click', function(e) {
         e.preventDefault();
         showForm(registerForm);
     });
 
-    // Event to change to the forgot password form
+    // Evento para cambiar al formulario de recuperación de contraseña
     forgotPasswordLink.addEventListener('click', function(e) {
         e.preventDefault();
         showForm(forgotPasswordForm);
     });
 
-    // Event to go back to login from registration
+    // Evento para volver al formulario de inicio de sesión desde el registro
     alreadyHaveAccount.addEventListener('click', function(e) {
         e.preventDefault();
         showForm(loginForm);
     });
 
-    // Event to go back to login from the registration back button
+    // Evento para volver al formulario de inicio de sesión desde el botón de registro
     backToLoginFromRegister.addEventListener('click', function(e) {
         e.preventDefault();
         showForm(loginForm);
     });
 
-    // Event to go back to login from the forgot password back button
+    // Evento para volver al formulario de inicio de sesión desde el botón de recuperación de contraseña
     rememberPasswordLink.addEventListener('click', function(e) {
         e.preventDefault();
         showForm(loginForm);
     });
 
-    // Event to go back to login from the forgot password back button
+    // Evento para volver al formulario de inicio de sesión desde el botón de recuperación de contraseña
     backToLoginFromForgot.addEventListener('click', function(e) {
         e.preventDefault();
         showForm(loginForm);
     });
 
-    // Handle form submission
+    // Manejar la presentación del formulario
     loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
 
         try {
-            // First try to search in employees
+            // Primero intenta buscar en empleados
             const employeeResponse = await fetch(apiEmployeeUrl);
             const employeeData = await employeeResponse.json();
             const employee = employeeData.find(emp => emp.email === email && emp.password === password);
 
             if (employee) {
-                // It's an employee
+                // Es un empleado
                 sessionStorage.setItem('userRole', 'employee');
                 sessionStorage.setItem('userData', JSON.stringify(employee));
                 window.location.href = 'userDetail.html';
                 return;
             }
 
-            // If it's not an employee, search in clients
+            // Si no es un empleado, busca en clientes
             const clientResponse = await fetch(apiClientUrl);
             const clientData = await clientResponse.json();
             const client = clientData.find(cli => cli.email === email && cli.password === password);
 
             if (client) {
-                // It's a client
+                // Es un cliente
                 sessionStorage.setItem('userRole', 'client');
                 sessionStorage.setItem('userData', JSON.stringify(client));
                 window.location.href = 'userDetail.html';
                 return;
             }
 
-            // If it's not found in any base
+            // Si no se encuentra en ninguna base de datos
             alert('Invalid email or password');
 
         } catch (error) {
@@ -112,23 +110,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('An error occurred during login. Please try again.');
         }
     });
-
-    // var check = function(){
-    //     if(registerBtn != confirRegister ){
-    //         alert("aushdaidfhisadf");
-    //     }
-    // }
-
-    // function joseluis(event){
-    //     const password = document.querySelector('input[id=registerPassword]');
-    //     const confirm = document.querySelector('input[id=confirmPassword]');
-
-    //     if(confirm.value != password.value){
-    //         alert('asd');
-    //     }
-    // }
-
-
 
     //Show in class
     submitBtn.addEventListener('click',function(e){
@@ -142,28 +123,28 @@ document.addEventListener('DOMContentLoaded', function() {
             email: document.getElementById('registerEmail').value,
             password_hash: document.getElementById('registerPassword').value,
         }
-        const param = { //create request 
-            headers:{'content-type': 'application/json; charset = UTF-8'}, // Formatos del param
-            body:userObj, //what is in the param
-            method: 'POST', // what we do with the param, can be GET, PUT, POST and DELETE
-            mode:'cors', //policy
+        const param = {  
+            headers:{'content-type': 'application/json; charset = UTF-8'}, 
+            body:userObj, 
+            method: 'POST', 
+            mode:'cors', 
         };
 
 
         if(confirm.value != password.value){
              alert('The password must be the same');
-             document.getElementById('registerPassword').style.backgroundColor = "#ab371f" // is not very strong red;
-             document.getElementById('confirmPassword').style.backgroundColor = "#ab371f" // is not very strong red;
+             document.getElementById('registerPassword').style.backgroundColor = "#ab371f" 
+             document.getElementById('confirmPassword').style.backgroundColor = "#ab371f" 
         }else{
             //incomplete url D:
             console.log("soy el userObj: ",userObj);
             console.log("soy el param: ",param);
             console.log("soy la api: ",apiUrl);
             
-            fetch(apiUrl,param) // the url and what we send to that url pal back
-                .then(function(response){ // if the back responds ok (that the param has arrived)
+            fetch(apiUrl,param) // la url y lo que enviamos a esa url pal back
+                .then(function(response){ 
                     if(response.ok){
-                        return response.json();//returns 
+                        return response.json(); 
                     }else{
                         throw new Error ('No llego capo, socorro:' + response.statusText);
                     }
@@ -172,9 +153,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     })
 
-    ///////////////////////
-    // Register data //
-    ///////////////////////
     registerForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -195,7 +173,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            // By default we register as a client
             const response = await fetch(apiClientUrl, {
                 method: 'POST',
                 headers: {
@@ -218,7 +195,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     forgotPasswordForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        // Here goes your logic to process the password recovery
         const resetEmail = document.getElementById('resetEmail').value;
         alert('If an account exists with ' + resetEmail + ', you will receive a password reset email.');
         showForm(loginForm);
