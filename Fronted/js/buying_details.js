@@ -5,19 +5,19 @@ const apiOrderTypeUrl = "http://52.44.178.183:8080/Controller?ACTION=ORDER.FIND_
 document.addEventListener('DOMContentLoaded', async function() {
     // Configuración de tipos de pedido fijos
     const orderTypes = [
-        { name: 'LOCAL', icon: 'fa-store' },
-        { name: 'TAKEAWAY', icon: 'fa-shopping-bag' }
+        { name: 'LOCAL', value: 'local', icon: 'fa-store' },
+        { name: 'TAKE AWAY', value: 'take_away', icon: 'fa-shopping-bag' }
     ];
     
     // Actualizar el contenedor de tipos de pedido
     const orderTypeContainer = document.querySelector('.order-type-options');
     if (orderTypeContainer) {
-        orderTypeContainer.innerHTML = '';  
+        orderTypeContainer.innerHTML = '';  // Limpiar contenedor
         
         orderTypes.forEach(type => {
             const div = document.createElement('div');
             div.className = 'order-type-option';
-            div.setAttribute('data-type', type.name);
+            div.setAttribute('data-type', type.value);
             div.innerHTML = `
                 <i class="fas ${type.icon}"></i>
                 <div>${type.name}</div>
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 // Agregar clase selected a la opción clickeada
                 this.classList.add('selected');
                 // Guardar el tipo de pedido seleccionado
-                localStorage.setItem('selectedOrderType', type.name);
+                localStorage.setItem('selectedOrderType', type.value);
             });
             
             orderTypeContainer.appendChild(div);
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
         const response = await fetch(apiPaymentUrl);
         if (!response.ok) {
-            throw new Error('Error loading payment methods');
+            throw new Error('Error al cargar los métodos de pago');
         }
         const paymentMethods = await response.json();
         
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
     } catch (error) {
-        console.error('Error loading payment methods:', error);
+        console.error('Error al cargar los métodos de pago:', error);
     }
     
     // Obtener el carrito del localStorage
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // Si el carrito está vacío, redirigir al inicio
     if (cart.length === 0) {
-        alert('The cart is empty');
+        alert('El carrito está vacío');
         window.location.href = 'index.html';
         return;
     }
@@ -149,15 +149,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (totalSection) {
             totalSection.innerHTML = `
                 <div class="total-row">
-                    <span>Total products:</span>
+                    <span>Total productos:</span>
                     <span id="subtotal">$${subtotal.toFixed(2)}</span>
                 </div>
                 <div class="total-row">
-                    <span>Tip (16%):</span>
+                    <span>IVA (16%):</span>
                     <span id="iva">$${iva.toFixed(2)}</span>
                 </div>
                 <div class="total-row">
-                    <span>Total to pay:</span>
+                    <span>Total a pagar:</span>
                     <span id="total" class="total-amount">$${total.toFixed(2)}</span>
                 </div>
             `;
@@ -229,38 +229,132 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // Manejar envío del formulario
-    document.querySelector('.confirm-button').addEventListener('click', async function (e) {
-    e.preventDefault();
-        
-        // Check if establishment is selected
-        const selectedEstablishment = localStorage.getItem('selectedEstablishment');
-        if (!selectedEstablishment) {
-            alert('Please select an establishment');
-            return;
-        }
-        
-        // Check if payment method is selected
-        const selectedPayment = document.querySelector('.payment-option.selected');
-        if (!selectedPayment) {
-            alert('Please select a payment method');
-            return;
-        }
+    const form = document.querySelector('.buying_details_card');
+    console.log('Formulario encontrado:', form); // Debug log
 
-        // Check if order type is selected
-        const selectedOrderType = document.querySelector('.order-type-option.selected');
-        if (!selectedOrderType) {
-            alert('Please select an order type');
-            return;
-        }
-        
-        // Aquí iría la lógica para procesar el pago
-        alert('¡Compra realizada con éxito!');
-        
-        // Limpiar el carrito
-        localStorage.removeItem('cart');
-        localStorage.removeItem('selectedEstablishment');
-        
-        // Redirigir al inicio
-        window.location.href = 'index.html';
-    });
+    if (!form) {
+        console.error('No se encontró el formulario .buying_details_card');
+    } else {
+        form.addEventListener('submit', async function(e) {
+            console.log('Formulario enviado'); // Debug log
+            e.preventDefault();
+            
+            // Check if establishment is selected
+            const selectedEstablishment = localStorage.getItem('selectedEstablishment');
+            console.log('Establecimiento seleccionado:', selectedEstablishment); // Debug log
+            if (!selectedEstablishment) {
+                alert('Please select an establishment');
+                return;
+            }
+            
+            // Check if payment method is selected
+            const selectedPayment = document.querySelector('.payment-option.selected');
+            console.log('Método de pago seleccionado:', selectedPayment?.dataset.id); // Debug log
+            if (!selectedPayment) {
+                alert('Please select a payment method');
+                return;
+            }
+
+            // Check if order type is selected
+            const selectedOrderType = document.querySelector('.order-type-option.selected');
+            console.log('Tipo de orden seleccionado:', selectedOrderType?.dataset.type); // Debug log
+            if (!selectedOrderType) {
+                alert('Please select an order type');
+                return;
+            }
+
+            // Get user data from sessionStorage
+            const userData = JSON.parse(sessionStorage.getItem('userData'));
+            console.log('Datos del usuario:', userData); // Debug log
+            if (!userData) {
+                alert('Please log in to complete your order');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                // Crear la orden principal primero
+                const orderParams = new URLSearchParams();
+                
+                // Debug logs para verificar los valores
+                console.log('Tipo de orden seleccionado:', selectedOrderType);
+                console.log('Dataset type:', selectedOrderType.dataset.type);
+                
+                // Usar el valor en minúsculas
+                const orderStatus = selectedOrderType.dataset.type.toLowerCase();
+                console.log('Status final que se enviará:', orderStatus);
+
+                // Calcular el total del carrito
+                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                const iva = subtotal * 0.16;
+                const total = subtotal + iva;
+                console.log('Total calculado:', total);
+                
+                // Construir los parámetros incluyendo el total_price
+                orderParams.append('status', orderStatus);
+                orderParams.append('establishment_id2', selectedEstablishment);
+                orderParams.append('client_id1', userData.m_iId || userData.id);
+                orderParams.append('payment_method_id1', selectedPayment.dataset.id);
+                orderParams.append('total_price', total);
+
+                const orderUrl = 'http://52.44.178.183:8080/Controller?ACTION=ORDER.ADD';
+                const fullOrderUrl = `${orderUrl}&${orderParams.toString()}`;
+                console.log('URL completa de la orden:', fullOrderUrl);
+                console.log('Parámetros de la orden:', Object.fromEntries(orderParams.entries()));
+
+                // Crear la orden principal
+                console.log('Enviando petición ORDER.ADD...');
+                const orderResponse = await fetch(orderUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: orderParams
+                });
+
+                console.log('Respuesta recibida:', orderResponse.status);
+                const orderResponseText = await orderResponse.text();
+                console.log('Respuesta texto de la orden:', orderResponseText);
+
+                if (!orderResponse.ok) {
+                    console.error('Error del servidor:', orderResponseText);
+                    throw new Error(`Error al crear la orden: ${orderResponseText}`);
+                }
+
+                // Esperar a que la orden se cree completamente
+                console.log('Esperando 1 segundo para asegurar la creación de la orden...');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Verificar que la orden existe
+                console.log('Verificando la creación de la orden...');
+                const verifyOrderResponse = await fetch(`http://52.44.178.183:8080/Controller?ACTION=ORDER.FIND_ALL`);
+                const verifiedOrders = await verifyOrderResponse.json();
+                console.log('Órdenes encontradas:', verifiedOrders);
+
+                // Ordenar por ID descendente y tomar la primera (la más reciente)
+                const sortedOrders = verifiedOrders.sort((a, b) => b.m_iId - a.m_iId);
+                const createdOrder = sortedOrders[0];
+                console.log('Orden más reciente:', createdOrder);
+
+                if (!createdOrder) {
+                    console.error('No se encontró la orden creada');
+                    throw new Error('No se pudo verificar la creación de la orden');
+                }
+
+                const orderId = createdOrder.m_iId;
+                console.log('ID de la orden verificada:', orderId);
+
+                alert('¡Pedido realizado con éxito!');
+                // Limpiar el carrito y datos de selección
+                localStorage.removeItem('cart');
+                localStorage.removeItem('selectedEstablishment');
+                localStorage.removeItem('selectedOrderType');
+                // Redirigir al inicio
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error al procesar el pedido:', error);
+                alert('Error al procesar el pedido. Por favor, inténtalo de nuevo.');
+            }
+        });
+    }
 }); 
