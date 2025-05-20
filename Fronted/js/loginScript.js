@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const apiUrlADDClient = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller';
-    const apiClientUrl = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=CLIENT.FIND_ALL';
-    const apiEmployeeUrl = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.FIND_ALL';
+    const apiUrlADDClient = 'http://52.44.178.183:8080/Controller';
+    const apiClientUrl = 'http://52.44.178.183:8080/Controller?ACTION=CLIENT.FIND_ALL';
+    const apiEmployeeUrl = 'http://52.44.178.183:8080/Controller?ACTION=EMPLOYEE.FIND_ALL';
 
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');

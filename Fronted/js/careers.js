@@ -1,4 +1,4 @@
-const apiJobOfferUrl = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=JOBOFFER.FIND_ALL';
+const apiJobOfferUrl = 'http://52.44.178.183:8080/Controller?ACTION=JOBOFFER.FIND_ALL';
 
 document.addEventListener('DOMContentLoaded', function () {
     // Definimos los elementos DOM que vamos a usar
