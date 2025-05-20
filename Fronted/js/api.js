@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/PruebaDBConsola/Controller';
+const API_BASE_URL = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller';
 
 // Función auxiliar para formatear el nombre del archivo
 const formatImageFileName = (fileName) => {

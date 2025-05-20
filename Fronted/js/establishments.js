@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8080/PruebaDBConsola/Controller';
+const API_URL = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller';
 
 class EstablishmentManager {
     constructor() {

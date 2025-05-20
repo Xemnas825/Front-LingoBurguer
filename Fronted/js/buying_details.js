@@ -1,6 +1,6 @@
-const apiEstUrl = "http://localhost:8080/PruebaDBConsola/Controller?ACTION=ESTABLISHMENT.FIND_ALL";
-const apiPaymentUrl = "http://localhost:8080/PruebaDBConsola/Controller?ACTION=PAYMENTMETHOD.FIND_ALL";
-const apiOrderTypeUrl = "http://localhost:8080/PruebaDBConsola/Controller?ACTION=ORDER.FIND_ALL";
+const apiEstUrl = "http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=ESTABLISHMENT.FIND_ALL";
+const apiPaymentUrl = "http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=PAYMENTMETHOD.FIND_ALL";
+const apiOrderTypeUrl = "http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=ORDER.FIND_ALL";
 
 document.addEventListener('DOMContentLoaded', async function() {
     // Configuración de tipos de pedido fijos

@@ -34,17 +34,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // URLs del API
-    const apiUrlADDEmployee = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.ADD';
-    const apiUrlGetEmployees = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.FIND_ALL';
-    const apiUrlDeleteEmployee = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.DELETE';
-    const apiUrlUpdateEmployee = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.UPDATE';
-    const apiUrlGetJobs = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=JOB.FIND_ALL';
-    const apiUrlGetEstablishments = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=ESTABLISHMENT.FIND_ALL';
-    const apiUrlADDProduct = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=PRODUCT.ADD';
-    const apiUrlGetProducts = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=PRODUCT.FIND_ALL';
-    const apiUrlUpdateProduct = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=PRODUCT.UPDATE';
-    const apiUrlDeleteProduct = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=PRODUCT.DELETE';
-    const apiUrlGetCategories = 'http://localhost:8080/PruebaDBConsola/Controller?ACTION=CATEGORY.FIND_ALL';
+    const apiUrlADDEmployee = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.ADD';
+    const apiUrlGetEmployees = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.FIND_ALL';
+    const apiUrlDeleteEmployee = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.DELETE';
+    const apiUrlUpdateEmployee = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=EMPLOYEE.UPDATE';
+    const apiUrlGetJobs = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=JOB.FIND_ALL';
+    const apiUrlGetEstablishments = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=ESTABLISHMENT.FIND_ALL';
+    const apiUrlADDProduct = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=PRODUCT.ADD';
+    const apiUrlGetProducts = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=PRODUCT.FIND_ALL';
+    const apiUrlUpdateProduct = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=PRODUCT.UPDATE';
+    const apiUrlDeleteProduct = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=PRODUCT.DELETE';
+    const apiUrlGetCategories = 'http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=CATEGORY.FIND_ALL';
 
     // Variables globales para cuando se edita un empleado
     let editingEmployeeId = null;
@@ -1216,7 +1216,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const ordersContainer = document.getElementById('orders-list'); // Asegúrate de tener un contenedor con este ID
 
         try {
-            const response = await fetch('http://localhost:8080/PruebaDBConsola/Controller?ACTION=ORDER.FIND_ALL');
+            const response = await fetch('http://web.lingoburguer.linkpc.net:8080/PruebaDBConsola/Controller?ACTION=ORDER.FIND_ALL');
             if (!response.ok) throw new Error('Error al cargar pedidos');
 
             const allOrders = await response.json();

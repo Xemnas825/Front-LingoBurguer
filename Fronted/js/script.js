@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <p>${error.message}</p>
                 <p>Please check that:</p>
                 <ul>
-                    <li>The server is working on http://localhost:8080</li>
+                    <li>The server is working on http://web.lingoburguer.linkpc.net:8080</li>
                     <li>The database is connected</li>
                     <li>There are products available</li>
                 </ul>
