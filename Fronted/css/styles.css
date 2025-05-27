@@ -498,6 +498,20 @@ nav ul li:hover::after {
     color: white;
 }
 
+/*
+Pongo por aqui el css del boton combo
+*/
+
+.botonCombo{
+    background-color: black;    
+    color: black;
+}
+
+.botonCombo:hover{
+    background-color: grey;    
+    color: grey;
+}
+
 .about-content {
     flex: 1;
     padding-right: 50px;
